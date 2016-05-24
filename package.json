@@ -4,6 +4,7 @@
   "description": "A desktop application on electron to help Bible edit.",
   "main": "app.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
