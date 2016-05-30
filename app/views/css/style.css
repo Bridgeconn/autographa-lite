@@ -1,5 +1,8 @@
-#navbar-header {
-    background-color:#eeeeee;
+#header {
+    background-color:#000000;
     padding: 10px 16px;
 }
-
+#footer {
+    background-color:#000000;
+    padding: 10px 12px;
+}
