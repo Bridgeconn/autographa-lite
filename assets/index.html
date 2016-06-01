@@ -1,46 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
   <head>
-    <title >BibEdit</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <title>Photon</title>
 
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/photon.min.css">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Javascript -->
+    <script src="js/menu.js" charset="utf-8"></script>
   </head>
-
   <body>
+    <div class="window">
 
-    <nav class="navbar navbar-default"  >
-      <div class="collapse navbar-collapse" >
-        <div class="navbar-header navbar-fixed-top" id="header" >
-          <a class="navbar-brand" href="assets/index.html"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>BibleEdit</a>
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header">
+        <h1 class="title">Photon</h1>
+      </header>
 
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="assign.html">Assign</a></li>
-            <li ><a href="translate.html">Translate</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div>
-        <div class="navbar-footer navbar-fixed-bottom" id="footer" align="center">
-          <p>Copyright &copy; Bridgeconn 2016</p>
+      <!-- Your app's content goes inside .window-content -->
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane pane-sm sidebar">
+            <nav class="nav-group">
+              <h5 class="nav-group-title">Favorites</h5>
+              <span class="nav-group-item">
+                <span class="icon icon-home"></span>
+                connors
+              </span>
+              <span class="nav-group-item active">
+                <span class="icon icon-light-up"></span>
+                Photon
+              </span>
+              <span class="nav-group-item">
+                <span class="icon icon-download"></span>
+                Downloads
+              </span>
+              <span class="nav-group-item">
+                <span class="icon icon-folder"></span>
+                Documents
+              </span>
+              <span class="nav-group-item">
+                <span class="icon icon-window"></span>
+                Applications
+              </span>
+              <span class="nav-group-item">
+                <span class="icon icon-signal"></span>
+                AirDrop
+              </span>
+              <span class="nav-group-item">
+                <span class="icon icon-monitor"></span>
+                Desktop
+              </span>
+            </nav>
+          </div>
+
+          <div class="pane">
+	    <a class="btn btn-primary" href="./assign.html">Assignments</a>	    
+            <table class="table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Kind</th>
+                  <th>Date Modified</th>
+                  <th>Author</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>bars.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>base.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>button-groups.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>buttons.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>docs.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>forms.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>grid.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>icons.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>images.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>lists.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>mixins.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>navs.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>normalize.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>photon.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>tables.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>tabs.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>utilities.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+                <tr>
+                  <td>variables.scss</td>
+                  <td>Document</td>
+                  <td>Oct 13, 2015</td>
+                  <td>connors</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </nav>
-
-    <div class="jumbotron" align="center">
-      <h1>ScriptureMaker (Bib-Edit)</h1>
-      <h2>Welcome User</h2>
-      <p><a class="btn btn-primary btn-lg" href="./assign.html" role="button">Continue</a></p>
     </div>
-
   </body>
-
 </html>
-
