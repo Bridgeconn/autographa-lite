@@ -1,8 +1,31 @@
 const electron = require('electron');
+const PouchDB = require('pouchdb');
+
+const bibleJson = require('./lib/full_net_bible.json');
+
 // Module to control application life.
 const {app} = electron;
 // Module to create native browser window.
 const {BrowserWindow} = electron;
+
+var db = new PouchDB('bible');
+
+db.destroy().then(function (response) {
+    console.log(response);
+    console.log('done');
+  // success
+}).catch(function (err) {
+  console.log(err);
+}); 
+
+db.put(bibleJson).then(function (response) {
+    console.log('i loaded.');
+    console.log(response);
+  // handle response
+}).catch(function (err) {
+  console.log(err);
+});
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
