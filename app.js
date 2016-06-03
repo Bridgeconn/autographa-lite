@@ -1,7 +1,6 @@
 const electron = require('electron');
+const ipc = electron.ipcMain
 const PouchDB = require('pouchdb');
-
-const bibleJson = require('./lib/full_net_bible.json');
 
 // Module to control application life.
 const {app} = electron;
@@ -10,22 +9,28 @@ const {BrowserWindow} = electron;
 
 var db = new PouchDB('bible');
 
-db.destroy().then(function (response) {
+/*db.destroy().then(function (response) {
     console.log(response);
     console.log('done');
   // success
 }).catch(function (err) {
   console.log(err);
-}); 
+}); */
 
-db.put(bibleJson).then(function (response) {
-    console.log('i loaded.');
-    console.log(response);
-  // handle response
+db.get('isDBSetup').then(function (doc) {
+    // handle doc
+    console.log('Already loaded.');
 }).catch(function (err) {
-  console.log(err);
+    console.log(err);
+    const bibleJson = require('./lib/full_net_bible.json');
+    db.bulkDocs(bibleJson).then(function (response) {
+	console.log('i loaded.');
+	console.log(response);
+	// handle response
+    }).catch(function (err) {
+	console.log(err);
+    });
 });
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -70,6 +75,11 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipc.on('synchronous-message', function (event, arg) {
+    win.loadURL(`file:${__dirname}/assets/translate.html`);
+    event.returnValue = 'pong';
+})
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
