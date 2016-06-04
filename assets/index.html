@@ -1,35 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Photon</title>
+<head>
+<title>Autographa Lite 1.0 </title>
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/photon.min.css">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="css/photon.min.css">
 
-    <!-- Javascript -->
-    <script src="js/menu.js" charset="utf-8"></script>
+<style> 
+
+#leftpame { margin :   10px ; width: 600px;
+
+
+  } </style>
+
+
+
+  <!-- Javascript -->
+  <script src="js/menu.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="window">
+  <div class="window">
 
-      <!-- .toolbar-header sits at the top of your app -->
-      <header class="toolbar toolbar-header">
-        <h1 class="title">Browse</h1>
-      </header>
+  <!-- .toolbar-header sits at the top of your app -->
+  <header class="toolbar toolbar-header">
+  <h1 class="title">Select Book</h1>
+  </header>
 
-      <!-- Your app's content goes inside .window-content -->
-      <div class="window-content">
-	<div class="pane-group">
-	  <div class="pane-mini sidebar">...</div>
-	  <div class="pane">
-	    <button id="sync-msg" class="btn btn-default">Sync-up</button>
-	    <p id="sync-reply"></p>
-	    Bible browse stuff.
-	    <a href="translate.html">Editor</a>
-	  </div>
-	</div>	
-      </div>
+  <!-- Your app's content goes inside .window-content -->
+  <div class="window-content">
+  
+    
+
+  <div  class="pane-group">
+  <div id="leftpane" class="pane-mini sidebar" >
+
+    <div>
+            <input type="radio" name="radio" id="radio1" class="radio" checked/>
+            <label for="radio1">Old Testament</label>
     </div>
-    <script>require('./js/index.js')</script>
+
+    <div>
+            <input type="radio" name="radio" id="radio2" class="radio"/>
+            <label for="radio2">New Testament</label>
+    </div>
+
+
+  <button class="btn btn-default">MAT</button>
+  <button class="btn btn-default">MRK</button>
+  <button class="btn btn-default">LUK</button>
+  <button class="btn btn-default">JHN</button>
+  <button class="btn btn-default">ACT</button>
+  <button class="btn btn-default">ROM</button>
+  <button class="btn btn-default">1CO</button>
+  <button class="btn btn-default">2CO</button>
+  <button class="btn btn-default">GAL</button>
+  <button class="btn btn-default">EPH</button>
+  <button class="btn btn-default">PHP</button>
+  <button class="btn btn-default">COL</button>
+  <button class="btn btn-default">1TH</button>
+  <button class="btn btn-default">2TH</button>
+  <button class="btn btn-default">1TI</button>
+  <button class="btn btn-default">2TI</button>
+  <button class="btn btn-default">TIT</button>
+  <button class="btn btn-default">MRK</button>
+  <button class="btn btn-default">PHM</button>
+  <button class="btn btn-default">HEB</button>
+  <button class="btn btn-default">JAS</button>
+  <button class="btn btn-default">1PE</button>
+  <button class="btn btn-default">2PE</button>
+  <button class="btn btn-default">1JN</button>
+  <button class="btn btn-default">2JN</button>
+  <button class="btn btn-default">JUD</button>
+  <button class="btn btn-default">REV</button>
+
+
+
+  </div>
+  <div class="pane">
+  <button id="sync-msg" class="btn btn-default">Sync-up</button>
+  <p id="sync-reply"></p>
+  Bible browse stuff.
+  <a href="translate.html">Editor</a>
+  </div>
+  </div>	
+  </div>
+  </div>
+  <script>require('./js/index.js')</script>
   </body>
-</html>
+  </html>
