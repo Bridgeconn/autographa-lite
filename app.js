@@ -11,7 +11,7 @@ var db = new PouchDB('bible');
 
 /*db.destroy().then(function (response) {
     console.log(response);
-    console.log('done');
+    console.log('done destroying.');
   // success
 }).catch(function (err) {
   console.log(err);
@@ -20,6 +20,7 @@ var db = new PouchDB('bible');
 db.get('isDBSetup').then(function (doc) {
     // handle doc
     console.log('Already loaded.');
+    db.close();
 }).catch(function (err) {
     console.log(err);
     const bibleJson = require('./lib/full_net_bible.json');
@@ -27,8 +28,10 @@ db.get('isDBSetup').then(function (doc) {
 	console.log('i loaded.');
 	console.log(response);
 	// handle response
+	db.close();
     }).catch(function (err) {
 	console.log(err);
+	db.close();
     });
 });
 
