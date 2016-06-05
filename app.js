@@ -10,7 +10,7 @@ const {app} = electron;
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 
-var db = new PouchDB('bible');
+var db = new PouchDB('database');
 
 /*db.destroy().then(function (response) {
     console.log(response);

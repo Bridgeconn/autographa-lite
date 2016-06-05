@@ -1,6 +1,6 @@
 const PouchDB = require('pouchdb');
 
-var db = new PouchDB('bible');
+var db = new PouchDB('database');
 
 document.getElementById("save-btn").addEventListener("click", function (e) {
     db.get('isDBSetup').then(function (doc) {
