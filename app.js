@@ -2,6 +2,9 @@ const electron = require('electron');
 const ipc = electron.ipcMain
 const PouchDB = require('pouchdb');
 
+const session = require('electron').session;
+//const session = electron.session.fromPartition('sharedData');
+
 // Module to control application life.
 const {app} = electron;
 // Module to create native browser window.
@@ -39,22 +42,33 @@ db.get('isDBSetup').then(function (doc) {
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    'min-width': 600,
-    'min-height': 300,
-    'accept-first-mouse': true,
-    'title-bar-style': 'hidden'
-  });
+var util = require('util');
 
-  // and load the index.html of the app.
-  win.loadURL(`file:${__dirname}/assets/index.html`);
+function createWindow() {
+    const cookie = {url: 'http://index.autographa.com', Name: 'book', value: 'Exodus'};
+    session.defaultSession.cookies.set(cookie, (error) => {
+	if (error)
+	    console.error(error);
+    });
+
+    console.log('session var is: ' + session.defaultSession);
+
+    // Create the browser window.
+    win = new BrowserWindow({
+	width: 800,
+	height: 600,
+	'min-width': 600,
+	'min-height': 300,
+	'accept-first-mouse': true,
+	'title-bar-style': 'hidden',
+	'webPreferences': {'session': session}
+    });
 
   // Open the DevTools.
   win.webContents.openDevTools();
+
+    // and load the index.html of the app.
+    win.loadURL(`file:${__dirname}/assets/index.html`);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -69,6 +83,7 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
