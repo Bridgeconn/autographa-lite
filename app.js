@@ -5,7 +5,7 @@ const PouchDB = require('pouchdb');
 const session = require('electron').session;
 
 // Module to control application life.
-const {app} = electron;
+const {app} = electron
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 

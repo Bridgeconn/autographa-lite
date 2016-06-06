@@ -5,9 +5,7 @@ var db = new PouchDB('database');
 
 document.getElementById("save-btn").addEventListener("click", function (e) {
     db.get('isDBSetup').then(function (doc) {
-	console.log('Inside and Already loaded.');
 	db.get('1').then(function (doc) {
-	    console.log(doc.chapters[0].verses[0]);
 	    doc.chapters[0].verses[0] = "An edited verse."
 	    return db.put({
 		_id: '1',
@@ -22,10 +20,9 @@ document.getElementById("save-btn").addEventListener("click", function (e) {
     });
 });
 
-document.getElementById("load-btn").addEventListener("click", function (e) {
+/*document.getElementById("load-btn").addEventListener("click", function (e) {
     db.get('isDBSetup').then(function (doc) {
 	db.get('1').then(function (doc) {
-	    console.log("Loading..");
 	    console.log(doc.chapters[0].verses[0]);
 	}).catch(function (err) {
 	    console.log('Error: While retrieving document. ' + err);
@@ -33,7 +30,7 @@ document.getElementById("load-btn").addEventListener("click", function (e) {
     }).catch(function (err) {
 	console.log("Error: Database not setup. " + err);
     });
-});
+}); */
 
 function createVerseInputs(verseLimit) {
     var i;
@@ -47,20 +44,13 @@ function createVerseInputs(verseLimit) {
 }
 
 session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
-    console.log(cookie[0]);
-    console.log(cookie[0].name + "|" + cookie[0].value);
     book = cookie[0].value;
-
     session.defaultSession.cookies.get({url: 'http://chapter.autographa.com'}, (error, cookie) => {
-	console.log(cookie[0]);
-	console.log(cookie[0].name + "|" + cookie[0].value);
 	chapter = cookie[0].value;
 	console.log('values are ' + book + ' ' + chapter);
-
 	db.get(book.toString()).then(function (doc) {
-	    console.log("Making new components..");
-	    console.log(doc.chapters[parseInt(chapter,10)].verses.length);
-	    createVerseInputs(doc.chapters[parseInt(chapter,10)].verses.length);
+	    console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
+	    createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses.length);
 	}).catch(function (err) {
 	    console.log('Error: While retrieving document. ' + err);
 	});	

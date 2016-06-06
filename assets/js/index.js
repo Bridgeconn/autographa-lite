@@ -4,13 +4,7 @@ const ipc = require('electron').ipcRenderer;
 const PouchDB = require('pouchdb');
 var db = new PouchDB('database');
 
-const syncMsgBtn = document.getElementById('sync-msg');
-
-syncMsgBtn.addEventListener('click', function () {
-    const reply = ipc.sendSync('synchronous-message', 'ping');
-    const message = `Synchronous message reply: ${reply}`;
-    document.getElementById('sync-reply').innerHTML = message;
-});
+var booksList = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"]
 
 function createBooksList(booksLimit) {
     var i;
@@ -18,7 +12,7 @@ function createBooksList(booksLimit) {
 	b = document.createElement('button');
 	b.className = "btn btn-default";
 	b.id = "b"+i;
-	t = document.createTextNode(i);
+	t = document.createTextNode(booksList[i-1]);
 	b.appendChild(t);
 	document.getElementById('leftpane').appendChild(b);
     }
@@ -48,10 +42,8 @@ function createChaptersList(chaptersLimit) {
 createBooksList(66);
 
 books = document.querySelectorAll("button[id^=b]");
-console.log(books)
 for(i=1; i<=books.length; i++) {
     books[i-1].addEventListener("click", function (e) {
-	console.log(e.target.id);
 	const cookie = {url: 'http://book.autographa.com', name: 'book', value: e.target.id.substring(1)};
 	session.defaultSession.cookies.set(cookie, (error) => {
 	    if (error)
