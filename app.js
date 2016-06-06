@@ -3,7 +3,6 @@ const ipc = electron.ipcMain
 const PouchDB = require('pouchdb');
 
 const session = require('electron').session;
-//const session = electron.session.fromPartition('sharedData');
 
 // Module to control application life.
 const {app} = electron;
@@ -45,14 +44,6 @@ let win;
 var util = require('util');
 
 function createWindow() {
-    const cookie = {url: 'http://index.autographa.com', Name: 'book', value: 'Exodus'};
-    session.defaultSession.cookies.set(cookie, (error) => {
-	if (error)
-	    console.error(error);
-    });
-
-    console.log('session var is: ' + session.defaultSession);
-
     // Create the browser window.
     win = new BrowserWindow({
 	width: 800,

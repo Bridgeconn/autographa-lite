@@ -1,3 +1,4 @@
+const session = require('electron').remote.session;
 const PouchDB = require('pouchdb');
 
 var db = new PouchDB('database');
@@ -45,10 +46,25 @@ function createVerseInputs(verseLimit) {
     }
 }
 
-db.get('1').then(function (doc) {
-    console.log("Making new components..");
-    console.log(doc.chapters[0].verses.length);
-    createVerseInputs(doc.chapters[0].verses.length);
-}).catch(function (err) {
-    console.log('Error: While retrieving document. ' + err);
+session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
+    console.log(cookie[0]);
+    console.log(cookie[0].name + "|" + cookie[0].value);
+    book = cookie[0].value;
+
+    session.defaultSession.cookies.get({url: 'http://chapter.autographa.com'}, (error, cookie) => {
+	console.log(cookie[0]);
+	console.log(cookie[0].name + "|" + cookie[0].value);
+	chapter = cookie[0].value;
+	console.log('values are ' + book + ' ' + chapter);
+
+	db.get(book.toString()).then(function (doc) {
+	    console.log("Making new components..");
+	    console.log(doc.chapters[parseInt(chapter,10)].verses.length);
+	    createVerseInputs(doc.chapters[parseInt(chapter,10)].verses.length);
+	}).catch(function (err) {
+	    console.log('Error: While retrieving document. ' + err);
+	});	
+    });
 });
+
+
