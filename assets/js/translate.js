@@ -20,17 +20,15 @@ document.getElementById("save-btn").addEventListener("click", function (e) {
     });
 });
 
+
 /*document.getElementById("load-btn").addEventListener("click", function (e) {
-    db.get('isDBSetup').then(function (doc) {
-	db.get('1').then(function (doc) {
-	    console.log(doc.chapters[0].verses[0]);
-	}).catch(function (err) {
-	    console.log('Error: While retrieving document. ' + err);
-	});
-    }).catch(function (err) {
-	console.log("Error: Database not setup. " + err);
-    });
-}); */
+  db.get('isDBSetup').then(function (doc) {
+  db.get('1').then(function (doc) {
+  document.getElementById("load-btn").addEventListener("click", function (e) {
+  db.get('isDBSetup').then(function (doc) {
+  db.get('1').then(function (doc) {
+  console.log("Loading..");
+  }); */
 
 function createVerseInputs(verseLimit) {
     var i;
@@ -56,5 +54,3 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 	});	
     });
 });
-
-
