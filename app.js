@@ -1,52 +1,65 @@
 const electron = require('electron');
+const ipc = electron.ipcMain
 const PouchDB = require('pouchdb');
 
-const bibleJson = require('./lib/full_net_bible.json');
+const session = require('electron').session;
 
 // Module to control application life.
-const {app} = electron;
+const {app} = electron
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 
-var db = new PouchDB('bible');
+var db = new PouchDB('database');
 
-db.destroy().then(function (response) {
+/*db.destroy().then(function (response) {
     console.log(response);
-    console.log('done');
+    console.log('done destroying.');
   // success
 }).catch(function (err) {
   console.log(err);
-}); 
+}); */
 
-db.put(bibleJson).then(function (response) {
-    console.log('i loaded.');
-    console.log(response);
-  // handle response
+db.get('isDBSetup').then(function (doc) {
+    // handle doc
+    console.log('Already loaded.');
+    db.close();
 }).catch(function (err) {
-  console.log(err);
+    console.log(err);
+    const bibleJson = require('./lib/full_net_bible.json');
+    db.bulkDocs(bibleJson).then(function (response) {
+	console.log('i loaded.');
+	console.log(response);
+	// handle response
+	db.close();
+    }).catch(function (err) {
+	console.log(err);
+	db.close();
+    });
 });
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    'min-width': 600,
-    'min-height': 300,
-    'accept-first-mouse': true,
-    'title-bar-style': 'hidden'
-  });
+var util = require('util');
 
-  // and load the index.html of the app.
-  win.loadURL(`file:${__dirname}/assets/index.html`);
+function createWindow() {
+    // Create the browser window.
+    win = new BrowserWindow({
+	width: 800,
+	height: 600,
+	'min-width': 600,
+	'min-height': 300,
+	'accept-first-mouse': true,
+	'title-bar-style': 'hidden',
+	'webPreferences': {'session': session}
+    });
 
   // Open the DevTools.
   win.webContents.openDevTools();
+
+    // and load the index.html of the app.
+    win.loadURL(`file:${__dirname}/assets/index.html`);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -62,6 +75,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
@@ -70,6 +84,12 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipc.on('synchronous-message', function (event, arg) {
+    db.close();
+    win.loadURL(`file:${__dirname}/assets/translate.html`);
+    event.returnValue = 'pong';
+})
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
