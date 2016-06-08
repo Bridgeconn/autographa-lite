@@ -1,7 +1,6 @@
 const electron = require('electron');
 const ipc = electron.ipcMain
 const PouchDB = require('pouchdb');
-
 const session = require('electron').session;
 
 // Module to control application life.
@@ -89,7 +88,7 @@ ipc.on('synchronous-message', function (event, arg) {
     db.close();
     win.loadURL(`file:${__dirname}/assets/translate.html`);
     event.returnValue = 'pong';
-})
+});
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-</head>
-<body>
+  <head>
+    <title>Settings</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/photon.min.css">
+  </head>
+  <body>
+    <div class="window">
+      <!-- .toolbar-header sits at the top of your app -->
+      <header class="toolbar toolbar-header">
+	<h1 class="title">Settings</h1>
+      </header>
 
-	<div class="radio">
-						<label>
-							<input type="radio" name="radios" checked>Option 1</label>
-					</div>
-					<div class="radio">
-						<label>
-							<input type="radio" name="radios">Option 2</label>
-					</div>
-
-
-
-</body>
+      <!-- Your app's content goes inside .window-content -->
+      <div class="window-content">
+	<div class="padded-more">
+	  Reference USFM settings
+	    <div class="form-group">
+	      <label>Language</label>
+	      <input id="lang" class="form-control" placeholder="Language">
+	    </div>
+	    <div class="form-group">
+	      <label>Version</label>
+	      <input id="version" class="form-control" placeholder="Version">
+	    </div>
+	    <button id="ref-select-btn" class="btn btn-primary">Select</button>	    
+	</div>
+      </div>
+    </div>
+    <script>require('./js/settings.js')</script>
+  </body>
 </html>
