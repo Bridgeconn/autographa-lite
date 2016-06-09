@@ -19,9 +19,10 @@ module.exports = {
 
 	lineReader.on('line', function (line) {
 	    //    console.log(line);
-	    line = line.trim();
-	    splitLine = line.split(' ');
+	    var line = line.trim();
+	    var splitLine = line.split(' ');
 	    if(splitLine[0] == '\\id') {
+		temp = id_prefix + splitLine[1];
 		book._id = id_prefix + splitLine[1];
 	    } else if(splitLine[0] == '\\c') {
 		book.chapters.push({
@@ -47,15 +48,11 @@ module.exports = {
 	});
 
 	lineReader.on('close', function(line) {
-	    //console.log(book.chapters[2].verses);
-	    //TODO: Check case when book with same _id exists in DB.
-	    
-	    console.log(book);
-//	    refDb.destroy();
-	    refDb.put(book);
-	    refDb.get('en_udb_1CO').then(function (doc) {
-		console.log(doc);
-		refDb.close();
+	    refDb.get(book._id).then(function (doc) {
+		book._rev = doc._rev;
+		db.put(book);
+	    }).catch(function (err) {
+		refDb.put(book);
 	    });
 	});
     }
