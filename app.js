@@ -67,6 +67,13 @@ function createWindow() {
 	// when you should delete the corresponding element.
 	win = null;
     });
+
+    exportWindow = new BrowserWindow({
+	width: 400,
+	height: 400,
+	show: false
+    });
+    exportWindow.loadURL(`file:${__dirname}/assets/settings.html`);
 }
 
 // This method will be called when Electron has finished
@@ -88,6 +95,10 @@ ipc.on('synchronous-message', function (event, arg) {
     db.close();
     win.loadURL(`file:${__dirname}/assets/translate.html`);
     event.returnValue = 'pong';
+});
+
+ipc.on('show-export-window', function () {
+    exportWindow.show();
 });
 
 app.on('activate', () => {
