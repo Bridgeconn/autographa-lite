@@ -1,28 +1,12 @@
 #header {
     background-color:#000000;
-    padding: 10px 16px;
+    padding: 5px 10px;
 }
-#footer {
-    background-color:#000000;
-    padding: 10px 10px;
+#leftpane {
+    padding-left: 15px;
+    width: 200px;
+    overflow: scroll;
 }
-#test {
-    background-color:black;
-    color:white;
-    text-align:center;
-    padding:5px;
+#button{
+  overflow: hidden;
 }
-#book {
-    line-height:30px;
-    background-color:#eeeeee;
-    width:200px;
-    float:left;
-    padding:5px;
-}
-#section {
-    width:350px;
-    height:100%;
-    float:left;
-    padding:10px;
-}
-

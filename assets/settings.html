@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Settings</title>
+    <title>Autographa Lite 1.0</title>
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/photon.min.css">
+    <link rel="stylesheet" href="css/picnic.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
   </head>
   <body>
     <div class="window">
-      <!-- .toolbar-header sits at the top of your app -->
-      <header class="toolbar toolbar-header">
-	<h1 class="title">Settings</h1>
+      <header class="toolbar toolbar-header" id="header">
+        <h1 class="title">Settings</h1>
+	<div align="right">
+	  <a class="pseudo button"  href="index.html">
+	    <span class="icon icon-reply"></span>Back</a>
+        </div>
       </header>
-
-      <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
 	<div class="padded-more">
 	  Reference USFM settings
-	    <div class="form-group">
-	      <label>Language</label>
-	      <input id="lang" class="form-control" placeholder="Language">
-	    </div>
-	    <div class="form-group">
-	      <label>Version</label>
-	      <input id="version" class="form-control" placeholder="Version">
-	    </div>
-	    <button id="ref-select-btn" class="btn btn-primary">Select</button>	    
+	  <div class="form-group">
+	    <label>Language</label>
+	    <input id="lang" class="form-control" placeholder="Language">
+	  </div>
+	  <div class="form-group">
+	    <label>Version</label>
+	    <input id="version" class="form-control" placeholder="Version">
+	  </div>
+	  <button id="ref-select-btn" class="btn btn-primary">Select</button>	    
 	</div>
       </div>
     </div>
-    <script>require('./js/settings.js')</script>
+    <script>require('./js/settings.js')</script>    
   </body>
 </html>

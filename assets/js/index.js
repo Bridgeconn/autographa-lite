@@ -8,9 +8,9 @@ var booksList = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Jo
 
 function createBooksList(booksLimit) {
     var i;
-    for (i=1; i<=booksLimit; i++) {  
+    for (i=1; i<=booksLimit; i++) {
 	b = document.createElement('button');
-	b.className = "btn btn-default";
+	b.className = "stack pseudo button";
 	b.id = "b"+i;
 	t = document.createTextNode(booksList[i-1]);
 	b.appendChild(t);
@@ -22,9 +22,9 @@ function createChaptersList(chaptersLimit) {
     var i;
     for (i=1; i<=chaptersLimit; i++) {
 	c = document.createElement('button');
-	c.className = "access btn btn-default";
+	c.className = "access pseudo button";
 	t = document.createTextNode(i);
-	c.appendChild(t);	
+	c.appendChild(t);
 	c.id = "c"+i;
 	document.getElementById('chapters-pane').appendChild(c);
 	c.addEventListener('click', function (e) {
