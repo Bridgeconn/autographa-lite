@@ -88,6 +88,17 @@ function createWindow() {
     exportWindow.on('closed', () => {
 	exportWindow = null;
     });
+
+    settingsWindow = new BrowserWindow({
+        width: 400,
+        height: 400,
+        show: false
+    })
+    settingsWindow.loadURL(`file:${__dirname}/assets/settings.html`);
+
+    ipc.on('show-settings', function(){
+        settingsWindow.show()
+    });
 }
 
 // This method will be called when Electron has finished

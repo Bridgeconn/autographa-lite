@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Photon</title>
+    <title>Editor</title>
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/photon.min.css">
+    <link rel="stylesheet" href="css/picnic.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
   </head>
   <body>
     <div class="window">
 
       <!-- .toolbar-header sits at the top of your app -->
-      <header class="toolbar toolbar-header">
-        <h1 class="title">Editor</h1>
+      <header class="toolbar toolbar-header" id="header">
+        <!-- <h1 class="title"></h1> -->
+        <div align="right">
+          <a class="pseudo button"  href="index.html">
+          <span class="icon icon-reply"></span>Back</a>
+        </div>
       </header>
+
 
       <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
-	<div class="pane-group">
-	  <div class="pane sidebar">Reference</div>
-	  <div class="pane">Verses
-	    <form>
-	      <div id="verses-group" class="form-group">
-	      </div>
-	    </form>
-	    <button id="save-btn" class="btn btn-primary pull-right">Save</button>
-<!--	    <button id="load-btn" class="btn btn-primary pull-right">Load</button> -->
-	  </div>
-	</div>
+      	<div class="pane-group">
+      	  <div class="pane sidebar" id="ref">Reference</div>
+      	  <div class="pane">Verses
+          <button id="save-btn" class="btn btn-primary pull-right">Save</button>
+      	    <form>
+      	      <div id="verses-group" class="form-group">
+      	      </div>
+      	    </form>
+
+      <!--	    <button id="load-btn" class="btn btn-primary pull-right">Load</button> -->
+      	  </div>
+      	</div>
+
       </div>
+      <footer class="toolbar toolbar-footer">
+      </footer>
     </div>
     <script>require("./js/translate.js")</script>
   </body>

@@ -7,6 +7,16 @@
     width: 200px;
     overflow: scroll;
 }
-#button{
-  overflow: hidden;
+#button {
+    overflow: hidden;
+}
+#ref {
+    margin-top: 50px;
+    position:fixed;
+    top: 10%;
+    left: 10%;
+    overflow: hidden;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
 }
