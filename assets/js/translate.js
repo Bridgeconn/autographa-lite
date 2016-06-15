@@ -1,5 +1,5 @@
-const session = require('electron').remote.session;
-const PouchDB = require('pouchdb');
+const session = require('electron').remote.session,
+      PouchDB = require('pouchdb');
 
 var db = new PouchDB('database');
 
