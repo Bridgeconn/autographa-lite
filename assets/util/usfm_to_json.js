@@ -15,7 +15,7 @@ module.exports = {
 	var book = {}, verse = [];
 	var c = 0, v = 0;
 	var id_prefix = options.lang + '_' + options.version + '_';
-	book.chapters = []
+	book.chapters = [];
 
 	lineReader.on('line', function (line) {
 	    //    console.log(line);
@@ -50,7 +50,7 @@ module.exports = {
 	lineReader.on('close', function(line) {
 	    refDb.get(book._id).then(function (doc) {
 		book._rev = doc._rev;
-		db.put(book);
+		refDb.put(book);
 	    }).catch(function (err) {
 		refDb.put(book);
 	    });

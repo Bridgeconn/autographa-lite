@@ -42,9 +42,9 @@ function createVerseInputs(verseLimit) {
 }
 
 session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
-    book = cookie[0].value;
+    var book = cookie[0].value;
     session.defaultSession.cookies.get({url: 'http://chapter.autographa.com'}, (error, cookie) => {
-	chapter = cookie[0].value;
+	var chapter = cookie[0].value;
 	console.log('values are ' + book + ' ' + chapter);
 	db.get(book.toString()).then(function (doc) {
 	    console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
@@ -54,3 +54,44 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 	});	
     });
 });
+
+var bookCodeList = ['GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA', '2SA', '1KI', '2KI', '1CH', '2CH', 'EZR', 'NEH', 'EST', 'JOB', 'PSA', 'PRO', 'ECC', 'SNG', 'ISA', 'JER', 'LAM', 'EZK', 'DAN', 'HOS', 'JOL', 'AMO', 'OBA', 'JON', 'MIC', 'NAM', 'HAB', 'ZEP', 'HAG', 'ZEC', 'MAL', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT', 'ROM', '1CO', '2CO', 'GAL', 'EPH', 'PHP', 'COL', '1TH', '2TH', '1TI', '2TI', 'TIT', 'PHM', 'HEB', 'JAS', '1PE', '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV'];
+
+function showReferenceText(ref_id) {
+    session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
+	var book = cookie[0].value;
+	session.defaultSession.cookies.get({url: 'http://chapter.autographa.com'}, (error, cookie) => {
+	    var chapter = cookie[0].value,
+		refDb = new PouchDB('reference'),
+		id = ref_id + '_' + bookCodeList[parseInt(book,10)-1];
+	    refDb.get(id).then(function (doc) {
+		//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
+		document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
+		    return '<span>  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
+		}).join('');
+	    }).catch(function (err) {
+		console.log('Error: Unable to find requested reference in DB. ' + err);
+	    });
+	});
+    });
+}
+
+function createRefSelections() {
+    refDb = new PouchDB('reference'),
+    refDb.get('refs').then(function (doc) {
+	console.log(doc);
+	doc.ref_ids.forEach(function (ref_doc) {
+	    if(ref_doc.isDefault) {
+		showReferenceText(ref_doc.ref_id);
+	    }
+	    var s = document.createElement('option');
+	    var t = document.createTextNode(ref_doc.ref_name);
+	    s.appendChild(t);
+	    document.getElementById('refs-select').appendChild(s);
+	});
+    }).catch(function (err) {
+	console.log('Info: No references found in Database. ' + err);
+    });
+}
+
+createRefSelections();
