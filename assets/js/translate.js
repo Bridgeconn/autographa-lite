@@ -32,12 +32,19 @@ document.getElementById("save-btn").addEventListener("click", function (e) {
 
 function createVerseInputs(verseLimit) {
     var i;
-    for (i=1; i<=verseLimit; i++) {  
-	var v = document.createElement('textarea');
-	v.className = "form-control";
-	v.setAttribute("rows", "3");
-	v.id = "v"+i;
-	document.getElementById('verses-group').appendChild(v);
+    for (i=1; i<=verseLimit; i++) {
+	var divContainer = document.createElement('div'),
+	    divVerseNum = document.createElement('div'),
+	    divVerse = document.createElement('div');
+
+	divVerse.contentEditable = true;
+	divVerse.style.cssText = 'width:95%;float:right';
+	divVerseNum.appendChild(document.createTextNode(i));
+	divVerseNum.style.cssText = 'width:5%;float:left;';
+	divContainer.appendChild(divVerseNum);
+	divContainer.appendChild(divVerse);
+
+	document.getElementById('verses-group').appendChild(divContainer);
     }
 }
 
