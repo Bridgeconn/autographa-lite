@@ -6,7 +6,7 @@ module.exports = {
 	    fs = require("fs"),
 	    path = require("path"),
 	    usfmContent = [];
-	usfmContent.push('\\id ' + book.bookName);
+	usfmContent.push('\\id ' + book.bookCode);
 	usfmContent.push('\\mt ' + book.bookName);
 	db.get(book.bookNumber).then(function (doc) {
 	    var chapterLimit = doc.chapters.length;

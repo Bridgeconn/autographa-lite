@@ -65,7 +65,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	ref_entry = {},
     	files = fs.readdirSync(document.getElementById('ref-path').value);
     ref_entry.ref_id = ref_id_value;
-    ref_entry.ref_name =  ref_id_value;
+    ref_entry.ref_name =  document.getElementById('ref-name').value;
     ref_entry.isDefault = false;
     refDb.get('refs').then(function (doc) {
 	var refExistsFlag = false;
