@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.2.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,9 @@
   },
   "homepage": "https://github.com/Bridgeconn/bib-edit#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.1.1"
+    "electron-prebuilt": "^1.2.0"
   },
   "dependencies": {
-    "pouchdb": "^5.3.2"
+    "pouchdb": "5.4.4"
   }
 }

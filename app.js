@@ -16,8 +16,16 @@ var db = new PouchDB('database');
   // success
   }).catch(function (err) {
   console.log(err);
-  }); */
+  });
 
+var refDb = new PouchDB('reference');
+refDb.destroy().then(function (response) {
+  console.log(response);
+  console.log('done destroying refs.');
+  // success
+  }).catch(function (err) {
+  console.log(err);
+  });*/
 db.get('isDBSetup').then(function (doc) {
     // handle doc
     db.close();    
