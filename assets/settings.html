@@ -23,14 +23,18 @@
 	<div class="padded-more">
 	  Reference USFM settings
 	  <div class="form-group">
-	    <label>Reference Language</label>
-	    <input id="lang" class="form-control" placeholder="Language">
+	    <label>Reference Bible Language Code</label>
+	    <input id="ref-lang-code" class="form-control" placeholder="Language">
 	  </div>
 	  <div class="form-group">
-	    <label>Reference Version</label>
-	    <input id="version" class="form-control" placeholder="Version">
+	    <label>Reference Bible Version</label>
+	    <input id="ref-version" class="form-control" placeholder="Version">
 	  </div>
-	  <button id="ref-select-btn" class="btn btn-primary">Select Folder</button>
+	  <div class="form-group">
+	    <label>Reference Bible Folder Location</label>
+	    <input id="ref-path" class="form-control" placeholder="/path/to/reference-bible/folder" readonly>
+	  </div>	  
+	  <button id="ref-import-btn" class="btn btn-primary">Import</button>
 	  <br /><hr />
 	  Target Language Settings
 	  <div class="form-group">
