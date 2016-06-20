@@ -72,9 +72,12 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 var bookCodeList = ['GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA', '2SA', '1KI', '2KI', '1CH', '2CH', 'EZR', 'NEH', 'EST', 'JOB', 'PSA', 'PRO', 'ECC', 'SNG', 'ISA', 'JER', 'LAM', 'EZK', 'DAN', 'HOS', 'JOL', 'AMO', 'OBA', 'JON', 'MIC', 'NAM', 'HAB', 'ZEP', 'HAG', 'ZEC', 'MAL', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT', 'ROM', '1CO', '2CO', 'GAL', 'EPH', 'PHP', 'COL', '1TH', '2TH', '1TI', '2TI', 'TIT', 'PHM', 'HEB', 'JAS', '1PE', '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV'];
 
 function showReferenceText(ref_id) {
+    ref_id = (ref_id === 0 ? document.getElementById('refs-select').value : ref_id);
     var id = ref_id + '_' + bookCodeList[parseInt(book,10)-1];
+    console.log('id is = ' + id)
     refDb.get(id).then(function (doc) {
 	//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
+	console.log(doc.chapters);
 	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
 	    return '<span>  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
 	}).join('');
@@ -91,6 +94,7 @@ function createRefSelections() {
 		showReferenceText(ref_doc.ref_id);
 	    }
 	    var s = document.createElement('option');
+	    s.value = ref_doc.ref_name;
 	    var t = document.createTextNode(ref_doc.ref_name);
 	    s.appendChild(t);
 	    document.getElementById('refs-select').appendChild(s);
@@ -100,3 +104,6 @@ function createRefSelections() {
     });
 }
 
+document.getElementById("refs-select").addEventListener("change", function (e) {
+    showReferenceText(e.target.value);
+});

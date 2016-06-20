@@ -59,57 +59,61 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
     });
 });
 
-document.getElementById('ref-select-btn').addEventListener('click', function (e) {
+document.getElementById('ref-import-btn').addEventListener('click', function (e) {
+    var refDb = new PouchDB('reference'),
+	ref_id_value = document.getElementById('ref-lang-code').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
+	ref_entry = {},
+    	files = fs.readdirSync(document.getElementById('ref-path').value);
+    ref_entry.ref_id = ref_id_value;
+    ref_entry.ref_name =  ref_id_value;
+    ref_entry.isDefault = false;
+    refDb.get('refs').then(function (doc) {
+	var refExistsFlag = false;
+	var updatedDoc = doc.ref_ids.forEach(function (ref_doc) {
+	    if(ref_doc.ref_id === ref_id_value) {
+		refExistsFlag = true;
+	    }
+	});
+	if(!refExistsFlag) {
+	    doc.ref_ids.push(ref_entry);
+	    refDb.put(doc).then(function (res) {
+		refDb.close();
+	    });
+	} else {
+	    refDb.close();
+	}
+    }).catch(function (err) {
+	var refs = {
+	    _id: 'refs',
+	    ref_ids: []
+	};
+	ref_entry.isDefault = true;
+	refs.ref_ids.push(ref_entry);
+	refDb.put(refs).then(function (res) {
+	    refDb.close();
+	});
+    });
+    files.forEach(function (file) {
+	var filePath = path.join(document.getElementById('ref-path').value.toLowerCase(), file);
+	//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
+	if(fs.statSync(filePath).isFile()) {
+	    var options = {
+		lang: document.getElementById('ref-lang-code').value.toLowerCase(),
+		version: document.getElementById('ref-version').value.toLowerCase(),
+		usfmFile: filePath
+	    }
+	    bibUtil.toJson(options);
+	}
+    });
+});
+
+document.getElementById('ref-path').addEventListener('click', function (e) {
     dialog.showOpenDialog({properties: ['openDirectory'],
 			   filters: [{name: 'All Files', extensions: ['*']}],
-			   title: "Select reference folder"
+			   title: "Select reference version folder"
 			  }, function (selectedDir) {
 			      if(selectedDir != null) {
-				  var refDb = new PouchDB('reference'),
-				      files = fs.readdirSync(selectedDir[0]);
-				  var ref_id_value = document.getElementById('lang').value + '_' + document.getElementById('version').value,
-				      ref_entry = {};
-				  ref_entry.ref_id = ref_id_value;
-				  ref_entry.ref_name =  'English - NET';
-				  ref_entry.isDefault = false;
-				  refDb.get('refs').then(function (doc) {
-				      var refExistsFlag = false;
-				      var updatedDoc = doc.ref_ids.forEach(function (ref_doc) {
-					  if(ref_doc.ref_id === ref_id_value) {
-					      refExistsFlag = true;
-					  }
-				      });
-				      if(!refExistsFlag) {
-					  doc.ref_ids.push(ref_entry);
-					  refDb.put(doc).then(function (res) {
-					      refDb.close();
-					  });
-				      } else {
-					  refDb.close();
-				      }
-				  }).catch(function (err) {
-				      var refs = {
-					  _id: 'refs',
-					  ref_ids: []
-				      };
-				      ref_entry.isDefault = true;
-				      refs.ref_ids.push(ref_entry);
-				      refDb.put(refs).then(function (res) {
-					  refDb.close();
-				      });
-				  });
-				  files.forEach(function (file) {
-				      var filePath = path.join(selectedDir[0], file);
-//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
-				      if(fs.statSync(filePath).isFile()) {
-					  var options = {
-					      lang: document.getElementById('lang').value,
-					      version: document.getElementById('version').value,
-					      usfmFile: filePath
-					  }
-					  bibUtil.toJson(options);
-				      }
-				  });
+				  e.target.value = selectedDir;
 			      }
 			  });
 });
