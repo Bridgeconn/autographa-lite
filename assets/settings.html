@@ -2,63 +2,73 @@
 <html>
   <head>
     <title>Autographa Lite 1.0</title>
-
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/photon.min.css">
+    <!-- <link rel="stylesheet" href="css/photon.min.css"> -->
     <link rel="stylesheet" href="css/picnic.min.css">
-
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
   </head>
   <body>
     <div class="window">
       <header class="toolbar toolbar-header" id="header">
-        <h1 class="title">Settings</h1>
-	<div align="right">
-	  <a class="pseudo button"  href="index.html">
-	    <span class="icon icon-reply"></span>Back</a>
+        <!-- <h1 class="title">Settings</h1> -->
+    	  <div align="right">
+    	   <a class="pseudo button"  href="index.html">
+  	     <span class="icon icon-reply"></span>Back</a>
         </div>
       </header>
       <div class="window-content">
-	<div class="padded-more">
-	  Reference USFM settings
-	  <div class="form-group">
-	    <label>Reference Bible Name</label>
-	    <input id="ref-name" class="form-control" placeholder="Hindi - UDB (BSI)">
-	  </div>	  
-	  <div class="form-group">
-	    <label>Reference Bible Language Code</label>
-	    <input id="ref-lang-code" class="form-control" placeholder="hi">
-	  </div>
-	  <div class="form-group">
-	    <label>Reference Bible Version</label>
-	    <input id="ref-version" class="form-control" placeholder="udb">
-	  </div>
-	  <div class="form-group">
-	    <label>Reference Bible Folder Location</label>
-	    <input id="ref-path" class="form-control" placeholder="/path/to/reference-bible/folder" readonly>
-	  </div>	  
-	  <button id="ref-import-btn" class="btn btn-primary">Import</button>
-	  <br /><hr />
-	  Target Language Settings
-	  <div class="form-group">
-	    <label>Target Language Code</label>
-	    <input id="target-lang" class="form-control" placeholder="hi">
-	  </div>
-	  <div class="form-group">
-	    <label>Target Version</label>
-	    <input id="target-version" class="form-control" placeholder="ulb">
-	  </div>
-	  <div class="form-group">
-	    <label>Export Path</label>
-	    <input id="export-path" class="form-control" placeholder="/path/to/export/folder" readonly>
-	  </div>
-	  <button id="save-btn" class="btn btn-primary">Save Settings</button>
-	</div>
+      	<div class="padded-more">
+        <div class="flex demo">
+        <div class="card">
+          <fieldset class="flex demo">
+            <label>Name</label><input type="text" placeholder="name">
+            <label>Email</label><input type="email" placeholder="Email">
+            <label>Organisation</label><input type="text" placeholder="Organisation">
+            <input value="Submit" type="submit">
+          </fieldset>
+        </div>
+        <div class="half">
+      	  Reference USFM settings
+      	  <div class="form-group">
+      	    <label>Reference Bible Name</label>
+      	    <input id="ref-name" class="form-control" placeholder="Hindi - UDB (BSI)">
+      	  </div>
+      	  <div class="form-group">
+      	    <label>Reference Bible Language Code</label>
+      	    <input id="ref-lang-code" class="form-control" placeholder="hi">
+      	  </div>
+      	  <div class="form-group">
+      	    <label>Reference Bible Version</label>
+      	    <input id="ref-version" class="form-control" placeholder="udb">
+      	  </div>
+      	  <div class="form-group">
+      	    <label>Reference Bible Folder Location</label>
+      	    <input id="ref-path" class="form-control" placeholder="/path/to/reference-bible/folder" readonly>
+      	  </div>
+      	  <button id="ref-import-btn" class="btn btn-primary">Import</button>
+
+	       <!-- <br /><hr /> -->
+
+      	  Target Language Settings
+      	  <div class="form-group">
+      	    <label>Target Language Code</label>
+      	    <input id="target-lang" class="form-control" placeholder="hi">
+      	  </div>
+      	  <div class="form-group">
+      	    <label>Target Version</label>
+      	    <input id="target-version" class="form-control" placeholder="ulb">
+      	  </div>
+      	  <div class="form-group">
+      	    <label>Export Path</label>
+      	    <input id="export-path" class="form-control" placeholder="/path/to/export/folder" readonly>
+      	  </div>
+      	  <button id="save-btn" class="btn btn-primary">Save Settings</button>
+    	  </div>
       </div>
+    </div>
        <footer class="toolbar toolbar-footer">
       </footer>
     </div>
-    <script>require('./js/settings.js')</script>    
+    <script>require('./js/settings.js')</script>
   </body>
 </html>
