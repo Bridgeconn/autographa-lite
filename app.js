@@ -86,7 +86,7 @@ function createWindow() {
 	exportWindow = null;
     });
 
-    exportWindow = new BrowserWindow({
+/*    exportWindow = new BrowserWindow({
 	width: 500,
 	height: 800,
 	show: false
@@ -106,7 +106,7 @@ function createWindow() {
 
     ipc.on('show-settings', function(){
         settingsWindow.show()
-    });
+    });*/
 }
 
 // This method will be called when Electron has finished
@@ -124,7 +124,7 @@ app.on('window-all-closed', () => {
     }
 });
 
-ipc.on('synchronous-message', function (event, arg) {
+/*ipc.on('synchronous-message', function (event, arg) {
     db.close();
     win.loadURL(`file:${__dirname}/assets/translate.html`);
     event.returnValue = 'pong';
@@ -132,7 +132,7 @@ ipc.on('synchronous-message', function (event, arg) {
 
 ipc.on('show-import-window', function () {
     exportWindow.show();
-});
+});*/
 
 app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
