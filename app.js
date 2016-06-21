@@ -26,6 +26,7 @@ refDb.destroy().then(function (response) {
   }).catch(function (err) {
   console.log(err);
   });*/
+
 db.get('isDBSetup').then(function (doc) {
     // handle doc
     db.close();    
@@ -129,7 +130,7 @@ app.on('window-all-closed', () => {
     win.loadURL(`file:${__dirname}/assets/translate.html`);
     event.returnValue = 'pong';
 });
-
+/*
 ipc.on('show-import-window', function () {
     exportWindow.show();
 });*/
