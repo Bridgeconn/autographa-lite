@@ -11,7 +11,9 @@
     <div class="window">
       <header class="toolbar toolbar-header" id="header">
         <!-- <h1 class="title">Settings</h1> -->
+
     	  <div align="right">
+        <label for="modal_1" class="pseudo button">Details</label>
     	   <a class="pseudo button"  href="index.html">
   	     <span class="icon icon-reply"></span>Back</a>
         </div>
@@ -19,14 +21,39 @@
       <div class="window-content">
       	<div class="padded-more">
         <div class="flex demo">
-        <div class="card">
-          <fieldset class="flex demo">
-            <label>Name</label><input type="text" placeholder="name">
-            <label>Email</label><input type="email" placeholder="Email">
-            <label>Organisation</label><input type="text" placeholder="Organisation">
-            <input value="Submit" type="submit">
-          </fieldset>
+
+
+        <div class="modal">
+          <input id="modal_1" type="checkbox" />
+          <label for="modal_1" class="overlay"></label>
+          <article>
+            <header>
+              <h3>Enter Details</h3>
+              <label for="modal_1" class="close">&times;</label>
+            </header>
+            <section class="content">
+              <div class="form-group">
+                 <label>Name:</label>
+                 <input type="text" name="name" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label>Organisation:</label>
+                <input type="text" name="organisation" placeholder="Organisation">
+              </div>
+            </section>
+            <footer>
+              <a class="button" type="submit" >Save</a>
+              <label for="modal_1" class="button dangerous">
+                Cancel
+              </label>
+            </footer>
+          </article>
         </div>
+
         <div class="half">
       	  Reference USFM settings
       	  <div class="form-group">
