@@ -78,11 +78,9 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	if(!refExistsFlag) {
 	    doc.ref_ids.push(ref_entry);
 	    refDb.put(doc).then(function (res) {
-		refDb.close();
 		saveJsonToDB(files);
 	    });
 	} else {
-	    refDb.close();
 	    saveJsonToDB(files);
 	}
     }).catch(function (err) {
@@ -93,7 +91,6 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	ref_entry.isDefault = true;
 	refs.ref_ids.push(ref_entry);
 	refDb.put(refs).then(function (res) {
-	    refDb.close();
 	    saveJsonToDB(files);
 	});
     });
@@ -101,7 +98,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 
 function saveJsonToDB(files) {
         files.forEach(function (file) {
-	var filePath = path.join(document.getElementById('ref-path').value.toLowerCase(), file);
+	var filePath = path.join(document.getElementById('ref-path').value, file);
 	//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
 	if(fs.statSync(filePath).isFile()) {
 	    var options = {
