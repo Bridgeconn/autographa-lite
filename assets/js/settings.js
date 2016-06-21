@@ -69,6 +69,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
     ref_entry.isDefault = false;
     refDb.get('refs').then(function (doc) {
 	var refExistsFlag = false;
+	console.log('see this.');
 	var updatedDoc = doc.ref_ids.forEach(function (ref_doc) {
 	    if(ref_doc.ref_id === ref_id_value) {
 		refExistsFlag = true;
@@ -78,9 +79,11 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	    doc.ref_ids.push(ref_entry);
 	    refDb.put(doc).then(function (res) {
 		refDb.close();
+		saveJsonToDB(files);
 	    });
 	} else {
 	    refDb.close();
+	    saveJsonToDB(files);
 	}
     }).catch(function (err) {
 	var refs = {
@@ -91,9 +94,13 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	refs.ref_ids.push(ref_entry);
 	refDb.put(refs).then(function (res) {
 	    refDb.close();
+	    saveJsonToDB(files);
 	});
     });
-    files.forEach(function (file) {
+});
+
+function saveJsonToDB(files) {
+        files.forEach(function (file) {
 	var filePath = path.join(document.getElementById('ref-path').value.toLowerCase(), file);
 	//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
 	if(fs.statSync(filePath).isFile()) {
@@ -105,7 +112,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	    bibUtil.toJson(options);
 	}
     });
-});
+}
 
 document.getElementById('ref-path').addEventListener('click', function (e) {
     dialog.showOpenDialog({properties: ['openDirectory'],

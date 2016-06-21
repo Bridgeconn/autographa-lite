@@ -94,7 +94,7 @@ function createRefSelections() {
 		showReferenceText(ref_doc.ref_id);
 	    }
 	    var s = document.createElement('option');
-	    s.value = ref_doc.ref_name;
+	    s.value = ref_doc.ref_id;
 	    var t = document.createTextNode(ref_doc.ref_name);
 	    s.appendChild(t);
 	    document.getElementById('refs-select').appendChild(s);
