@@ -41,7 +41,7 @@ function setupTargetDb() {
 
 function setupRefDb() {
     var refDb = new PouchDB('reference');
-    const refEnJson = require('/home/joel/bib-edit-data/output.json');
+    const refEnJson = require('./lib/refs.json');
     refDb.bulkDocs(refEnJson).then(function (response) {
 	console.log('done ref en.');
 	console.log(response);
