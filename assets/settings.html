@@ -78,24 +78,26 @@
         </div>
 	       <!-- <br /><hr /> -->
         <div id="target" class="card">
-          <header>
-            <h3>Target Language Settings</h3>
-          </header>
-      	  <div class="form-group">
-      	    <label>Target Language Code</label>
-      	    <input id="target-lang" class="form-control" placeholder="hi">
-      	  </div>
-      	  <div class="form-group">
-      	    <label>Target Version</label>
-      	    <input id="target-version" class="form-control" placeholder="ulb">
-      	  </div>
-      	  <div class="form-group">
-      	    <label>Export Path</label>
-      	    <input id="export-path" class="form-control" placeholder="/path/to/export/folder" readonly>
-      	  </div>
-          <footer>
-      	  <button id="save-btn" class="btn btn-primary">Save Settings</button>
-          </footer>
+          <form name="Form" onsubmit="return validateForm()">
+            <header>
+              <h3>Target Language Settings</h3>
+            </header>
+        	  <div class="form-group">
+        	    <label>Target Language Code</label>
+        	    <input id="target-lang" name="target_lang" class="form-control" placeholder="hi">
+        	  </div>
+        	  <div class="form-group">
+        	    <label>Target Version</label>
+        	    <input id="target-version" name="target_version" class="form-control" placeholder="ulb">
+        	  </div>
+        	  <div class="form-group">
+        	    <label>Export Path</label>
+        	    <input id="export-path" name="export" class="form-control" placeholder="/path/to/export/folder" readonly>
+        	  </div>
+            <footer>
+        	  <button id="save-btn" type="submit" class="btn btn-primary">Save Settings</button>
+            </footer>
+          </form>
         </div>
 
     </div>
@@ -103,5 +105,19 @@
       </footer>
     </div>
     <script>require('./js/settings.js')</script>
+    <script type="text/javascript">
+    function validateForm()
+    {
+    var a=document.forms["Form"]["target_lang"].value;
+    var b=document.forms["Form"]["target_version"].value;
+    var c=document.forms["Form"]["export"].value;
+
+    if (a==null || a=="",b==null || b=="",c==null || c=="")
+      {
+      alert("Please Fill All Required Field");
+      return false;
+      }
+    }
+    </script>
   </body>
 </html>

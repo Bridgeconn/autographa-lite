@@ -41,7 +41,7 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
 	    _rev: doc._rev,
 	    targetLang: document.getElementById('target-lang').value,
 	    targetVersion: document.getElementById('target-version').value,
-	    targetPath: document.getElementById('export-path').value  
+	    targetPath: document.getElementById('export-path').value
 	}).then(function (e) {
 	    db.close();
 	});
@@ -50,7 +50,7 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
 	    _id: 'targetBible',
 	    targetLang: document.getElementById('target-lang').value,
 	    targetVersion: document.getElementById('target-version').value,
-	    targetPath: document.getElementById('export-path').value  
+	    targetPath: document.getElementById('export-path').value
 	}).then(function (e) {
 	    db.close();
 	}).catch(function (err) {
@@ -121,3 +121,16 @@ document.getElementById('ref-path').addEventListener('click', function (e) {
 			      }
 			  });
 });
+
+// function validateForm()
+//     {
+//     var a=document.forms["Form"]["target_lang"].value;
+//     var b=document.forms["Form"]["target_version"].value;
+//     var c=document.forms["Form"]["export"].value;
+
+//     if (a==null || a=="",b==null || b=="",c==null || c=="")
+//       {
+//       alert("Please Fill All Required Field");
+//       return false;
+//       }
+//     }
