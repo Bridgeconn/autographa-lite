@@ -85,7 +85,7 @@ app.on('window-all-closed', () => {
     }
 });
 
-/*ipc.on('synchronous-message', function (event, arg) {
+ipc.on('synchronous-message', function (event, arg) {
     db.close();
     win.loadURL(`file:${__dirname}/assets/translate.html`);
     event.returnValue = 'pong';

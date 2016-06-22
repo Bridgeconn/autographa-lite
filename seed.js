@@ -26,10 +26,8 @@ function setupTargetDb() {
     db.get('isDBSetup').then(function (doc) {
 	db.close();    
     }).catch(function (err) {
-	console.log(err);
 	const bibleJson = require('./lib/full_net_bible.json');
 	db.bulkDocs(bibleJson).then(function (response) {
-	    console.log('i loaded.');
 	    console.log(response);
 	    db.close();
 	}).catch(function (err) {
@@ -41,15 +39,18 @@ function setupTargetDb() {
 
 function setupRefDb() {
     var refDb = new PouchDB('reference');
-    const refEnJson = require('./lib/refs.json');
-    refDb.bulkDocs(refEnJson).then(function (response) {
-	console.log('done ref en.');
-	console.log(response);
+    refDb.get('refs').then(function (doc) {
+	console.log(doc);
 	refDb.close();
     }).catch(function (err) {
-	console.log('error');
-	console.log(err);
-	refDb.close();
+	const refEnJson = require('./lib/refs.json');	
+	refDb.bulkDocs(refEnJson).then(function (response) {
+	    console.log(response);
+	    refDb.close();
+	}).catch(function (err) {
+	    console.log('Error loading reference data. ' + err);
+	    refDb.close();
+	});	
     });
 }
 
