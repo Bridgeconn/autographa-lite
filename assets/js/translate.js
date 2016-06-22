@@ -77,7 +77,6 @@ function showReferenceText(ref_id) {
     console.log('id is = ' + id)
     refDb.get(id).then(function (doc) {
 	//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
-	console.log(doc.chapters);
 	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
 	    return '<span>  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
 	}).join('');
@@ -94,7 +93,7 @@ function createRefSelections() {
 		showReferenceText(ref_doc.ref_id);
 	    }
 	    var s = document.createElement('option');
-	    s.value = ref_doc.ref_name;
+	    s.value = ref_doc.ref_id;
 	    var t = document.createTextNode(ref_doc.ref_name);
 	    s.appendChild(t);
 	    document.getElementById('refs-select').appendChild(s);
