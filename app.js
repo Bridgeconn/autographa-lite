@@ -10,47 +10,7 @@ const {BrowserWindow} = electron;
 
 var db = new PouchDB('database');
 
-/*db.destroy().then(function (response) {
-  console.log(response);
-  console.log('done destroying.');
-  // success
-  }).catch(function (err) {
-  console.log(err);
-  });
-
-var refDb = new PouchDB('reference');
-refDb.destroy().then(function (response) {
-  console.log(response);
-  console.log('done destroying refs.');
-  // success
-  }).catch(function (err) {
-  console.log(err);
-  });*/
-
-db.get('isDBSetup').then(function (doc) {
-    // handle doc
-    db.close();    
-/*    console.log('Already loaded.');
-    db.get('targetBible').then(function (doc) {
-	console.log(doc);
-	db.close();
-    }).catch(function (err) {
-	console.log('targetBible not set');
-	db.close();
-    });*/
-}).catch(function (err) {
-    console.log(err);
-    const bibleJson = require('./lib/full_net_bible.json');
-    db.bulkDocs(bibleJson).then(function (response) {
-	console.log('i loaded.');
-	console.log(response);
-	// handle response
-	db.close();
-    }).catch(function (err) {
-	console.log(err);
-	db.close();
-    });
-});
+require('./seed.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
