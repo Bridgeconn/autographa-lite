@@ -33,13 +33,32 @@ document.getElementById("save-btn").addEventListener("click", function (e) {
   console.log("Loading..");
   }); */
 
-function createVerseInputs(verses) {
-    var i;
+function createVerseInputs(verses, chunks, chapter) {
+    var i, chunkIndex = 0, chunkVerseStart, chunkVerseEnd;
+    for(i=0; i<chunks.length; i++) {
+	if(parseInt(chunks[i].chp, 10) === parseInt(chapter, 10)) {
+	    chunkIndex = i+1;
+	    chunkVerseStart = parseInt(chunks[i].firstvs, 10);
+	    chunkVerseEnd = parseInt(chunks[i+1].firstvs, 10) - 1;
+	    break;
+	}
+    }
+
     for (i=1; i<=verses.length; i++) {
 	var divContainer = document.createElement('div'),
 	    divVerseNum = document.createElement('div'),
 	    divVerse = document.createElement('div');
-
+	if(i > chunkVerseEnd) {
+	    chunkVerseStart = parseInt(chunks[chunkIndex].firstvs, 10);
+	    if(chunkIndex === chunks.length-1 || parseInt((chunks[chunkIndex+1].chp), 10) != chapter) {
+		chunkVerseEnd = verses.length;
+	    } else {
+		chunkIndex++;
+		chunkVerseEnd = parseInt(chunks[chunkIndex].firstvs, 10)-1;
+	    }
+	}
+	var chunk = chunkVerseStart + '-' + chunkVerseEnd;
+	divVerse.setAttribute("chunk-group", chunk);
 	divVerse.contentEditable = true;
 	divVerse.style.cssText = 'width:95%;float:right';
 	divVerse.id = "v"+i;
@@ -59,13 +78,15 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 	chapter = cookie[0].value;
 	console.log('values are ' + book + ' ' + chapter);
 	db.get(book).then(function (doc) {
-	    console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
-	    currentBook = doc;
-	    createRefSelections();
-	    createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses);
+	    refDb.get('refChunks').then(function (chunkDoc) {
+		console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
+		currentBook = doc;
+		createRefSelections();
+		createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses, chunkDoc.chunks[parseInt(book,10)-1], chapter);
+	    });
 	}).catch(function (err) {
 	    console.log('Error: While retrieving document. ' + err);
-	});	
+	});
     });
 });
 
