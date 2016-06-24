@@ -106,18 +106,18 @@
     </div>
     <script>require('./js/settings.js')</script>
     <script type="text/javascript">
-    function validateForm()
-    {
-    var a=document.forms["Form"]["target_lang"].value;
-    var b=document.forms["Form"]["target_version"].value;
-    var c=document.forms["Form"]["export"].value;
-
-    if (a==null || a=="",b==null || b=="",c==null || c=="")
+      function validateForm()
       {
-      alert("Please Fill All Required Field");
-      return false;
+      var a=document.forms["Form"]["target_lang"].value;
+      var b=document.forms["Form"]["target_version"].value;
+      var c=document.forms["Form"]["export"].value;
+
+      if (a==null || a=="",b==null || b=="",c==null || c=="")
+        {
+        alert("Please Fill All Required Field");
+        return false;
+        }
       }
-    }
     </script>
   </body>
 </html>
