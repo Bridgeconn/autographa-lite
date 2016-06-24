@@ -40,7 +40,6 @@ function setupTargetDb() {
 function setupRefDb() {
     var refDb = new PouchDB('reference');
     refDb.get('refs').then(function (doc) {
-	console.log(doc);
 	refDb.close();
     }).catch(function (err) {
 	const refEnJson = require('./lib/refs.json'),
