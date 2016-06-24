@@ -43,10 +43,13 @@ function setupRefDb() {
 	console.log(doc);
 	refDb.close();
     }).catch(function (err) {
-	const refEnJson = require('./lib/refs.json');	
+	const refEnJson = require('./lib/refs.json'),
+	      chunksJson = require('./lib/chunks.json');
 	refDb.bulkDocs(refEnJson).then(function (response) {
-	    console.log(response);
-	    refDb.close();
+	    refDb.put(chunksJson).then(function (response) {
+		console.log(response);
+		refDb.close();	
+	    });
 	}).catch(function (err) {
 	    console.log('Error loading reference data. ' + err);
 	    refDb.close();
