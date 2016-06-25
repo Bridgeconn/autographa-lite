@@ -68,8 +68,9 @@ function createVerseInputs(verses, chunks, chapter) {
 	divContainer.appendChild(divVerseNum);
 	divContainer.appendChild(divVerse);
 
-	document.getElementById('verses-group').appendChild(divContainer);
+	document.getElementById('input-verses-group').appendChild(divContainer);
     }
+    highlightRef();
 }
 
 session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
@@ -99,7 +100,7 @@ function showReferenceText(ref_id) {
     refDb.get(id).then(function (doc) {
 	//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
 	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
-	    return '<span>  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
+	    return '<span id="r'+ (verseNum+1) +'">  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
 	}).join('');
     }).catch(function (err) {
 	console.log('Error: Unable to find requested reference in DB. ' + err);
@@ -127,3 +128,25 @@ function createRefSelections() {
 document.getElementById("refs-select").addEventListener("change", function (e) {
     showReferenceText(e.target.value);
 });
+
+function highlightRef() {
+    var i,
+	j,
+	verses = document.querySelectorAll("div[id^=v]");
+    console.log(verses);
+    for(i=0; i<verses.length; i++) {
+	verses[i].addEventListener("focus", function (e) {
+	    var limits = e.target.getAttribute("chunk-group").split("-").map(function (element) {
+		return parseInt(element, 10) - 1;
+	    });;
+	    console.log(limits);
+	    var refs = document.querySelectorAll("span[id^=r]");
+	    refs.forEach(function (ref) {
+		ref.className = "";
+	    });
+	    for(j=limits[0]; j<=limits[1]; j++) {
+		refs[j].className = "highlight";
+	    }
+	});
+    }
+}
