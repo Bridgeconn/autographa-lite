@@ -1,7 +1,11 @@
 #header {
-    background-color:#000000;
+    background-color: #000000;
     padding: 5px 10px;
 }
 #button {
     overflow: hidden;
+}
+.highlight
+{
+    background-color: #b3ffa8;
 }
