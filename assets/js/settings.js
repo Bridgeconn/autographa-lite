@@ -6,25 +6,21 @@ var bibUtil = require("../util/usfm_to_json.js"),
     fs = require("fs"),
     path = require("path");
 
-/*const PouchDB = require('pouchdb');
-var refDb = new PouchDB('reference');
-refDb.destroy().then(function (response) {
-    console.log(response);
-    console.log('done destroying.');
-  // success
-}).catch(function (err) {
-  console.log(err);
-});
-db.get('targetBible').then(function (doc) {
-    console.log(doc);
-}).catch(function (err) {
-    console.log(err);
-});*/
-
 document.getElementById('export-path').addEventListener('click', function (e) {
     dialog.showOpenDialog({properties: ['openDirectory'],
 			   filters: [{name: 'All Files', extensions: ['*']}],
 			   title: "Select export destination folder"
+			  }, function (selectedDir) {
+			      if(selectedDir != null) {
+				  e.target.value = selectedDir;
+			      }
+			  });
+});
+
+document.getElementById('target-import-path').addEventListener('click', function (e) {
+    dialog.showOpenDialog({properties: ['openDirectory'],
+			   filters: [{name: 'All Files', extensions: ['*']}],
+			   title: "Select import folder for target"
 			  }, function (selectedDir) {
 			      if(selectedDir != null) {
 				  e.target.value = selectedDir;
@@ -69,7 +65,6 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
     ref_entry.isDefault = false;
     refDb.get('refs').then(function (doc) {
 	var refExistsFlag = false;
-	console.log('see this.');
 	var updatedDoc = doc.ref_ids.forEach(function (ref_doc) {
 	    if(ref_doc.ref_id === ref_id_value) {
 		refExistsFlag = true;
@@ -96,15 +91,33 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
     });
 });
 
+document.getElementById('target-import-btn').addEventListener('click', function (e) {
+    var files = fs.readdirSync(document.getElementById('target-import-path').value);
+    files.forEach(function (file) {
+	var filePath = path.join(document.getElementById('target-import-path').value, file);
+	if(fs.statSync(filePath).isFile()) {
+	    var options = {
+		lang: 'input',
+		version: 'in',
+		usfmFile: filePath,
+		targetDb: 'target'
+	    }
+	    bibUtil.toJson(options);
+	}
+    });
+});
+
+
 function saveJsonToDB(files) {
-        files.forEach(function (file) {
+    files.forEach(function (file) {
 	var filePath = path.join(document.getElementById('ref-path').value, file);
 	//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
 	if(fs.statSync(filePath).isFile()) {
 	    var options = {
 		lang: document.getElementById('ref-lang-code').value.toLowerCase(),
 		version: document.getElementById('ref-version').value.toLowerCase(),
-		usfmFile: filePath
+		usfmFile: filePath,
+		targetDb: 'refs'
 	    }
 	    bibUtil.toJson(options);
 	}

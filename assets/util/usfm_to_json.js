@@ -8,9 +8,6 @@ module.exports = {
 	var lineReader = require('readline').createInterface({
 	    input: require('fs').createReadStream(options.usfmFile)
 	});
-
-	const PouchDB = require('pouchdb');
-	var refDb = new PouchDB('reference');
 	
 	var book = {}, verse = [];
 	var c = 0, v = 0;
@@ -48,12 +45,34 @@ module.exports = {
 	});
 
 	lineReader.on('close', function(line) {
-	    refDb.get(book._id).then(function (doc) {
-		book._rev = doc._rev;
-		refDb.put(book);
-	    }).catch(function (err) {
-		refDb.put(book);
-	    });
+	    const PouchDB = require('pouchdb');
+	    var db;
+	    if(options.targetDb === 'refs') {
+		db = new PouchDB('reference');
+		db.get(book._id).then(function (doc) {
+		    book._rev = doc._rev;
+		    db.put(book);
+		}).catch(function (err) {
+		    db.put(book);
+		});
+	    } else if(options.targetDb === 'target') {
+		console.log('in here then');
+		db = new PouchDB('database');
+		const booksCodes = require('./constants.js').bookCodeList;
+		var bookId = book._id.split('_');
+		bookId = bookId[bookId.length-1].toUpperCase();
+		var i;
+		for(i=0; i<booksCodes.length; i++) {
+		    if(bookId === booksCodes[i]) {
+			i++;
+			break;
+		    }
+		}
+		console.log(i);
+		db.get(i.toString()).then(function (doc) {
+		    console.log(doc);
+		});
+	    }
 	});
     }
 };
