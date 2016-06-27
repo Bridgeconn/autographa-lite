@@ -96,12 +96,13 @@ var bookCodeList = ['GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA
 function showReferenceText(ref_id) {
     ref_id = (ref_id === 0 ? document.getElementById('refs-select').value : ref_id);
     var id = ref_id + '_' + bookCodeList[parseInt(book,10)-1];
-    console.log('id is = ' + id)
+    console.log('id is = ' + id);
     refDb.get(id).then(function (doc) {
-	//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
-	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
+	console.log('ref value is ');
+	console.log(doc);
+/*	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
 	    return '<span id="r'+ (verseNum+1) +'">  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
-	}).join('');
+	}).join('');*/
     }).catch(function (err) {
 	console.log('Error: Unable to find requested reference in DB. ' + err);
     });

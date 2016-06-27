@@ -22,14 +22,19 @@ module.exports = {
 		temp = id_prefix + splitLine[1];
 		book._id = id_prefix + splitLine[1];
 	    } else if(splitLine[0] == '\\c') {
+		console.log(splitLine[1]);
 		book.chapters.push({
-		    "verses": verse
+		    "verses": verse,
+		    "chapter": parseInt(splitLine[1], 10)
 		});
 		verse = [];
 		c++;
 		v = 0;
 	    } else if(splitLine[0] == '\\v') {
-		book.chapters[c-1].verses.push(line.substring(line.indexOf(' ', 3)+1));
+		book.chapters[c-1].verses.push({
+		    "verse_number": parseInt(splitLine[1], 10),
+		    "verse": line.substring(line.indexOf(' ', 3)+1)
+		});
 		v++;
 	    } else if(splitLine[0] == '\\s') {
 		//Do nothing for section headers now.
@@ -56,12 +61,11 @@ module.exports = {
 		    db.put(book);
 		});
 	    } else if(options.targetDb === 'target') {
-		console.log('in here then');
 		db = new PouchDB('database');
 		const booksCodes = require('./constants.js').bookCodeList;
 		var bookId = book._id.split('_');
 		bookId = bookId[bookId.length-1].toUpperCase();
-		var i;
+		var i, j, k;
 		for(i=0; i<booksCodes.length; i++) {
 		    if(bookId === booksCodes[i]) {
 			i++;
@@ -71,6 +75,26 @@ module.exports = {
 		console.log(i);
 		db.get(i.toString()).then(function (doc) {
 		    console.log(doc);
+		    console.log(book);
+		    for(i=0; i<doc.chapters.length; i++) {
+			for(j=0; j<book.chapters.length; j++) {
+			    if(book.chapters[j].chapter === doc.chapters[i].chapter) {
+				var versesLen = Math.min(book.chapters[j].verses.length, doc.chapters[i].verses.length);
+				for(k=0; k<versesLen; k++) {
+				    var verseNum = book.chapters[j].verses[k].verse_number;
+				    doc.chapters[i].verses[verseNum-1] = book.chapters[j].verses[k];
+				    book.chapters[j].verses[k] = undefined;
+				}
+				//check for extra verses in the imported usfm here.
+				break;
+			    }
+			}
+		    }
+		    db.put(doc).then(function (response) {
+			console.log('Successfully imported files.');
+		    });
+		}).catch(function (err) {
+		    console.log('Error: While trying to save to DB. ' + err);
 		});
 	    }
 	});
