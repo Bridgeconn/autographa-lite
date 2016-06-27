@@ -22,7 +22,6 @@ module.exports = {
 		temp = id_prefix + splitLine[1];
 		book._id = id_prefix + splitLine[1];
 	    } else if(splitLine[0] == '\\c') {
-		console.log(splitLine[1]);
 		book.chapters.push({
 		    "verses": verse,
 		    "chapter": parseInt(splitLine[1], 10)
@@ -50,6 +49,16 @@ module.exports = {
 	});
 
 	lineReader.on('close', function(line) {
+	    console.log(book);
+	    require('fs').writeFileSync('./output.json', JSON.stringify(book), {
+		encoding: 'utf8',
+		flag: 'a'
+	    });
+	    require('fs').writeFileSync('./output.json', ',\n', {
+		encoding: 'utf8',
+		flag: 'a'
+	    });
+/*	    
 	    const PouchDB = require('pouchdb');
 	    var db;
 	    if(options.targetDb === 'refs') {
@@ -96,7 +105,7 @@ module.exports = {
 		}).catch(function (err) {
 		    console.log('Error: While trying to save to DB. ' + err);
 		});
-	    }
+	    }*/
 	});
     }
 };
