@@ -49,7 +49,7 @@ module.exports = {
 	});
 
 	lineReader.on('close', function(line) {
-	    console.log(book);
+/*	    console.log(book);
 	    require('fs').writeFileSync('./output.json', JSON.stringify(book), {
 		encoding: 'utf8',
 		flag: 'a'
@@ -57,8 +57,8 @@ module.exports = {
 	    require('fs').writeFileSync('./output.json', ',\n', {
 		encoding: 'utf8',
 		flag: 'a'
-	    });
-/*	    
+	    });*/
+	    
 	    const PouchDB = require('pouchdb');
 	    var db;
 	    if(options.targetDb === 'refs') {
@@ -105,7 +105,7 @@ module.exports = {
 		}).catch(function (err) {
 		    console.log('Error: While trying to save to DB. ' + err);
 		});
-	    }*/
+	    }
 	});
     }
 };

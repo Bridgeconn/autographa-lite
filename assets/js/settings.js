@@ -92,7 +92,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 });
 
 document.getElementById('target-import-btn').addEventListener('click', function (e) {
-    var contents = require('fs').readFileSync('./lib/full_net_bible.json', {
+/*    var contents = require('fs').readFileSync('./lib/full_net_bible.json', {
 	encoding: 'utf8',
 	flag: 'r'
     });
@@ -109,8 +109,8 @@ document.getElementById('target-import-btn').addEventListener('click', function 
     require('fs').writeFileSync('./output_en.json', JSON.stringify(eng_bible), {
 	encoding: 'utf8',
 	flag: 'w'
-    });
-    /*
+    });*/
+
     var files = fs.readdirSync(document.getElementById('target-import-path').value);
     files.forEach(function (file) {
 	var filePath = path.join(document.getElementById('target-import-path').value, file);
@@ -124,7 +124,6 @@ document.getElementById('target-import-btn').addEventListener('click', function 
 	    bibUtil.toJson(options);
 	}
     });
-*/
 });
 
 
