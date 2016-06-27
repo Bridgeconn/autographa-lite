@@ -91,16 +91,21 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
     });
 });
 
-var bookCodeList = ['GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA', '2SA', '1KI', '2KI', '1CH', '2CH', 'EZR', 'NEH', 'EST', 'JOB', 'PSA', 'PRO', 'ECC', 'SNG', 'ISA', 'JER', 'LAM', 'EZK', 'DAN', 'HOS', 'JOL', 'AMO', 'OBA', 'JON', 'MIC', 'NAM', 'HAB', 'ZEP', 'HAG', 'ZEC', 'MAL', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT', 'ROM', '1CO', '2CO', 'GAL', 'EPH', 'PHP', 'COL', '1TH', '2TH', '1TI', '2TI', 'TIT', 'PHM', 'HEB', 'JAS', '1PE', '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV'];
+var bookCodeList = require('../util/constants.js').bookCodeList;
 
 function showReferenceText(ref_id) {
     ref_id = (ref_id === 0 ? document.getElementById('refs-select').value : ref_id);
-    var id = ref_id + '_' + bookCodeList[parseInt(book,10)-1];
-    console.log('id is = ' + id)
+    var id = ref_id + '_' + bookCodeList[parseInt(book,10)-1],
+	i;
+    console.log('id is = ' + id);
     refDb.get(id).then(function (doc) {
-	//	    document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses;
-	document.getElementById('ref').innerHTML = doc.chapters[parseInt(chapter,10)-1].verses.map(function (verse, verseNum) {
-	    return '<span id="r'+ (verseNum+1) +'">  <sup>' + (verseNum+1) + '</sup>' + verse + '</span>';
+	for(i=0; i<doc.chapters.length; i++) {
+	    if(doc.chapters[i].chapter == parseInt(chapter, 10)) {
+		break;
+	    }
+	}
+	document.getElementById('ref').innerHTML = doc.chapters[i].verses.map(function (verse, verseNum) {
+	    return '<span id="r'+ (verseNum+1) +'">  <sup>' + (verseNum+1) + '</sup>' + verse.verse + '</span>';
 	}).join('');
     }).catch(function (err) {
 	console.log('Error: Unable to find requested reference in DB. ' + err);
@@ -133,7 +138,6 @@ function highlightRef() {
     var i,
 	j,
 	verses = document.querySelectorAll("div[id^=v]");
-    console.log(verses);
     for(i=0; i<verses.length; i++) {
 	verses[i].addEventListener("focus", function (e) {
 	    var limits = e.target.getAttribute("chunk-group").split("-").map(function (element) {
