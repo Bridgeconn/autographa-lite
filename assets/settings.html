@@ -78,7 +78,7 @@
 	  </div>	  
 
 	  <div id="target" class="card">
-	    <form name="Form" onsubmit="return validateForm()">
+	    <form name="Form">
 	      <header>
 		<h3>Target Language Settings</h3>
 	      </header>
@@ -108,19 +108,5 @@
 	  </footer>
 	</div>
 	<script>require('./js/settings.js')</script>
-	<script type="text/javascript">
-	  function validateForm()
-	  {
-	  var a=document.forms["Form"]["target_lang"].value;
-	  var b=document.forms["Form"]["target_version"].value;
-	  var c=document.forms["Form"]["export"].value;
-
-	  if (a==null || a=="",b==null || b=="",c==null || c=="")
-	  {
-	  alert("Please Fill All Required Field");
-	  return false;
-	  }
-	  }
-	</script>
   </body>
 </html>

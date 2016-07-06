@@ -111,10 +111,12 @@ document.getElementById('target-import-btn').addEventListener('click', function 
 	flag: 'w'
     });*/
 
-    var files = fs.readdirSync(document.getElementById('target-import-path').value);
+    var inputPath = document.getElementById('target-import-path').value;
+    var files = fs.readdirSync(inputPath);
     files.forEach(function (file) {
-	var filePath = path.join(document.getElementById('target-import-path').value, file);
-	if(fs.statSync(filePath).isFile()) {
+	var filePath = path.join(inputPath, file);
+	if(fs.statSync(filePath).isFile() && !file.startsWith('.')) {
+//	    console.log(filePath);
 	    var options = {
 		lang: 'hi',
 		version: 'ulb',
@@ -129,16 +131,18 @@ document.getElementById('target-import-btn').addEventListener('click', function 
 
 function saveJsonToDB(files) {
     files.forEach(function (file) {
-	var filePath = path.join(document.getElementById('ref-path').value, file);
-	//				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
-	if(fs.statSync(filePath).isFile()) {
-	    var options = {
-		lang: document.getElementById('ref-lang-code').value.toLowerCase(),
-		version: document.getElementById('ref-version').value.toLowerCase(),
-		usfmFile: filePath,
-		targetDb: 'refs'
+	if(!file.startsWith('.')) {
+	    var filePath = path.join(document.getElementById('ref-path').value, file);
+	    //				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
+	    if(fs.statSync(filePath).isFile()) {
+		var options = {
+		    lang: document.getElementById('ref-lang-code').value.toLowerCase(),
+		    version: document.getElementById('ref-version').value.toLowerCase(),
+		    usfmFile: filePath,
+		    targetDb: 'refs'
+		}
+		bibUtil.toJson(options);
 	    }
-	    bibUtil.toJson(options);
 	}
     });
 }

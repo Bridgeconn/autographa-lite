@@ -15,10 +15,11 @@ module.exports = {
 	book.chapters = [];
 
 	lineReader.on('line', function (line) {
-	    //    console.log(line);
 	    var line = line.trim();
 	    var splitLine = line.split(' ');
-	    if(splitLine[0] == '\\id') {
+	    if(!line) {
+		//Do nothing for empty lines.
+	    } else if(splitLine[0] == '\\id') {
 		temp = id_prefix + splitLine[1];
 		book._id = id_prefix + splitLine[1];
 	    } else if(splitLine[0] == '\\c') {
@@ -65,9 +66,17 @@ module.exports = {
 		db = new PouchDB('reference');
 		db.get(book._id).then(function (doc) {
 		    book._rev = doc._rev;
-		    db.put(book);
+		    db.put(book).then(function (doc) {
+			console.log("Successfully loaded and updated refs.");
+		    }).catch(function (err) {
+			console.log("Error: While updating refs. " + err);
+		    });
 		}).catch(function (err) {
-		    db.put(book);
+		    db.put(book).then(function (doc) {
+			console.log("Successfully loaded new refs.");
+		    }).catch(function (err) {
+			console.log("Error: While loading new refs. " + err);
+		    });
 		});
 	    } else if(options.targetDb === 'target') {
 		db = new PouchDB('database');
@@ -81,10 +90,7 @@ module.exports = {
 			break;
 		    }
 		}
-		console.log(i);
 		db.get(i.toString()).then(function (doc) {
-		    console.log(doc);
-		    console.log(book);
 		    for(i=0; i<doc.chapters.length; i++) {
 			for(j=0; j<book.chapters.length; j++) {
 			    if(book.chapters[j].chapter === doc.chapters[i].chapter) {
@@ -100,10 +106,10 @@ module.exports = {
 			}
 		    }
 		    db.put(doc).then(function (response) {
-			console.log('Successfully imported files.');
+			console.log(response);
+		    }).catch(function (err) {
+			console.log('Error: While trying to save to DB. ' + err);
 		    });
-		}).catch(function (err) {
-		    console.log('Error: While trying to save to DB. ' + err);
 		});
 	    }
 	});
