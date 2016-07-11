@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Autographa Lite</title>
+    <!-- Bootstrap core CSS-->
+    <link href="../css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="#">Autographa</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <div class="btn-group navbar-btn strong" role="group" aria-label="..."><a id="book-chapter-btn" class="btn btn-default" href="reference.html"></a></div>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="settings.html" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog fa-2x"></i></a></li>
+            <li><a href="about.html" data-toggle="tooltip" data-placement="bottom" title="About"><i class="fa fa-info fa-2x"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row row-col-fixed">
+        <div class="col-sm-6 col-fixed">
+          <div class="row">
+            <div class="col-12 center-align">
+              <div class="btn-group">
+                <button role="ref-selector" class="btn btn-primary" type="button"></button>
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                <ul type="refs-list" class="dropdown-menu"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div type="ref" class="col-12 col-ref">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-fixed col-editor">
+          <div class="row">
+            <div class="col-12 center-align">
+              <div class="btn-group" role="group" aria-label="..."><a class="btn btn-success btn-default" href="#">Translation</a></div>
+            </div>
+          </div>
+          <div class="row">
+            <div id="input-verses" class="col-12 col-ref">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+          <div class="nav navbar-nav">
+            <div class="btn-group navbar-btn" role="group" aria-label="..."><a class="btn btn-primary btn-default" href="#" data-output="2x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="2 Column Layout">2x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="3x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="3 Column Layout">3x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="4x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="4 Column Layout">4x &nbsp;<i class="fa fa-columns fa-lg"></i></a></div><a id="save-btn" class="btn btn-success navbar-btn navbar-right btn-save" href="#" role="button">Save</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="modal fade" id="login" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Login</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Enter the API Key to start using Autographer</label>
+              <input class="form-control" id="api-code" placeholder="API KEY">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="button">Save changes</button>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
+    <!-- /.modal-->
+    <!--
+    Bootstrap core JavaScript
+    ==================================================
+    -->
+    <!-- Placed at the end of the document so the pages load faster-->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="../js/lib/jquery.min.js"></script>
+    <script src="../js/lib/bootstrap.min.js"></script>
+    <script src="../js/lib/main.js"></script>
+    <script src="../js/index.js"></script>
+    <script>if (window.module) module = window.module;</script>
+  </body>
+</html>

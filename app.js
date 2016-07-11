@@ -36,7 +36,7 @@ function createWindow() {
     win.webContents.openDevTools();
 
     // and load the index.html of the app.
-    win.loadURL(`file:${__dirname}/assets/index.html`);
+    win.loadURL(`file:${__dirname}/assets/pages/index.html`);
 
     // Emitted when the window is closed.
     win.on('closed', () => {
@@ -87,7 +87,7 @@ app.on('window-all-closed', () => {
 
 ipc.on('synchronous-message', function (event, arg) {
     db.close();
-    win.loadURL(`file:${__dirname}/assets/translate.html`);
+    win.loadURL(`file:${__dirname}/assets/pages/index.html`);
     event.returnValue = 'pong';
 });
 /*
