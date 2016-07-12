@@ -71,6 +71,11 @@
                 <input class="form-control" id="export-path" placeholder="/path/to/export/folder" readonly="">
               </div>
               <button class="btn btn-success" id="save-btn">Save Settings</button>
+	      <hr />
+	      <div class="form-group">
+		<input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
+	      </div>
+	      <button id="target-import-btn" class="btn btn-success">Import Target</button>
             </div>
           </div>
         </div>
@@ -79,6 +84,7 @@
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="../js/lib/jquery.min.js"></script>
     <script src="../js/lib/bootstrap.min.js"></script>
+    <script src="../js/settings.js"></script>
     <script>if (window.module) module = window.module;</script>
   </body>
 </html>

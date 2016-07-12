@@ -98,19 +98,18 @@ for(i=1; i<=books.length; i++) {
     });
 }
 
-/*document.getElementById("export-btn").addEventListener("click", function (e) {
+$('a[type="export"]').click(function () {
     session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
-	console.log(cookie);
 	book = {};
 	var db = new PouchDB('database');
 	db.get('targetBible').then(function (doc) {
 	    book.bookNumber = cookie[0].value;
 	    book.bookName = constants.booksList[parseInt(book.bookNumber, 10)-1];
-	    book.bookCode = constants.bookCodesList[parseInt(book.bookNumber, 10)-1];
+	    book.bookCode = constants.bookCodeList[parseInt(book.bookNumber, 10)-1];
 	    book.outputPath = doc.targetPath;
 	    bibUtil.toUsfm(book);
 	}).catch(function (err) {
-	    console.log('Error: Cannot get details from DB');
+	    console.log('Error: Cannot get details from DB' + err);
 	});
     });
-});*/
+});
