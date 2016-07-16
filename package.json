@@ -1,12 +1,13 @@
 {
-  "name": "bib-edit",
-  "version": "1.0.0",
-  "description": "A desktop application on electron to help Bible edit.",
+  "name": "AutographaLite",
+  "version": "0.0.1",
+  "description": "Yet another Bible translation editor.",
   "main": "app.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.2.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
+    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.2.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
+    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.2.7 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
@@ -14,8 +15,9 @@
   },
   "keywords": [
     "desktop",
-    "electron",
-    "application"
+    "Bible Editor",
+      "USFM",
+      "USFM Editor"
   ],
   "author": "Bridgeconn",
   "license": "MIT",
@@ -24,9 +26,13 @@
   },
   "homepage": "https://github.com/Bridgeconn/bib-edit#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.0"
+    "electron-prebuilt": "^1.2.7"
   },
   "dependencies": {
     "pouchdb": "5.4.4"
+  },
+  "build": {
+    "appId": "com.autographa.free",
+    "app-category-type": "public.app.category.business"
   }
 }

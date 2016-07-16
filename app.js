@@ -33,7 +33,7 @@ function createWindow() {
     win.maximize();
 
     // Open the DevTools.
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
 
     // and load the index.html of the app.
     win.loadURL(`file:${__dirname}/assets/pages/index.html`);
