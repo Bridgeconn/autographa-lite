@@ -44,7 +44,7 @@ module.exports = {
 		if(line.startsWith('\\')) {
 		    book.chapters[c-1].verses[v-1] += (' ' + line.substring(line.indexOf(' ')+1));
 		} else {
-		    book.chapters[c-1].verses[v-1] += (' ' + line);
+		    book.chapters[c-1].verses[v-1].verse += (' ' + line);
 		}
 	    }
 	});
