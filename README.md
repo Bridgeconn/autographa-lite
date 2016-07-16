@@ -1,10 +1,8 @@
-# Bib-Edit Description
+# Autographa Lite
 
-This is a desktop application using electron. This application can be used for translating Scripture.
+This is a desktop application built on Electron which we hope would make life as a Bible Translator much easier. We have built the application with the principle that 'less is more'- which means that it doesn't have a host of flashy features but should serve the purpose of at least getting things of the ground. 
 
-## Getting Started
-
-Please follow below steps to use this application
-* Fork this repository on GitHub
-* $ cd bib-edit && npm install
-* $ npm start or electron .
+## Unix Setup
+Fork this repository.   
+```> cd bib-edit && npm install```    
+```> npm start```
