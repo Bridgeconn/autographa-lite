@@ -29,9 +29,10 @@ document.getElementById('target-import-path').addEventListener('click', function
 });
 
 document.getElementById('save-btn').addEventListener('click', function (e) {
+	if (target_setting() == false)
+		return;
     db = new PouchDB('database');
     db.get('targetBible').then(function (doc) {
-	console.log(doc);
 	db.put({
 	    _id: 'targetBible',
 	    _rev: doc._rev,
@@ -40,6 +41,7 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
 	    targetPath: document.getElementById('export-path').value
 	}).then(function (e) {
 	    db.close();
+	    alert_message(".alert-success", "Successfully target settings saved!");
 	});
     }).catch(function (err) {
 	db.put({
@@ -49,13 +51,17 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
 	    targetPath: document.getElementById('export-path').value
 	}).then(function (e) {
 	    db.close();
+	    alert_message(".alert-success", "Successfully target settings saved!");
 	}).catch(function (err) {
 	    db.close();
+	    alert_message(".alert-danger", "Something went wrong!! Please try again");
 	});
     });
 });
 
 document.getElementById('ref-import-btn').addEventListener('click', function (e) {
+	if (reference_setting() == false )
+		return;
     var refDb = new PouchDB('reference'),
 	ref_id_value = document.getElementById('ref-lang-code').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
 	ref_entry = {},
@@ -158,15 +164,75 @@ document.getElementById('ref-path').addEventListener('click', function (e) {
 			  });
 });
 
-// function validateForm()
-//     {
-//     var a=document.forms["Form"]["target_lang"].value;
-//     var b=document.forms["Form"]["target_version"].value;
-//     var c=document.forms["Form"]["export"].value;
+// Validation check for reference settings
+function reference_setting(){
+  var name     = $("#ref-name").val(),
+  	 langCode = $("#ref-lang-code").val(),
+  	 version  = $("#ref-version").val(),
+  	 path     = $("#ref-path").val(),
+  	 isValid = true;
+  if(name == ""){
+    alert_message(".alert-danger", "Reference Bible name must not be blank");
+    isValid = false;
+  }else if(langCode === null || langCode === "") {
+    alert_message(".alert-danger", "Reference Bible language code must not be blank");
+     isValid = false;
+  }else if(version === null || version === ""){
+    alert_message(".alert-danger", "Reference Bible version must not be blank");
+    isValid = false;
+  }else if(path === null || path === ""){
+    alert_message(".alert-danger", "Reference Bible path must not be blank");
+    isValid = false;
+  }else{
+    isValid = true;
+    
+  }
+  return isValid;
+} //validation reference settings
 
-//     if (a==null || a=="",b==null || b=="",c==null || c=="")
-//       {
-//       alert("Please Fill All Required Field");
-//       return false;
-//       }
-//     }
+// Validation check for target language settings
+function target_setting(){
+  var langCode  = $("#target-lang").val(),
+  	 version   = $("#target-version").val(),
+  	 path     = $("#export-path").val(),
+     isValid = true;
+
+  if(langCode === null || langCode === ""){
+    alert_message(".alert-danger", "Target Bible language code must not be blank");
+    isValid = false;
+  }else if(version === null || version === ""){
+    alert_message(".alert-danger", "Target Bible version must not be blank");
+    isValid = false;
+  }else if(path === null || path === ""){
+    alert_message(".alert-danger", "Target Bible path must not be blank");
+    isValid = false;
+  }else{
+    isValid = true;
+  }
+  return isValid;
+} //validation target setting
+
+function alert_message(type,message){
+  $(type).css("display", "block");
+    $(type).fadeTo(2000, 1000).slideUp(1000, function(){
+       $(type).css("display", "none");
+    });
+  $(type+" "+"span").html(message);
+}
+
+function setReferenceSetting(){
+	db = new PouchDB('database');
+	db.get('targetBible').then(function (doc) {
+		$("#target-lang").val(doc.targetLang);
+  	 	$("#target-version").val(doc.targetVersion);
+  	 	$("#export-path").val(doc.targetPath);
+	}).catch(function (err) {
+		$("#target-lang").val("");
+  	 	$("#target-version").val("");
+  	 	$("#export-path").val("");
+	});	
+}
+//get reference setting
+$(function(){
+	setReferenceSetting();
+});

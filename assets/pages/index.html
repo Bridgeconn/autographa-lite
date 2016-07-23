@@ -15,17 +15,20 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="#">Autographa</a>
+          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="index.html"><img alt="Brand" src="../images/logo.png"></a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li>
-              <div class="btn-group navbar-btn strong" role="group" aria-label="..."><a id="book-chapter-btn" class="btn btn-default" href="reference.html"></a></div>
+              <div class="btn-group navbar-btn strong" role="group" aria-label="..." id="bookBtn">
+              <a class="btn btn-default" href="javascript:getBookList();" id="book-chapter-btn">Genesis</a><span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" href="javascript:getBookChapterList('1');" >1</a></span>
+              </div>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="settings.html" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog fa-2x"></i></a></li>
             <li><a href="about.html" data-toggle="tooltip" data-placement="bottom" title="About"><i class="fa fa-info fa-2x"></i></a></li>
+            <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Export" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i></a>
           </ul>
         </div>
       </div>
@@ -69,6 +72,54 @@
         </div>
       </div>
     </nav>
+    <div class="modal fade" id="books" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Books</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="wrap-center">
+                  <div class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-default" type="button">ALL</button>
+                    <button class="btn btn-default" type="button">OT</button>
+                    <button class="btn btn-default" type="button">NT</button>
+                  </div>
+                  <ul class="books" id="books-pane">
+                    
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <div class="modal fade" id="chapters" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Chapters</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <ul class="chapter-picker" id="chaptersList">
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
     <div class="modal fade" id="login" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -91,6 +142,22 @@
       <!-- /.modal-dialog-->
     </div>
     <!-- /.modal-->
+    <div class="modal fade"  tabindex="-1" role="dialog" id="dynamicModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading"></h4>
+          </div>
+          <div class="modal-body" id="content"></div>
+          <div class="modal-footer">
+            <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
     <!--
     Bootstrap core JavaScript
     ==================================================

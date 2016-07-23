@@ -20,7 +20,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="index.html">Autographa</a>
+          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="index.html"><img alt="Brand" src="../images/logo.png"></a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -31,12 +31,18 @@
         </div>
       </div>
     </nav>
-    <div class="container">
+    <div class="container" style="margin-top:15px;">
       <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="alert alert-success" role="alert" style="display:none;"><strong>Well done!</strong> <span>You successfully read this important alert message.</span></div>
+            <div class="alert alert-danger" role="alert" style="display:none;position: relative;"><strong>Oh snap!</strong> <span>Change a few things up and try submitting again.</span></div>
+          </div>
+        </div><br/><br/><br/><br/>
+        <div class="col-md-12">
           <div class="row">
             <form></form>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <h3>Reference USFM settings</h3>
               <div class="form-group">
                 <label>Reference Bible Name</label>
@@ -56,7 +62,7 @@
               </div>
               <button class="btn btn-success" id="ref-import-btn">Import</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <h3> Target Language Settings</h3>
               <div class="form-group">
                 <label>Target Language Code</label>
@@ -71,11 +77,21 @@
                 <input class="form-control" id="export-path" placeholder="/path/to/export/folder" readonly="">
               </div>
               <button class="btn btn-success" id="save-btn">Save Settings</button>
-	      <hr />
-	      <div class="form-group">
-		<input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
-	      </div>
-	      <button id="target-import-btn" class="btn btn-success">Import Target</button>
+	          </div>
+            <div class="col-md-4">
+              <h3> Import and Sync Settings </h3>
+              <div class="form-group">
+                <label>User Name</label>
+                <input class="form-control" id="target-version" placeholder="User Name">
+              </div>
+              <div class="form-group">
+                <label>API Key</label>
+                <input class="form-control" id="export-path" placeholder="API KEY">
+              </div>
+              <div class="form-group">
+                <input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
+                </div>
+                <button id="target-import-btn" class="btn btn-success">Import Target</button>
             </div>
           </div>
         </div>
