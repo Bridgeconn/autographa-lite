@@ -8,6 +8,16 @@ var db = new PouchDB('database'),
     chapter,
     currentBook;
 
+
+var constants = require('../util/constants.js');
+	 booksList = constants.booksList,
+	 otBookStart = 1,
+	 otBookEnd = 39,
+	 ntBookStart = 40,
+	 ntBookEnd = 66,
+	 allBookStart = 1,
+	 allBookEnd = 66;
+
 document.getElementById("save-btn").addEventListener("click", function (e) {
 	db = new PouchDB('database');
     var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
@@ -61,9 +71,6 @@ function createVerseInputs(verses, chunks, chapter) {
     }
     highlightRef();
 }
-
-var constants = require('../util/constants.js');
-var booksList = constants.booksList;
 
 session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
     book = '1';
@@ -176,58 +183,64 @@ function highlightRef() {
 }
 
 // Multi-reference windows
-$('a[role="multi-window-btn"]').click(function () {
-    var children = $('div.row-col-fixed').children(),
+function setMultiwindowReference(layout){
+
+	var children = $('div.row-col-fixed').children(),
 	editor = children[children.length-1],
 	i,
 	clone;
-    if($(this).data('output') === '2x') {
-	if(children.length === 2) {
-	    return;
-	}
-	for(i=0; i<children.length; i++) {
-	    $(children[i]).removeClass (function (index, css) {
-		return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
-	    });
-	    $(children[i]).addClass('col-sm-6');
-	}
-	if(children.length > 2) {
-	    for(i=1; i<children.length-1; i++) {
-		children[i].remove();
-	    }
-	}
-    } else if($(this).data('output') === '3x') {
-	if(children.length === 3) {
-	    return;
-	}
-	for(i=0; i<children.length; i++) {
-	    $(children[i]).removeClass (function (index, css) {
-		return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
-	    });
-	    $(children[i]).addClass('col-sm-4');
-	}
-	if(children.length > 3) {
-	    children[0].remove();
-	} else if(children.length < 3) {
-	    $(children[0]).clone(true, true).insertBefore('div.col-editor');
-	}
-    } else if($(this).data('output') === '4x') {
-	if(children.length === 4) {
-	    return;
-	}
-	for(i=0; i<children.length; i++) {
-	    $(children[i]).removeClass (function (index, css) {
-		return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
-	    });
-	    $(children[i]).addClass('col-sm-3');
-	}
-	for(i=0; i<(4-children.length); i++) {
-	    $(children[0]).clone(true, true).insertBefore('div.col-editor');
-	}
+    if(layout === '2x') {
+		if(children.length === 2) {
+		    return;
+		}
+		for(i=0; i<children.length; i++) {
+		    $(children[i]).removeClass (function (index, css) {
+			return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
+		    });
+		    $(children[i]).addClass('col-sm-6');
+		}
+		if(children.length > 2) {
+		    for(i=1; i<children.length-1; i++) {
+			children[i].remove();
+		    }
+		}
+    } else if(layout === '3x') {
+		if(children.length === 3) {
+		    return;
+		}
+		for(i=0; i<children.length; i++) {
+		    $(children[i]).removeClass (function (index, css) {
+			return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
+		    });
+		    $(children[i]).addClass('col-sm-4');
+		}
+		if(children.length > 3) {
+		    children[0].remove();
+		} else if(children.length < 3) {
+		    $(children[0]).clone(true, true).insertBefore('div.col-editor');
+		}
+    } else if(layout === '4x') {
+		if(children.length === 4) {
+		    return;
+		}
+		for(i=0; i<children.length; i++) {
+		    $(children[i]).removeClass (function (index, css) {
+			return (css.match (/(^|\s)col-sm-\S+/g) || []).join(' ');
+		    });
+		    $(children[i]).addClass('col-sm-3');
+		}
+		for(i=0; i<(4-children.length); i++) {
+		    $(children[0]).clone(true, true).insertBefore('div.col-editor');
+		}
     }
+    
+}
+$('a[role="multi-window-btn"]').click(function () {
+    setMultiwindowReference($(this).data('output'));
+    saveReferenceLayout($(this).data('output'));
 });
 function createBooksList(booksLimit) {
-	document.getElementById('books-pane').innerHTML = "";
+  document.getElementById('books-pane').innerHTML = "";
   for (var i=1; i<=booksLimit; i++) {
   	var li = document.createElement('li'),
   	    a = document.createElement('a'),
@@ -366,7 +379,6 @@ function getBookList(){
   $("#books").modal('toggle');
 }
 
-
 /************ get book chapter list in popup*************/
 function getBookChapterList(bookId){
 	var db = new PouchDB('database');
@@ -427,3 +439,62 @@ function alertModal(heading, formContent) {
   $("#dynamicModal").modal();
   $("#dynamicModal").toggle();
 }
+
+$("#otBooksBtn").on("click", function(){
+	getBooksByLimit(otBookStart, otBookEnd);
+});
+$("#ntBooksBtn").on("click", function(){
+	getBooksByLimit(ntBookStart, ntBookEnd);
+});
+
+
+$("#allBooksBtn").on("click", function(){
+	getBooksByLimit(allBookStart, allBookEnd);
+});
+
+function getBooksByLimit(start, booksLength){
+  document.getElementById('books-pane').innerHTML = "";
+  for (var i=start; i<= booksLength ; i++) {
+	var li = document.createElement('li'),
+  	    a = document.createElement('a'),
+  	    bookName = document.createTextNode(booksList[i-1]);
+        a.id = 'b'+i;
+  	a.setAttribute('href', "javascript:setBookName("+"'"+"b"+i+"'"+")");
+  	a.appendChild(bookName);
+  	li.appendChild(a);
+  	document.getElementById('books-pane').appendChild(li);
+  }
+}
+
+function saveReferenceLayout(layout){
+	var refDb = new PouchDB('reference');
+    refDb.get('targetReferenceLayout').then(function (doc) {
+		refDb.put({
+		    _id: 'targetReferenceLayout',
+		     layout: layout,
+		     _rev: doc._rev
+		}).then(function (e) {
+		    refDb.close();
+			});
+	  }).catch(function (err) {
+		refDb.put({
+		     _id: 'targetReferenceLayout',
+		     layout: layout
+		}).then(function (e) {
+		    refDb.close();
+		}).catch(function (err) {
+		    refDb.close();
+			});
+    });
+}
+
+$(function(){
+	refDb = new PouchDB('reference');
+  	refDb.get('targetReferenceLayout').then(function (doc) {
+			setMultiwindowReference(doc.layout);
+		}).catch(function (err) {
+			console.log(err);
+		});
+});
+
+

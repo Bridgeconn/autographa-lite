@@ -80,22 +80,39 @@
 	          </div>
             <div class="col-md-4">
               <h3> Import and Sync Settings </h3>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label>User Name</label>
                 <input class="form-control" id="target-version" placeholder="User Name">
               </div>
               <div class="form-group">
                 <label>API Key</label>
                 <input class="form-control" id="export-path" placeholder="API KEY">
-              </div>
-              <div class="form-group">
-                <input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
+              </div> -->
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
                 </div>
                 <button id="target-import-btn" class="btn btn-success">Import Target</button>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="modal fade"  tabindex="-1" role="dialog" id="dynamicModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading"></h4>
+          </div>
+          <div class="modal-body" id="content"></div>
+          <div class="modal-footer">
+            <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
     </div>
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="../js/lib/jquery.min.js"></script>
