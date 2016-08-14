@@ -160,6 +160,43 @@
       </div>
       <!-- /.modal-dialog-->
     </div>
+
+
+    <div class="modal fade"  tabindex="-1" role="dialog" id="exportChoice">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading">Export Option</h4>
+          </div>
+          <div class="modal-body" id="content">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <input type="text" class="form-control" aria-label="..." id="stageText">
+                  <div class="input-group-btn">
+                    <button id="dropdownBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Stage <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li><a href="#" data-value="stage1">Stage 1</a></li>
+                      <li><a href="#" data-value="stage2">Stage 2</a></li>
+                      <li><a href="#" data-value="stage3">Stage 3</a></li>
+                      <li><a href="#" data-value="stage4">Stage 4</a></li>
+                      <li><a href="#" data-value="stage4">Stage 5</a></li>
+                    </ul>
+                  </div><!-- /btn-group -->
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="exportUsfm" disabled="disabled">Export</button>
+            <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
     <!--
     Bootstrap core JavaScript
     ==================================================

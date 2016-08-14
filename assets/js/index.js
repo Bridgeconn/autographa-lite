@@ -464,7 +464,82 @@ function closeModal(modal){
 
 //validation for export
 document.getElementById('export-usfm').addEventListener('click', function (e) {
-  console.log("hi...");
+	targetDB = new PouchDB('database');
+	referenceDB = new PouchDB('reference');
+  	targetDB.get('targetBible').catch(function(err){
+  		if(err.name === 'not_found'){
+  			alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
+  			return;
+  		} 
+  	}).then(function(doc){
+  		exportChoice();
+  	}).catch(function (err) {
+  		// handle any errors
+  		alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
+  		return;
+	});
+
+    referenceDB.get('refs').catch(function(err){
+  		if(err.name === 'not_found'){
+  			alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
+  			return;
+  		}else{
+  			exportChoice();
+  		}
+  	}).then(function(doc){
+  		exportChoice();
+  	}).catch(function (err) {
+  		// handle any errors
+  		alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
+  		return;
+	});
+   
+  // console.log("hi...");
+  // db = new PouchDB('database');
+  // // Reading the database object
+  // db.get('targetBible').then(function (doc) {
+  //   if(doc){
+  //     session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
+		// book = {};
+		// var db = new PouchDB('database');
+		// db.get('targetBible').then(function (doc) {
+		//     book.bookNumber = cookie[0].value;
+		//     book.bookName = constants.booksList[parseInt(book.bookNumber, 10)-1];
+		//     book.bookCode = constants.bookCodeList[parseInt(book.bookNumber, 10)-1];
+		//     book.outputPath = doc.targetPath;
+		//     filepath = bibUtil.toUsfm(book);
+		//     return filepath;
+		// }).then(function(filepath){
+		// 	alertModal("Export Message!!", "File exported at: "+ filepath);
+		// 	return;
+		// }).catch(function (err) {
+		//     console.log('Error: Cannot get details from DB' + err);
+		// });
+  //   });
+  //   }else{
+  //     //****** export logic *****************/
+  //     alertModal("Export Alert!!", "Please configure export setting!!");
+  //     return;
+  //   }
+  
+  // }).catch(function (err) {
+  //   alertModal("Something went wrong!!", "Contact support team!!");
+  //   return;
+  // });
+});
+$("#exportUsfm").on("click", function(){
+	exportUsfm();	
+})
+
+function exportChoice(){
+	$("#dropdownBtn").html("Choose Stage"+' <span class="caret"></span>');
+	$("#stageText").val('');
+	$("#exportChoice").modal();
+	$("#exportChoice").toggle();
+}
+
+function exportUsfm(){
+
   db = new PouchDB('database');
   // Reading the database object
   db.get('targetBible').then(function (doc) {
@@ -477,26 +552,30 @@ document.getElementById('export-usfm').addEventListener('click', function (e) {
 		    book.bookName = constants.booksList[parseInt(book.bookNumber, 10)-1];
 		    book.bookCode = constants.bookCodeList[parseInt(book.bookNumber, 10)-1];
 		    book.outputPath = doc.targetPath;
-		    filepath = bibUtil.toUsfm(book);
+		    filepath = bibUtil.toUsfm(book, $("#stageText").val(), doc);
 		    return filepath;
 		}).then(function(filepath){
+			$("#exportChoice").modal('hide');
 			alertModal("Export Message!!", "File exported at: "+ filepath);
 			return;
 		}).catch(function (err) {
+			$("#exportChoice").modal('hide');
 		    console.log('Error: Cannot get details from DB' + err);
 		});
     });
     }else{
       //****** export logic *****************/
+      $("#exportChoice").modal('hide');
       alertModal("Export Alert!!", "Please configure export setting!!");
       return;
     }
+  
   }).catch(function (err) {
+  	$("#exportChoice").modal('hide');
     alertModal("Something went wrong!!", "Contact support team!!");
     return;
   });
-});
-
+}
 // Alert Model Function for dynamic message
 function alertModal(heading, formContent) {
   $("#heading").html(heading);
@@ -559,8 +638,29 @@ $(function(){
 			setMultiwindowReference(doc.layout);
 		}).catch(function (err) {
 			console.log(err);
-		});
-	
+	});
+	const cookie = {url: 'http://book.autographa.com', name: 'book', value: '1'};
+  	session.defaultSession.cookies.set(cookie, (error) => {
+    	if (error)
+      	console.error(error);
+  	});
+
+  	$(".dropdown-menu").on('click', 'li a', function(){
+        $(this).parent().parent().siblings(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
+        $(this).parent().parent().siblings(".btn:first-child").val($(this).text());
+        $("#stageText").val($(this).text());
+        $("#exportUsfm").prop('disabled', false);
+    });
+  	$("#stageText").on("keyup", function(){
+  		if($(this).val().length > 0){
+  			$("#exportUsfm").prop('disabled', false);
+  		}else{
+  			$("#exportUsfm").prop('disabled', true);
+  		}
+  	})
+
 });
+
+
 
 
