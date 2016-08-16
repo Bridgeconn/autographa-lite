@@ -464,69 +464,21 @@ function closeModal(modal){
 
 //validation for export
 document.getElementById('export-usfm').addEventListener('click', function (e) {
-	targetDB = new PouchDB('database');
-	referenceDB = new PouchDB('reference');
-  	targetDB.get('targetBible').catch(function(err){
-  		if(err.name === 'not_found'){
-  			alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
-  			return;
-  		} 
-  	}).then(function(doc){
-  		exportChoice();
+    targetDB = new PouchDB('database');
+    referenceDB = new PouchDB('reference');
+    targetDB.get('targetBible').then(function(doc){
+	referenceDB.get('refs').then(function(doc){
+  	    exportChoice();
   	}).catch(function (err) {
-  		// handle any errors
-  		alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
-  		return;
+  	    // handle any errors
+  	    alertModal("Setting Error", "Please setup Target Language settings for export to work.");
 	});
-
-    referenceDB.get('refs').catch(function(err){
-  		if(err.name === 'not_found'){
-  			alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
-  			return;
-  		}else{
-  			exportChoice();
-  		}
-  	}).then(function(doc){
-  		exportChoice();
-  	}).catch(function (err) {
-  		// handle any errors
-  		alertModal("Setting Error", "Please entered target language and reference usfm setting to export.");
-  		return;
-	});
-   
-  // console.log("hi...");
-  // db = new PouchDB('database');
-  // // Reading the database object
-  // db.get('targetBible').then(function (doc) {
-  //   if(doc){
-  //     session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
-		// book = {};
-		// var db = new PouchDB('database');
-		// db.get('targetBible').then(function (doc) {
-		//     book.bookNumber = cookie[0].value;
-		//     book.bookName = constants.booksList[parseInt(book.bookNumber, 10)-1];
-		//     book.bookCode = constants.bookCodeList[parseInt(book.bookNumber, 10)-1];
-		//     book.outputPath = doc.targetPath;
-		//     filepath = bibUtil.toUsfm(book);
-		//     return filepath;
-		// }).then(function(filepath){
-		// 	alertModal("Export Message!!", "File exported at: "+ filepath);
-		// 	return;
-		// }).catch(function (err) {
-		//     console.log('Error: Cannot get details from DB' + err);
-		// });
-  //   });
-  //   }else{
-  //     //****** export logic *****************/
-  //     alertModal("Export Alert!!", "Please configure export setting!!");
-  //     return;
-  //   }
-  
-  // }).catch(function (err) {
-  //   alertModal("Something went wrong!!", "Contact support team!!");
-  //   return;
-  // });
+    }).catch(function (err) {
+  	// handle any errors
+  	alertModal("Setting Error", "Please setup Target Language settings for export to work.");
+    });
 });
+
 $("#exportUsfm").on("click", function(){
 	exportUsfm();	
 })

@@ -26,7 +26,7 @@ function setupTargetDb() {
     db.get('isDBSetup').then(function (doc) {
 	db.close();    
     }).catch(function (err) {
-	const bibleJson = require('./lib/full_net_bible.json');
+	const bibleJson = require('./lib/full_bible_skel.json');
 	db.bulkDocs(bibleJson).then(function (response) {
 	    console.log(response);
 	    db.close();
