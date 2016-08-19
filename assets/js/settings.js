@@ -103,24 +103,6 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 document.getElementById('target-import-btn').addEventListener('click', function (e) {
 	if (import_sync_setting() == false)
 		return;
-    var contents = require('fs').readFileSync('./lib/full_net_bible.json', {
-			encoding: 'utf8',
-			flag: 'r'
-    });
-    eng_bible = JSON.parse(contents);
-    var codesList = require('../util/constants.js').bookCodeList, i;
-    for(i=0; i<eng_bible.length; i++) {
-			eng_bible[i]._id = "en_net_" + codesList[i];
-			delete eng_bible[i].bible_name;
-			delete eng_bible[i].book_name;
-			delete eng_bible[i].language_code;
-			delete eng_bible[i].version;
-    }
-    console.log(eng_bible);
-    require('fs').writeFileSync('./output_en.json', JSON.stringify(eng_bible), {
-			encoding: 'utf8',
-			flag: 'w'
-    });
 
     var inputPath = document.getElementById('target-import-path').value;
     var files = fs.readdirSync(inputPath);

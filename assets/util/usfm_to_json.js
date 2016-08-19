@@ -40,7 +40,7 @@ module.exports = {
 		//Do nothing for section headers now.
 	    } else if(splitLine.length == 1) {
 		// Do nothing for now here.
-	    } else if(c > 0) {
+	    } else if(c > 0 && v > 0) {
 		if(line.startsWith('\\')) {
 		    book.chapters[c-1].verses[v-1].verse += (' ' + line.substring(line.indexOf(' ')+1));
 		} else {
