@@ -591,12 +591,15 @@ $(function(){
 		}).catch(function (err) {
 			console.log(err);
 	});
-	const cookie = {url: 'http://book.autographa.com', name: 'book', value: '1'};
-  	session.defaultSession.cookies.set(cookie, (error) => {
-    	if (error)
-      	console.error(error);
+	session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
+		if(cookie.length == 0){
+			const cookie = {url: 'http://book.autographa.com', name: 'book', value: '1'};
+			session.defaultSession.cookies.set(cookie, (error) => {
+			if (error)
+				console.error(error);
+			});
+		}
   	});
-
   	$(".dropdown-menu").on('click', 'li a', function(){
         $(this).parent().parent().siblings(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
         $(this).parent().parent().siblings(".btn:first-child").val($(this).text());
