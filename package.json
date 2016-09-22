@@ -16,8 +16,8 @@
   "keywords": [
     "desktop",
     "Bible Editor",
-      "USFM",
-      "USFM Editor"
+    "USFM",
+    "USFM Editor"
   ],
   "author": "Bridgeconn",
   "license": "MIT",
@@ -29,6 +29,7 @@
     "electron-prebuilt": "1.2.7"
   },
   "dependencies": {
+    "diff-match-patch": "^1.0.0",
     "pouchdb": "5.4.4"
   },
   "build": {

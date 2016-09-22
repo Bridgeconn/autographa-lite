@@ -10,8 +10,12 @@
     <title>Autographa Lite</title>
     <!-- Bootstrap core CSS-->
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/bootstrap-switch.css" rel="stylesheet">
+    
+
   </head>
   <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -20,12 +24,18 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li>
-              <div class="btn-group navbar-btn strong" role="group" aria-label="..." id="bookBtn">
+              <div class="btn-group navbar-btn strong verse-diff-on" role="group" aria-label="..." id="bookBtn">
               <a class="btn btn-default" href="javascript:getBookList();" id="book-chapter-btn">Genesis</a><span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" href="javascript:getBookChapterList('1');" >1</a></span>
               </div>
             </li>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right verse-diff-on">
+            <li>
+                <div style="margin-top:10px;">
+                  <input type="checkbox" class="check-diff"/> 
+                </div>
+                <!-- <a href="javascript:void(0);" onClick="setDiffReferenceText('', '');" >Check Difference</a> -->
+            </li>
             <li><a href="settings.html" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog fa-2x"></i></a></li>
             <li><a href="about.html" data-toggle="tooltip" data-placement="bottom" title="About"><i class="fa fa-info fa-2x"></i></a></li>
             <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Export" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i></a>
@@ -35,7 +45,7 @@
     </nav>
     <div class="container-fluid">
       <div class="row row-col-fixed">
-        <div class="col-sm-6 col-fixed">
+        <div class="col-sm-6 col-fixed" id="section-0">
           <div class="row">
             <div class="col-12 center-align">
               <div class="btn-group">
@@ -68,7 +78,7 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
       <div class="container-fluid">
         <div class="collapse navbar-collapse">
-          <div class="nav navbar-nav">
+          <div class="nav navbar-nav verse-diff-on">
             <div class="btn-group navbar-btn" role="group" aria-label="..."><a class="btn btn-primary btn-default" href="#" data-output="2x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="2 Column Layout">2x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="3x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="3 Column Layout">3x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="4x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="4 Column Layout">4x &nbsp;<i class="fa fa-columns fa-lg"></i></a></div><a id="save-btn" class="btn btn-success navbar-btn navbar-right btn-save" href="#" role="button">Save</a>
           </div>
         </div>
@@ -205,6 +215,7 @@
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="../js/lib/jquery.min.js"></script>
     <script src="../js/lib/bootstrap.min.js"></script>
+    <script src="../js/lib/bootstrap-switch.js"></script>
     <script src="../js/lib/main.js"></script>
     <script src="../js/index.js"></script>
     <script>if (window.module) module = window.module;</script>
