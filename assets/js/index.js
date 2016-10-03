@@ -365,7 +365,6 @@ function createRefSelections() {
 		});
 	}else {
 		$('.ref-drop-down :selected').each(function(i, selected){ 
-			console.log($(selected).val()); 
 			$(".current-val").val($(selected).val());
 			getReferenceText($(selected).val(), function(err, refContent) {
 				if(err) {
@@ -836,11 +835,51 @@ $(function(){
 
 });
 
+function isSameLanguage(){
+	var verseLangCode = ""
+	var db = new PouchDB('database');
+	var check_value = false;
+	return db.get('targetBible').then(function (doc) {
+		verseLangCode = doc.targetLang;
+		languagedropDown = $(".ref-drop-down").length
+		for(var i = 0; i < languagedropDown-1; i++){
+			v1 = $($('.ref-drop-down :selected')[i]).val().split("_")[0]
+			v2=""
+			if($($('.ref-drop-down :selected')[i+1]).length){
+				v2 = $($('.ref-drop-down :selected')[i+1]).val().split("_")[0]
+			}
+			if((verseLangCode != v1) || (verseLangCode != v2 )){
+				return false;
+			}
+		}
+		if(languagedropDown == 1){
+			if((verseLangCode != $($('.ref-drop-down :selected')[0]).val().split("_")[0]) ){
+				return false;
+			}
+		}
+		return true;
+	}).then(function(response){
+		return response;
+	}).catch(function (err){
+		console.log(err);
+	});	
+}
+
 $('.check-diff').on('switchChange.bootstrapSwitch', function (event, state) {
 	if(state === true) {
-		setDiffReferenceText();
-		$(".verse-diff-on a").attr( "disabled" , "true" ).addClass("disable_a_href");
-		$(".ref-drop-down").attr("disabled", "true");
+		promise = isSameLanguage();
+		promise.then(function(response){
+			if(response == false){
+				alertModal("Language!!", "Differences are not meaningful between different languages."
+				+"Kindly select the same language across all panes to continue.");
+				$('.check-diff').bootstrapSwitch('state', false);
+				return false;
+			}else{
+				setDiffReferenceText();
+				$(".verse-diff-on a").attr( "disabled" , "true" ).addClass("disable_a_href");
+				$(".ref-drop-down").attr("disabled", "true");
+			}
+		});
 	}else{
 		setReferenceTextBack();
 		$(".verse-diff-on a").removeAttr( "disabled").removeClass("disable_a_href");
