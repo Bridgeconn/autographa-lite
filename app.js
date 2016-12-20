@@ -8,9 +8,9 @@ const {app} = electron
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 
-var db = new PouchDB('database');
+var db = new PouchDB('./db/targetDB');
 
-require('./seed.js');
+require('./db/seed.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -45,7 +45,7 @@ function createWindow() {
 
 
     // and load the index.html of the app.
-    win.loadURL(`file:${__dirname}/assets/pages/index.html`);
+    win.loadURL(`file:${__dirname}/app/views/index.html`);
 
     // Emitted when the window is closed.
     win.on('closed', () => {
@@ -96,7 +96,7 @@ app.on('window-all-closed', () => {
 
 ipc.on('synchronous-message', function (event, arg) {
     db.close();
-    win.loadURL(`file:${__dirname}/assets/pages/index.html`);
+    win.loadURL(`file:${__dirname}/app/views/index.html`);
     event.returnValue = 'pong';
 });
 /*

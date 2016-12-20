@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "description": "Yet another Bible translation editor.",
   "main": "app.js",
-  "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.2.0 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.2.7 --dist-url=https://atom.io/download/atom-shell"
+    "scripts": {
+	"start": "electron .",
+	"test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall" : "npm install bower && bower install bootstrap-sass-official --save && npm install gulp && ./node_modules/.bin/gulp",
+    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.4.12 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
+      "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell",
+      "prepublish": "npm install electron-prebuilt"
   },
   "repository": {
     "type": "git",
@@ -26,11 +28,27 @@
   },
   "homepage": "https://github.com/Bridgeconn/bib-edit#readme",
   "devDependencies": {
-    "electron-prebuilt": "1.2.7"
+    "electron-prebuilt": "1.4.12"
   },
   "dependencies": {
     "diff-match-patch": "^1.0.0",
-    "pouchdb": "5.4.4"
+    "gulp": "^3.9.1",
+    "pouchdb": "6.1.0"
+  },
+  "devDependencies":{
+    "gulp": "^3.9.1",
+    "gulp-bower": "0.0.13",
+    "gulp-cached": "^1.1.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-if": "^2.0.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-pug": "^3.0.3",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-util": "^3.0.6",
+    "main-bower-files": "^2.9.0"
   },
   "build": {
     "appId": "com.autographa.free",
