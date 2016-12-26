@@ -95,7 +95,7 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 		document.getElementById('chapterBtnSpan').innerHTML = '<a  id="chapterBtn" class="btn btn-default" href="javascript:getBookChapterList('+"'"+book+"'"+');" >'+chapter+'</a>'
 		db.get(book).then(function (doc) {
 			refDb.get('refChunks').then(function (chunkDoc) {
-				console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
+				// console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
 				currentBook = doc;
 				createRefSelections();
 				createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses, chunkDoc.chunks[parseInt(book,10)-1], chapter);
@@ -590,7 +590,7 @@ function setChapter(chapter){
 		refDb = new PouchDB('./db/referenceDB');
 		db.get(book).then(function (doc) {
 			refDb.get('refChunks').then(function (chunkDoc) {
-				console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
+				//console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
 				currentBook = doc;
 				chapter = chapter;
 				createRefSelections();
@@ -797,7 +797,8 @@ $(function(){
 	refDb.get('targetReferenceLayout').then(function (doc) {
 		setMultiwindowReference(doc.layout);
 	}).catch(function (err) {
-		console.log(err);
+	    //Layout value unset.	    
+	    //console.log(err);
 	});
 	session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
 		if(cookie.length == 0){

@@ -1,7 +1,7 @@
 module.exports = {
     /*
       All keys of options are required!
-      e.g: options = {lang: 'en', version: 'udb', usfmFile: /home/test-data/L66_1 Corinthians_I.SFM}
+      e.g: options = {lang: 'en', version: 'udb', usfmFile: '/home/test-data/L66_1 Corinthians_I.SFM'}
     */
     
     toJson: function(options) {
@@ -31,10 +31,15 @@ module.exports = {
 		c++;
 		v = 0;
 	    } else if(splitLine[0] == '\\v') {
-	    	checkContent = line.indexOf(' ', 3)+1
+	    	var verseContent = line.indexOf(' ', 3)+1;
+		var verseStr = (verseContent == 0 ) ? "" : line.substring(verseContent);
+		verseStr = verseStr.replace(/\\[\S]*? \+ /g, '');
+		verseStr = verseStr.replace(/\\[\S]*?$/g, '');
+		verseStr = verseStr.replace(/\\[\S]*? /g, '');
+
 		book.chapters[c-1].verses.push({
 		    "verse_number": parseInt(splitLine[1], 10),
-		    "verse": (checkContent == 0 ) ? "" : line.substring(checkContent)
+		    "verse": verseStr
 		});
 		v++;
 	    } else if(splitLine[0] == '\\s') {
@@ -59,12 +64,12 @@ module.exports = {
 	    require('fs').writeFileSync('./output.json', ',\n', {
 		encoding: 'utf8',
 		flag: 'a'
-	    });*/
-	    
+	    });
+	    */
 	    const PouchDB = require('pouchdb');
 	    var db;
 	    if(options.targetDb === 'refs') {
-		db = new PouchDB('./db/referenceDB');
+		db = new PouchDB('../../db/referenceDB');
 		db.get(book._id).then(function (doc) {
 		    book._rev = doc._rev;
 		    db.put(book).then(function (doc) {
@@ -80,7 +85,7 @@ module.exports = {
 		    });
 		});
 	    } else if(options.targetDb === 'target') {
-		db = new PouchDB('./db/targetDB');
+		db = new PouchDB('../../db/targetDB');
 		const booksCodes = require('./constants.js').bookCodeList;
 		var bookId = book._id.split('_');
 		bookId = bookId[bookId.length-1].toUpperCase();

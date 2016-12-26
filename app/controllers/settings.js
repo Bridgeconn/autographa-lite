@@ -1,5 +1,4 @@
 const {dialog} = require('electron').remote,
-      ipc = require('electron').ipcRenderer,
       PouchDB = require('pouchdb');
 
 var bibUtil = require("../util/usfm_to_json.js"),

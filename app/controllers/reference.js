@@ -1,25 +1,7 @@
 const session = require('electron').remote.session,
-      ipc = require('electron').ipcRenderer,
       {Menu} = require('electron').remote,
       PouchDB = require('pouchdb');
 var bibUtil = require("../util/json_to_usfm.js");
-
-/*const menu = Menu.buildFromTemplate([
-    {
-        label: 'Autographa Lite'/*,
-	submenu: [
-	    {
-		label: 'Settings',
-		click: function () {
-		    ipc.sendSync('show-import-window');
-		}
-	    }
-	]
-    }
-]);*/
-
-//Menu.setApplicationMenu(menu);
-
 var constants = require('../util/constants.js');
 
 function createBooksList(booksLimit) {
@@ -51,8 +33,6 @@ function createChaptersList(chaptersLimit) {
 		    if (error)
 		      console.error(error);
 	    });
-    const reply = ipc.sendSync('synchronous-message', 'ping');
-    const message = `Synchronous message reply: ${reply}`;
     });
   }
 }

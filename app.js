@@ -1,6 +1,4 @@
 const electron = require('electron');
-const ipc = electron.ipcMain
-const PouchDB = require('pouchdb');
 const session = require('electron').session;
 
 // Module to control application life.
@@ -8,21 +6,15 @@ const {app} = electron
 // Module to create native browser window.
 const {BrowserWindow} = electron;
 
-var db = new PouchDB('./db/targetDB');
-
-require('./db/seed.js');
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
-
-var util = require('util');
 
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
     width: 800,
-    height: 600,
+	height: 600,
     'min-width': 600,
     'min-height': 300,
     'accept-first-mouse': true,
@@ -30,59 +22,63 @@ function createWindow() {
     'webPreferences': {'session': session},
     show: false
     });
-    //loading window gracefully
-    win.once('ready-to-show', () => {
-        win.maximize();
-        // Open the DevTools.
-        win.webContents.openDevTools();
-        win.show();
-    });
-
-
-
-    // Open the DevTools.
-    //win.webContents.openDevTools();
-
 
     // and load the index.html of the app.
     win.loadURL(`file:${__dirname}/app/views/index.html`);
+
+    //loading window gracefully
+    win.once('ready-to-show', () => {
+	// Open the DevTools.
+	win.webContents.openDevTools();	
+	win.maximize();
+        win.show();
+    });
 
     // Emitted when the window is closed.
     win.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null;
-    exportWindow = null;
+	win = null;
+	if (process.platform !== 'darwin') {
+	    app.quit();
+	}
+    });
+}
+
+var dbSetup = new Promise(
+    function (resolve, reject) {
+	// Setup database.
+	var dbUtil = require(`${__dirname}/app/util/DbUtil.js`);
+	dbUtil.setupTargetDb
+	    .then((response) => {
+		console.log(response);
+		return dbUtil.setupRefDb;
+	    })
+	    .then((response) => {
+		console.log(response);
+		resolve(response);
+	    })
+	    .catch((err) => {
+		console.log('Error while DB setup. ' + err);
+		reject(err);
+	    });
     });
 
-/*    exportWindow = new BrowserWindow({
-    width: 500,
-    height: 800,
-    show: false
-    });
-    exportWindow.loadURL(`file:${__dirname}/assets/settings.html`);
-    exportWindow.openDevTools();
-    exportWindow.on('closed', () => {
-    exportWindow = null;
-    });
-
-    settingsWindow = new BrowserWindow({
-        width: 400,
-        height: 400,
-        show: false
-    })
-    settingsWindow.loadURL(`file:${__dirname}/assets/settings.html`);
-
-    ipc.on('show-settings', function(){
-        settingsWindow.show()
-    });*/
+function preProcess() {
+    dbSetup
+	.then((response) => {
+	    createWindow();
+	})
+	.catch((err) => {
+	    console.log('Error while App intialization.' + err);
+	});
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', preProcess);
 
 
 // Quit when all windows are closed.
@@ -94,16 +90,6 @@ app.on('window-all-closed', () => {
     }
 });
 
-ipc.on('synchronous-message', function (event, arg) {
-    db.close();
-    win.loadURL(`file:${__dirname}/app/views/index.html`);
-    event.returnValue = 'pong';
-});
-/*
-ipc.on('show-import-window', function () {
-    exportWindow.show();
-});*/
-
 app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -112,5 +98,3 @@ app.on('activate', () => {
     }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
