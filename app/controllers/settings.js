@@ -86,16 +86,24 @@ document.getElementById('ref-import-btn').addEventListener('click', function (e)
 	    alertModal("Reference Usfm Setting", "Reference Usfm Setting saved successfully!!");
 	}
     }).catch(function (err) {
-	var refs = {
-	    _id: 'refs',
-	    ref_ids: []
-	};
-	ref_entry.isDefault = true;
-	refs.ref_ids.push(ref_entry);
-	refDb.put(refs).then(function (res) {
-	    saveJsonToDB(files);
-	    alertModal("Reference Usfm Setting", "Reference Usfm Setting saved successfully!!");
-	});
+	if(err.message === 'missing') {
+	    var refs = {
+		_id: 'refs',
+		ref_ids: []
+	    };
+	    ref_entry.isDefault = true;
+	    refs.ref_ids.push(ref_entry);
+	    refDb.put(refs).then(function (res) {
+		saveJsonToDB(files);
+		alertModal("Reference Usfm Setting", "Reference Usfm Setting saved successfully!!");
+	    }).catch(function (internalErr) {
+		alertModal("Reference USFM Setting", "There was an error while importing USFM.");
+	    });
+	} else if(err.message === 'usfm parser error') {
+	    alertModal("Reference USFM Setting", "There was an error while parsing the USFM.");
+	} else {
+	    alertModal("Reference USFM Setting", "There was an error while importing USFM.");
+	}
     });
 });
 
@@ -108,7 +116,7 @@ document.getElementById('target-import-btn').addEventListener('click', function 
     files.forEach(function (file) {
 			var filePath = path.join(inputPath, file);
 			if(fs.statSync(filePath).isFile() && !file.startsWith('.')) {
-		//	    console.log(filePath);
+			    //console.log(filePath);
 			    var options = {
 						lang: 'hi',
 						version: 'ulb',
@@ -126,7 +134,7 @@ function saveJsonToDB(files) {
     files.forEach(function (file) {
 	if(!file.startsWith('.')) {
 	    var filePath = path.join(document.getElementById('ref-path').value, file);
-	    //				      console.log(filePath + ' ' + fs.statSync(filePath).isFile());
+	    //console.log(filePath + ' ' + fs.statSync(filePath).isFile());
 	    if(fs.statSync(filePath).isFile()) {
 		var options = {
 		    lang: document.getElementById('ref-lang-code').value.toLowerCase(),

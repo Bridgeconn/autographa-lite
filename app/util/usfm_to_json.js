@@ -1,26 +1,38 @@
-module.exports = {
+var toJsonConverter = {
     /*
       All keys of options are required!
-      e.g: options = {lang: 'en', version: 'udb', usfmFile: '/home/test-data/L66_1 Corinthians_I.SFM'}
+      e.g: options = {lang: 'en', version: 'udb', usfmFile: '/home/test-data/L66_1 Corinthians_I.SFM', 'target': 'refs|target'}
     */
     
     toJson: function(options) {
-	var lineReader = require('readline').createInterface({
-	    input: require('fs').createReadStream(options.usfmFile)
-	});
-	
-	var book = {}, verse = [];
-	var c = 0, v = 0;
-	var id_prefix = options.lang + '_' + options.version + '_';
-	book.chapters = [];
+	try {
+	    this.patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
+	    var lineReader = require('readline').createInterface({
+		input: require('fs').createReadStream(options.usfmFile)
+	    });
+	    var book = {}, verse = [];
+	    var c = 0, v = 0, usfmBibleBook = false, validLineCount = 0;
+	    var id_prefix = options.lang + '_' + options.version + '_';
+	    book.chapters = [];
+	} catch(err) {
+	    throw new Error('usfm parser error');
+	}
 
 	lineReader.on('line', function (line) {
+	    // Logic to tell if the input file is a USFM book of the Bible.
+	    if(!usfmBibleBook)
+		if(validLineCount > 3)
+		    throw new Error('not usfm file');
+
+	    validLineCount++;
 	    var line = line.trim();
-	    var splitLine = line.split(' ');
+	    var splitLine = line.split(/ +/);
 	    if(!line) {
+		validLineCount--;
 		//Do nothing for empty lines.
 	    } else if(splitLine[0] == '\\id') {
-		temp = id_prefix + splitLine[1];
+		if(require(`${__dirname}/constants.js`).bookCodeList.includes(splitLine[1]))
+		    usfmBibleBook = true;
 		book._id = id_prefix + splitLine[1];
 	    } else if(splitLine[0] == '\\c') {
 		book.chapters.push({
@@ -31,45 +43,45 @@ module.exports = {
 		c++;
 		v = 0;
 	    } else if(splitLine[0] == '\\v') {
-	    	var verseContent = line.indexOf(' ', 3)+1;
-		var verseStr = (verseContent == 0 ) ? "" : line.substring(verseContent);
-		verseStr = verseStr.replace(/\\[\S]*? \+ /g, '');
-		verseStr = verseStr.replace(/\\[\S]*?$/g, '');
-		verseStr = verseStr.replace(/\\[\S]*? /g, '');
-
+		var verseStr = (splitLine.length <= 2)? '' : splitLine.splice(2, splitLine.length-1).join(' ');
+		verseStr = toJsonConverter.replaceMarkers(verseStr);
 		book.chapters[c-1].verses.push({
 		    "verse_number": parseInt(splitLine[1], 10),
 		    "verse": verseStr
 		});
 		v++;
-	    } else if(splitLine[0] == '\\s') {
+	    } else if(splitLine[0].startsWith('\\s')) {
 		//Do nothing for section headers now.
 	    } else if(splitLine.length == 1) {
-		// Do nothing for now here.
+		// Do nothing here for now.
+	    } else if(splitLine[0].startsWith('\\m')) {
+		// Do nothing here for now
+	    } else if(splitLine[0].startsWith('\\r')) {
+		// Do nothing here for now.
 	    } else if(c > 0 && v > 0) {
-		if(line.startsWith('\\')) {
-		    book.chapters[c-1].verses[v-1].verse += (' ' + line.substring(line.indexOf(' ')+1));
-		} else {
-		    book.chapters[c-1].verses[v-1].verse += (' ' + line);
-		}
+		var cleanedStr = toJsonConverter.replaceMarkers(line);
+		book.chapters[c-1].verses[v-1].verse += ((cleanedStr.length === 0? '' : ' ') + cleanedStr);
 	    }
 	});
 
 	lineReader.on('close', function(line) {
-/*	    console.log(book);
-	    require('fs').writeFileSync('./output.json', JSON.stringify(book), {
-		encoding: 'utf8',
-		flag: 'a'
-	    });
-	    require('fs').writeFileSync('./output.json', ',\n', {
-		encoding: 'utf8',
-		flag: 'a'
-	    });
-	    */
+	    if(!usfmBibleBook)
+		throw new Error('not usfm file');
+
+	    /*console.log(book);
+	      require('fs').writeFileSync('/home/joel/output.json', JSON.stringify(book), {
+	      encoding: 'utf8',
+	      flag: 'a'
+	      });
+	      require('fs').writeFileSync('/home/joel/output.json', ',\n', {
+	      encoding: 'utf8',
+	      flag: 'a'
+	      });*/
+	    
 	    const PouchDB = require('pouchdb');
 	    var db;
 	    if(options.targetDb === 'refs') {
-		db = new PouchDB('../../db/referenceDB');
+		db = new PouchDB(`${__dirname}/../../db/referenceDB`);
 		db.get(book._id).then(function (doc) {
 		    book._rev = doc._rev;
 		    db.put(book).then(function (doc) {
@@ -85,8 +97,8 @@ module.exports = {
 		    });
 		});
 	    } else if(options.targetDb === 'target') {
-		db = new PouchDB('../../db/targetDB');
-		const booksCodes = require('./constants.js').bookCodeList;
+		db = new PouchDB(`${__dirname}/../../db/targetDB`);
+		const booksCodes = require(`${__dirname}/constants.js`).bookCodeList;
 		var bookId = book._id.split('_');
 		bookId = bookId[bookId.length-1].toUpperCase();
 		var i, j, k;
@@ -119,6 +131,43 @@ module.exports = {
 		});
 	    }
 	});
-    }
+
+	lineReader.on('error', function(lineReaderErr) {
+	    if(lineReaderErr.message === 'not usfm file')
+		console.log(options.usfmFile + ' is not a valid USFM file.');
+	    else
+		throw new Error('usfm parser error');
+	});
+    },
+
+    replaceMarkers: function(str) {
+	patternsLine = this.patterns.split('\n');
+	var pattern = '',
+	    replacement = '',
+	    pairFoundFlag = -1;
+	for(var i=0; i<patternsLine.length; i++) {
+	    if(str.length === 0)
+		break
+	    if(patternsLine[i] === '' || patternsLine[i].startsWith('#'))
+		continue;
+
+	    if(patternsLine[i].startsWith('>') && pairFoundFlag <= 0) {
+		pattern = patternsLine[i].substr(1);
+		pairFoundFlag = 0;
+	    } else if(patternsLine[i].endsWith('<') && pairFoundFlag === 0) {
+		replacement = patternsLine[i].length === 1? '' : patternsLine[i].substr(0, patternsLine[i].length-1);
+		pairFoundFlag = 1;
+	    }
+
+	    if(pairFoundFlag === 1) {
+		str = str.replace(new RegExp(pattern, 'gu'), replacement);
+		pairFoundFlag = -1;
+	    }
+	}
+	return str;
+    },
+
+    patterns: ""
 };
 
+module.exports = toJsonConverter;

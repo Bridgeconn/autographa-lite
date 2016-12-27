@@ -28,7 +28,7 @@ module.exports = {
 	    targetDb.get('isDBSetup')
 		.then(function (doc) {
 		    targetDb.close();
-		    resolve('TargetDB is already setup.');
+		    resolve('TargetDB exists.');
 		})
 		.catch(function (err) {
 		    const bibleJson = require(`${__dirname}/../lib/full_bible_skel.json`);
@@ -53,7 +53,7 @@ module.exports = {
 	    refDb.get('refs')
 		.then(function (doc) {
 		    refDb.close();
-		    resolve('ReferenceDB is already setup.');
+		    resolve('ReferenceDB exists.');
 		})
 		.catch(function (err) {
 		    const refEnUlbJson = require(`${__dirname}/../lib/en_ulb.json`),
