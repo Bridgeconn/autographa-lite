@@ -8,7 +8,8 @@ var db = new PouchDB('./db/targetDB'),
 refDb = new PouchDB('./db/referenceDB'),
 book,
 chapter,
-currentBook;
+currentBook,
+intervalId;
 
 
 var constants = require('../util/constants.js');
@@ -77,6 +78,7 @@ function createVerseInputs(verses, chunks, chapter) {
 		divContainer.appendChild(spanVerseNum);
 		divContainer.appendChild(spanVerse);
 		document.getElementById('input-verses').appendChild(divContainer);
+		$(".diff-count-target").html("");
 	}
 	highlightRef();
 }
@@ -92,7 +94,8 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 			chapter = cookie[0].value;
 		}
 		document.getElementById('book-chapter-btn').innerHTML = booksList[parseInt(book,10)-1];
-		document.getElementById('chapterBtnSpan').innerHTML = '<a  id="chapterBtn" class="btn btn-default" href="javascript:getBookChapterList('+"'"+book+"'"+');" >'+chapter+'</a>'
+		document.getElementById('chapterBtnSpan').innerHTML = '<a  id="chapterBtn" data-toggle="tooltip" data-placement="bottom"  title="Select Chapter" class="btn btn-default" href="javascript:getBookChapterList('+"'"+book+"'"+');" >'+chapter+'</a>'
+		$('a[data-toggle=tooltip]').tooltip();
 		db.get(book).then(function (doc) {
 			refDb.get('refChunks').then(function (chunkDoc) {
 				// console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
@@ -108,6 +111,8 @@ session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, 
 
 function getDiffText(refId1, refId2, position, callback) {
 	refDb = new PouchDB('./db/referenceDB');
+	var t_ins = 0;
+	var t_del = 0;
 	var id1 = refId1 + '_' + bookCodeList[parseInt(book,10)-1],
 	id2 = refId2 + '_' + bookCodeList[parseInt(book,10)-1],
 	i,
@@ -137,15 +142,49 @@ function getDiffText(refId1, refId2, position, callback) {
 			var refString = "";
 			for (var i=1; i<=ref1.length; i++) {
 				var d = dmp_diff.diff_main(ref1[i-1].verse, ref2[i-1].verse);
+				var diff_count = getDifferenceCount(d);
+				t_ins+= diff_count["ins"]
+				t_del+= diff_count["del"]
 				var ds = dmp_diff.diff_prettyHtml(d);
 				refString+= '<div data-verse="r' + (i) +'"><span class="verse-num">' + (i) + '</span><span>' + ds + '</span></div>';
 			}
-			callback(null, refString, position);
+			callback(null, refString, position, t_ins, t_del);
+
 		})
 	}).catch(function (err) {
 		callback(err, null, null);
 	});
 }
+/* ===============================================
+//  insertion and deletion count in difference text by passing verse
+==================================================*/
+
+function getDifferenceCount(verse_diff){
+  var insertions = 0;
+  var deletions = 0;
+	for (var x = 0; x < verse_diff.length; x++) {
+    var op = verse_diff[x][0];
+    var data = verse_diff[x][1];
+    switch (op) {
+      case DiffMatchPatch.DIFF_INSERT:
+        insertions += data.length;
+        break;
+      case DiffMatchPatch.DIFF_DELETE:
+        deletions += data.length;
+        break;
+      case DiffMatchPatch.DIFF_EQUAL:
+        insertions = 0;
+        deletions = 0;
+        break;
+    }
+	}
+	return {ins: insertions, del: deletions}
+}
+
+/* ===============================================
+//  End insertion and deletion count in difference text
+==================================================*/
+
 
 function setDiffReferenceText() {
 	/*	==================================================
@@ -164,7 +203,7 @@ function setDiffReferenceText() {
 	}).catch(function (err) {
 		console.log(err);
 	});
-	/*	==================================================
+	/*==================================================
 		========== save document after edit ==============
 		==================================================
 	*/
@@ -172,11 +211,14 @@ function setDiffReferenceText() {
 	for(j=0; j<$('.ref-drop-down :selected').length; j++){ 
 		$("#section-"+j).find('div[type="ref"]').children().removeAttr("style");
 		if(j+1 < $('.ref-drop-down :selected').length){
-			getDiffText($($('.ref-drop-down :selected')[j]).val(), $($('.ref-drop-down :selected')[j+1]).val(), j+1, function(err, refContent, pos){
+			getDiffText($($('.ref-drop-down :selected')[j]).val(), $($('.ref-drop-down :selected')[j+1]).val(), j+1, function(err, refContent, pos, t_ins, t_del){
 				if(err){
 					console.log(err);
 				}else {
-					$("#section-"+pos).find('div[type="ref"]').html(refContent);	
+					$("#section-"+pos).find('div[type="ref"]').html(refContent);
+					$("#section-"+pos).find('.diff-count').html("<span>(+): "+t_ins+"</span><span> (-): "+t_del+"</span></span>");
+					t_ins =  0;
+					t_del = 0;
 				}
 			});	
 		}
@@ -231,6 +273,7 @@ function setReferenceTextBack(){
 					console.log(err);
 				}else {
 					$("#section-"+i).find('div[type="ref"]').html(refContent);
+					$("#section-"+i).find('.diff-count').html("");
 				}
 			});
 	});
@@ -258,6 +301,8 @@ function setReferenceTextBack(){
 }
 
 function createVerseDiffInputs(verses, chunks, chapter, book_original_verses){
+	var t_ins = 0;
+	var t_del = 0;
 	document.getElementById('input-verses').innerHTML = "";
 	var i, chunkIndex = 0, chunkVerseStart, chunkVerseEnd;
 	for(i=0; i<chunks.length; i++) {
@@ -285,11 +330,12 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses){
 
 		var chunk = chunkVerseStart + '-' + chunkVerseEnd;
 		spanVerse = "<span chunk-group="+chunk+" id=v"+i+">";
-		//$(spanVerse).attr("chunk-group", chunk);
-		//spanVerse.contentEditable = true;
-		//spanVerse.id = "v"+i;
 		var d = dmp_diff.diff_main(book_original_verses[i-1].verse, verses[i-1].verse);
+		var verse_diff = d;
 		var ds = dmp_diff.diff_prettyHtml(d);
+		var diff_count = getDifferenceCount(d);
+		t_ins+= diff_count["ins"]
+		t_del+= diff_count["del"]
 		spanVerse+= ds;
 		spanVerse+='</span>'
 		spanVerseNum += '<span class="verse-num">'+i+'</span>'//appendChild(document.createTextNode(i));
@@ -297,7 +343,9 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses){
 		divContainer += spanVerse;
 		divContainer += '</div>'
 		$("#input-verses").append(divContainer);
+		
 	}
+	$(".diff-count-target").html("<span>(+): "+t_ins+"</span><span> (-): "+t_del+"</span></span>");
 	highlightRef();
 }
 
@@ -345,6 +393,7 @@ function createRefSelections() {
 							return;
 						}
 						$('div[type="ref"]').html(refContent);
+
 					});
 				}
 				/*==================== old drop down commented =============================*/
@@ -596,7 +645,8 @@ function setChapter(chapter){
 				createRefSelections();
 				createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses, chunkDoc.chunks[parseInt(book,10)-1], chapter);
 			});
-			document.getElementById("bookBtn").innerHTML = '<a class="btn btn-default" href="javascript:getBookList();" id="book-chapter-btn">'+doc.book_name+'</a><span id="chapterBtnSpan"><a id="chapterBtn" class="btn btn-default" href="javascript:getBookChapterList('+"'"+book+"'"+')" >'+chapter+'</span></a>'
+			document.getElementById("bookBtn").innerHTML = '<a class="btn btn-default" data-toggle="tooltip" data-placement="bottom"  title="Select Book" href="javascript:getBookList();" id="book-chapter-btn">'+doc.book_name+'</a><span id="chapterBtnSpan"><a id="chapterBtn" class="btn btn-default" href="javascript:getBookChapterList('+"'"+book+"'"+')" >'+chapter+'</span></a>'
+			$('a[data-toggle=tooltip]').tooltip();
 			setChapterButton(book, chapter);
 			setChapterCookie(chapter);
 			closeModal($("#chapters"));
@@ -612,7 +662,9 @@ function setChapter(chapter){
 }
 
 function setChapterButton(bookId, chapterId){
-	document.getElementById('chapterBtnSpan').innerHTML = '<a id="chapterBtn" class="btn btn-default" href="javascript:getBookChapterList('+"'"+bookId+"'"+');" >'+chapterId+'</a>'
+	document.getElementById('chapterBtnSpan').innerHTML = '<a id="chapterBtn" data-toggle="tooltip" data-placement="bottom"  title="Select Chapter" class="btn btn-default" class="btn btn-default" href="javascript:getBookChapterList('+"'"+bookId+"'"+');" >'+chapterId+'</a>'
+	$('a[data-toggle=tooltip]').tooltip();
+
 }
 
 function setChapterCookie(chapter){
@@ -885,6 +937,81 @@ $('.check-diff').on('switchChange.bootstrapSwitch', function (event, state) {
 		setReferenceTextBack();
 		$(".verse-diff-on a").removeAttr( "disabled").removeClass("disable_a_href");
 		$(".ref-drop-down").removeAttr("disabled", "true");
+	}
+});
+
+// call after stopped typing
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
+// This will apply the debounce effect on the keyup event
+// And it only fires 3000ms after the user stopped typing
+$('#input-verses').on('keyup', debounce(function () {
+		db = new PouchDB('./db/targetDB');
+		var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
+		verses.forEach(function (verse, index) {
+			var vId = 'v'+(index+1);
+			verse.verse = document.getElementById(vId).textContent;
+		});
+		currentBook.chapters[parseInt(chapter,10)-1].verses = verses;
+		db.get(currentBook._id).then(function(book){
+			currentBook._rev = book._rev;
+			db.put(currentBook).then(function(response){
+				var dateTime = new Date().toLocaleString();
+				$("#saved-time").html("Last saved target at: "+ dateTime);
+				setAutoSaveTime(dateTime)
+				db.close();
+				clearInterval(intervalId);
+			}).catch(function(err){
+				db.put(currentBook).then(function(response){
+					var dateTime = new Date().toLocaleString();
+					$("#saved-time").html("Last saved target at: "+ dateTime);
+					setAutoSaveTime(dateTime);
+				}).catch(function(err){
+					clearInterval(intervalId);
+					db.close();
+				})
+				clearInterval(intervalId);
+				db.close();
+			})
+		})
+}, 3000));
+
+$(".font-button").bind("click", function () {
+    var size = parseInt($('.col-ref').css("font-size"));
+    if ($(this).hasClass("plus")) {
+        size = size + 2;
+    } else {
+        size = size - 2;
+        if (size <= 14) {
+            size = 14;
+        }
+    }
+    $('.col-ref').css("font-size", size);
+});
+
+function setAutoSaveTime(dateTime){
+	const cookie = {url: 'http://autosave.autographa.com', name: 'autosave', value: dateTime};
+	session.defaultSession.cookies.set(cookie, (error) => {
+		if (error)
+			console.error(error);
+	});
+}
+session.defaultSession.cookies.get({url: 'http://autosave.autographa.com'}, (error, cookie) => {
+	if(cookie.length > 0) {
+		$("#saved-time").html("Last saved target at: "+ cookie[0].value);
 	}
 });
 
