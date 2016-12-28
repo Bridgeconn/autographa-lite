@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "description": "Yet another Bible translation editor.",
   "main": "app.js",
-    "scripts": {
-	"start": "electron .",
-	"test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall" : "npm install bower && bower install bootstrap-sass-official --save && npm install gulp && ./node_modules/.bin/gulp",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npm install bower && bower install bootstrap-sass-official && npm install gulp && ./node_modules/.bin/gulp",
     "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.4.12 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-      "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell",
-      "prepublish": "npm install electron-prebuilt"
+    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell",
+    "prepublish": "npm install electron-prebuilt"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Bridgeconn/bib-edit.git"
   },
   "keywords": [
-    "desktop",
+    "Desktop",
     "Bible Editor",
     "USFM",
     "USFM Editor"
@@ -27,15 +27,13 @@
     "url": "https://github.com/Bridgeconn/bib-edit/issues"
   },
   "homepage": "https://github.com/Bridgeconn/bib-edit#readme",
-  "devDependencies": {
-    "electron-prebuilt": "1.4.12"
-  },
   "dependencies": {
     "diff-match-patch": "^1.0.0",
-    "gulp": "^3.9.1",
-    "pouchdb": "6.1.0"
+    "pouchdb-adapter-leveldb": "^6.1.0",
+    "pouchdb-core": "^6.1.0"
   },
-  "devDependencies":{
+  "devDependencies": {
+    "electron-prebuilt": "1.4.12",
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
     "gulp-cached": "^1.1.0",

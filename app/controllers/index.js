@@ -1,5 +1,7 @@
 const session = require('electron').remote.session,
-PouchDB = require('pouchdb');
+//      PouchDB = require('pouchdb');
+      PouchDB = require('pouchdb-core')
+      .plugin(require('pouchdb-adapter-leveldb'));
 var bibUtil = require("../util/json_to_usfm.js"),
 DiffMatchPatch = require('diff-match-patch'),
 dmp_diff = new DiffMatchPatch();

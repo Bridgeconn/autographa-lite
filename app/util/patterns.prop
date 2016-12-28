@@ -45,6 +45,10 @@
 >\\.+? (.*?)\\.+?\*
 $1<
 
+# Matches all markers at start of line.
+>^\\.+? 
+<
+
 # Matches all marker ends at end-of-line.
 >\\.+?$
 <

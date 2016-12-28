@@ -1,5 +1,7 @@
 const {dialog} = require('electron').remote,
-      PouchDB = require('pouchdb');
+      PouchDB = require('pouchdb-core')
+      .plugin(require('pouchdb-adapter-leveldb'));
+//      PouchDB = require('pouchdb');
 
 var bibUtil = require("../util/usfm_to_json.js"),
     fs = require("fs"),

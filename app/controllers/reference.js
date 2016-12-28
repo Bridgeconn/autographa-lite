@@ -1,6 +1,8 @@
 const session = require('electron').remote.session,
       {Menu} = require('electron').remote,
-      PouchDB = require('pouchdb');
+      PouchDB = require('pouchdb-core')
+      .plugin(require('pouchdb-adapter-leveldb'));      
+//      PouchDB = require('pouchdb');
 var bibUtil = require("../util/json_to_usfm.js");
 var constants = require('../util/constants.js');
 

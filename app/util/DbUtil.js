@@ -1,6 +1,8 @@
 module.exports = {
     destroyDbs: function() {
-	const PouchDB = require('pouchdb'),	
+	const PouchDB = require('pouchdb-core')
+	      .plugin(require('pouchdb-adapter-leveldb')),
+	      //PouchDB = require('pouchdb'),	
 	      targetDb = new PouchDB('./db/targetDB');
 	targetDb.destroy().then(function (response) {
 	    console.log('targetDB destroyed!.');
@@ -22,7 +24,9 @@ module.exports = {
 
     setupTargetDb: new Promise(
 	function(resolve, reject) {
-	    const PouchDB = require('pouchdb'),
+	    const PouchDB = require('pouchdb-core')
+	      .plugin(require('pouchdb-adapter-leveldb')),
+//	    const PouchDB = require('pouchdb'),
 		  targetDb = new PouchDB(`${__dirname}/../../db/targetDB`);
 		  //targetDb = new PouchDB('../../db/targetDB');
 	    targetDb.get('isDBSetup')
@@ -47,7 +51,9 @@ module.exports = {
     
     setupRefDb: new Promise (
 	function(resolve, reject) {
-	    const PouchDB = require('pouchdb'),	
+	    const PouchDB = require('pouchdb-core')
+		  .plugin(require('pouchdb-adapter-leveldb')),
+//	    const PouchDB = require('pouchdb'),	
 		  refDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
 		  //refDb = new PouchDB('../../db/referenceDB');
 	    refDb.get('refs')

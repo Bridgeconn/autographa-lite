@@ -1,4 +1,4 @@
-var toJsonConverter = {
+module.exports = {
     /*
       All keys of options are required!
       e.g: options = {lang: 'en', version: 'udb', usfmFile: '/home/test-data/L66_1 Corinthians_I.SFM', 'target': 'refs|target'}
@@ -6,7 +6,7 @@ var toJsonConverter = {
     
     toJson: function(options) {
 	try {
-	    this.patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
+	    patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
 	    var lineReader = require('readline').createInterface({
 		input: require('fs').createReadStream(options.usfmFile)
 	    });
@@ -44,7 +44,7 @@ var toJsonConverter = {
 		v = 0;
 	    } else if(splitLine[0] == '\\v') {
 		var verseStr = (splitLine.length <= 2)? '' : splitLine.splice(2, splitLine.length-1).join(' ');
-		verseStr = toJsonConverter.replaceMarkers(verseStr);
+		verseStr = replaceMarkers(verseStr);
 		book.chapters[c-1].verses.push({
 		    "verse_number": parseInt(splitLine[1], 10),
 		    "verse": verseStr
@@ -59,7 +59,7 @@ var toJsonConverter = {
 	    } else if(splitLine[0].startsWith('\\r')) {
 		// Do nothing here for now.
 	    } else if(c > 0 && v > 0) {
-		var cleanedStr = toJsonConverter.replaceMarkers(line);
+		var cleanedStr = replaceMarkers(line);
 		book.chapters[c-1].verses[v-1].verse += ((cleanedStr.length === 0? '' : ' ') + cleanedStr);
 	    }
 	});
@@ -77,8 +77,10 @@ var toJsonConverter = {
 	      encoding: 'utf8',
 	      flag: 'a'
 	      });*/
-	    
-	    const PouchDB = require('pouchdb');
+
+	    const PouchDB = require('pouchdb-core')
+		  .plugin(require('pouchdb-adapter-leveldb'));
+//	    const PouchDB = require('pouchdb');
 	    var db;
 	    if(options.targetDb === 'refs') {
 		db = new PouchDB(`${__dirname}/../../db/referenceDB`);
@@ -138,36 +140,34 @@ var toJsonConverter = {
 	    else
 		throw new Error('usfm parser error');
 	});
-    },
-
-    replaceMarkers: function(str) {
-	patternsLine = this.patterns.split('\n');
-	var pattern = '',
-	    replacement = '',
-	    pairFoundFlag = -1;
-	for(var i=0; i<patternsLine.length; i++) {
-	    if(str.length === 0)
-		break
-	    if(patternsLine[i] === '' || patternsLine[i].startsWith('#'))
-		continue;
-
-	    if(patternsLine[i].startsWith('>') && pairFoundFlag <= 0) {
-		pattern = patternsLine[i].substr(1);
-		pairFoundFlag = 0;
-	    } else if(patternsLine[i].endsWith('<') && pairFoundFlag === 0) {
-		replacement = patternsLine[i].length === 1? '' : patternsLine[i].substr(0, patternsLine[i].length-1);
-		pairFoundFlag = 1;
-	    }
-
-	    if(pairFoundFlag === 1) {
-		str = str.replace(new RegExp(pattern, 'gu'), replacement);
-		pairFoundFlag = -1;
-	    }
-	}
-	return str;
-    },
-
-    patterns: ""
+    }
 };
 
-module.exports = toJsonConverter;
+var patterns = "";
+
+function replaceMarkers(str) {
+    patternsLine = patterns.split('\n');
+    var pattern = '',
+	replacement = '',
+	pairFoundFlag = -1;
+    for(var i=0; i<patternsLine.length; i++) {
+	if(str.length === 0)
+	    break
+	if(patternsLine[i] === '' || patternsLine[i].startsWith('#'))
+	    continue;
+
+	if(patternsLine[i].startsWith('>') && pairFoundFlag <= 0) {
+	    pattern = patternsLine[i].substr(1);
+	    pairFoundFlag = 0;
+	} else if(patternsLine[i].endsWith('<') && pairFoundFlag === 0) {
+	    replacement = patternsLine[i].length === 1? '' : patternsLine[i].substr(0, patternsLine[i].length-1);
+	    pairFoundFlag = 1;
+	}
+
+	if(pairFoundFlag === 1) {
+	    str = str.replace(new RegExp(pattern, 'gu'), replacement);
+	    pairFoundFlag = -1;
+	}
+    }
+    return str;
+}
