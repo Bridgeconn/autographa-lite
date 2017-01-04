@@ -46,7 +46,7 @@ function onBookSelect(bookId) {
     if (error)
       console.error(error);
   });
-  var db = new PouchDB('./db/targetDB');
+  var db = new PouchDB(`${__dirname}/../../db/targetDB`);
   db.get(bookId.substring(1).toString()).then(function (doc) {
     chaptersPane = document.getElementById("chapters-pane");
   	while (chaptersPane.lastChild) {
@@ -81,7 +81,7 @@ for(i=1; i<=books.length; i++) {
 $('a[type="export"]').click(function () {
     session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
 	book = {};
-	var db = new PouchDB('./db/targetDB');
+	var db = new PouchDB(`${__dirname}/../../db/targetDB`);
 	db.get('targetBible').then(function (doc) {
 	    book.bookNumber = cookie[0].value;
 	    book.bookName = constants.booksList[parseInt(book.bookNumber, 10)-1];
@@ -96,7 +96,7 @@ $('a[type="export"]').click(function () {
 
 //validation for export
 document.getElementById('export-usfm').addEventListener('click', function (e) {
-  db = new PouchDB('./db/targetDB');
+  db = new PouchDB(`${__dirname}/../../db/targetDB`);
   // Deleting database
   // db.destroy(function (err, response) {
   //    if (err) {
