@@ -30,7 +30,8 @@
   "dependencies": {
     "diff-match-patch": "^1.0.0",
     "pouchdb-adapter-leveldb": "^6.1.0",
-    "pouchdb-core": "^6.1.0"
+    "pouchdb-core": "^6.1.0",
+    "pouchdb-quick-search": "^1.2.0"
   },
   "devDependencies": {
     "electron-prebuilt": "1.4.12",

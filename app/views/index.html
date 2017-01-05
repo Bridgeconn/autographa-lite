@@ -31,6 +31,9 @@
           </ul>
           <ul class="nav navbar-nav navbar-right verse-diff-on">
             <li>
+              <a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="search" id="searchText"><i class="fa fa-search fa-2x"></i></a></li>
+            </li>
+            <li>
                 <div style="margin-top:10px;">
                   <input type="checkbox" class="check-diff"/> 
                 </div>
@@ -177,7 +180,6 @@
       <!-- /.modal-dialog-->
     </div>
 
-
     <div class="modal fade"  tabindex="-1" role="dialog" id="exportChoice">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -207,6 +209,74 @@
           <div class="modal-footer">
             <button class="btn btn-primary" id="exportUsfm" disabled="disabled">Export</button>
             <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
+
+    <div class="modal fade"  tabindex="-1" role="dialog" id="searchTextModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading">Search Text:</h4>
+          </div>
+          <div class="modal-body" id="content">
+            <div class="row">
+              <div class="col-lg-6">
+                <label class="form-check-inline">
+                  <input type="radio" name="searchOption"  checked class="form-check-input" value="current" /> Current Chapter
+                </label>
+                <label class="form-check-inline">
+                  <input type="radio" name="searchOption"  class="form-check-input" value="all"/> All Chapters
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                <label>Find:</label>
+                  <input type="text" class="form-control" aria-label="..." id="searchTextBox">
+                  <span class="error help-inline" id="findError"></span>
+                </div><!-- /input-group -->
+                <div class="form-group">
+                <label>Replace With:</label>
+                  <input type="text" class="form-control" aria-label="..." id="replaceTextBox">
+                  <span class="error help-inline" id="replaceError"></span>
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+          </div>
+          <div class="modal-footer">
+            <!-- <button class="btn btn-primary" id="btnfind">Find</button> -->
+            <button class="btn btn-primary" id="btnfindReplace">Replace</button>
+            <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
+
+    <div class="modal fade"  tabindex="-1" role="dialog" id="replaced-text-change">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading">Information!!</h4>
+          </div>
+          <div class="modal-body" id="content">
+            <div class="row">
+              <div class="col-lg-6" id="replace-message">
+              </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+          </div>
+          <div class="modal-footer" id="btn-replace">
+            <input type="hidden" id="chapter-option" />
+            <button class="btn btn-primary" onclick="saveReplacedText();">Save Changes</button>
+            <button class="btn btn-primary" data-dismiss="modal" id="replace-cancel">Cancel</button>
           </div>
         </div>
         <!-- /.modal-content-->

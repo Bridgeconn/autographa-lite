@@ -2,6 +2,7 @@ const {dialog} = require('electron').remote,
       PouchDB = require('pouchdb-core')
       .plugin(require('pouchdb-adapter-leveldb'));
 //      PouchDB = require('pouchdb');
+PouchDB.plugin(require('pouchdb-quick-search'));
 
 var bibUtil = require("../util/usfm_to_json.js"),
     fs = require("fs"),
@@ -32,7 +33,7 @@ document.getElementById('target-import-path').addEventListener('click', function
 document.getElementById('save-btn').addEventListener('click', function (e) {
 	if (target_setting() == false)
 		return;
-    db = new PouchDB('./db/targetDB');
+    db = new PouchDB(`${__dirname}/../../db/targetDB`);
     db.get('targetBible').then(function (doc) {
 	db.put({
 	    _id: 'targetBible',
@@ -63,8 +64,8 @@ document.getElementById('save-btn').addEventListener('click', function (e) {
 document.getElementById('ref-import-btn').addEventListener('click', function (e) {
 	if (reference_setting() == false )
 		return;
-    var refDb = new PouchDB('./db/referenceDB'),
-	ref_id_value = document.getElementById('ref-lang-code').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
+    var refDb = new PouchDB(`${__dirname}/../../db/referenceDB`),
+	ref_id_value = document.getElementById('langCode').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
 	ref_entry = {},
     	files = fs.readdirSync(document.getElementById('ref-path').value);
     ref_entry.ref_id = ref_id_value;
@@ -166,7 +167,7 @@ document.getElementById('ref-path').addEventListener('click', function (e) {
 // Validation check for reference settings
 function reference_setting(){
   var name     = $("#ref-name").val(),
-  	 langCode = $("#ref-lang-code").val(),
+  	 langCode = $("#langCode").val(),
   	 version  = $("#ref-version").val(),
   	 path     = $("#ref-path").val(),
   	 isValid = true;
@@ -230,7 +231,7 @@ function alert_message(type,message){
 }
 
 function setReferenceSetting(){
-	db = new PouchDB('./db/targetDB');
+	db = new PouchDB(`${__dirname}/../../db/targetDB`);
 	db.get('targetBible').then(function (doc) {
 		$("#target-lang").val(doc.targetLang);
   	 	$("#target-version").val(doc.targetVersion);
@@ -244,11 +245,88 @@ function setReferenceSetting(){
 //get reference setting
 $(function(){
 	setReferenceSetting();
+	buildIndex();
 });
-
+function buildIndex(){
+	referenceDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
+  referenceDb.search({
+		  fields: ['_id', 'names'],
+		  build: true
+		})
+}
 function alertModal(heading, formContent) {
   $("#heading").html(heading);
   $("#content").html(formContent);
   $("#dynamicModal").modal();
   $("#dynamicModal").toggle();
 }
+
+function matchCode(input) {
+	var matches = []
+	referenceDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
+   return referenceDb.search({
+		  query: input,
+		  limit:10,
+		  fields: ['_id', 'names'],
+		  include_docs: true,
+		  stale: 'ok'
+		}).then(function(response){
+			var data = ""
+			if(response!=undefined && response.rows.length > 0){
+				$.each(response.rows, function(index, value){
+					doc = value.doc
+					if(doc){
+						matches.push({name: doc.names+" "+"("+(doc._id)+")", id: doc._id});
+					}
+				})
+				return matches;
+			}
+			else{
+				return [];
+			}
+		}).catch(function(err){
+			console.log(err)
+		})
+}
+function changeInput(val) {
+	var autoCompleteResult = matchCode(val)
+	autoCompleteResult.then(function(res){
+		var parent_ul = "<ul>";
+	  if(res){
+			$.each(res, function (index, value) {
+				// CREATE AND ADD SUB LIST ITEMS.
+				parent_ul += "<li><span class='code-name'>"+value['name']+"</span><input type='hidden' value="+"'"+value['id']+"'"+"class='code-id'/> </li>"
+	    });
+			parent_ul+="</ul>"
+			$("#divResult").html(parent_ul).show();
+			$("#divResult li").on("click",function(e){
+				var $clicked = $(this);
+				codeName = $clicked.children().select(".code-name").text();
+				codeId = 	$clicked.find(".code-id");
+				$('#ref-lang-code').val(codeName);
+				$("#langCode").val(codeId.val());
+			});
+	  }
+	});
+	$(document).on("click", function(e) {
+		var $clicked = $(e.target);
+		if (! $clicked.hasClass("search")){
+			$("#divResult").fadeOut();
+		}
+	});
+	$('#inputSearch').click(function(){
+		$("#divResult").fadeIn();
+	});
+}
+$("#ref-lang-code").keyup(function(){
+	changeInput($(this).val())
+});
+
+$('#ref-lang-code').on('blur', function () {
+		if ($(this).val().length === 2 || $(this).val().length === 1) {  //check for no. of characters entered
+			$(this).val('');	// clear the textbox
+    }
+    if ($("#divResult").text()==="") {
+			$("#ref-lang-code").val("");
+    }
+});

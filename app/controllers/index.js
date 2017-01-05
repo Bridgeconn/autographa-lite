@@ -14,7 +14,7 @@ currentBook,
 intervalId;
 
 
-var constants = require('../util/constants.js');
+var constants = require('../util/constants.js'),
 booksList = constants.booksList,
 otBookStart = 1,
 otBookEnd = 39,
@@ -22,6 +22,17 @@ ntBookStart = 40,
 ntBookEnd = 66,
 allBookStart = 1,
 allBookEnd = 66;
+
+var stringReplace = require('../util/string_replace.js'),
+		replaceCount = 0,
+		allChapterReplaceCount = [],
+		replacedChapter = {},
+		replacedVerse = {},
+		allChapters = {},
+		chapter_hash = {},
+		verses_arr = [],
+		chapter_arr = [];
+
 
 document.getElementById("save-btn").addEventListener("click", function (e) {
 	db = new PouchDB(`${__dirname}/../../db/targetDB`);
@@ -333,11 +344,10 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses){
 		var chunk = chunkVerseStart + '-' + chunkVerseEnd;
 		spanVerse = "<span chunk-group="+chunk+" id=v"+i+">";
 		var d = dmp_diff.diff_main(book_original_verses[i-1].verse, verses[i-1].verse);
-		var verse_diff = d;
 		var ds = dmp_diff.diff_prettyHtml(d);
 		var diff_count = getDifferenceCount(d);
-		t_ins+= diff_count["ins"]
-		t_del+= diff_count["del"]
+		t_ins+= diff_count["ins"];
+		t_del+= diff_count["del"];
 		spanVerse+= ds;
 		spanVerse+='</span>'
 		spanVerseNum += '<span class="verse-num">'+i+'</span>'//appendChild(document.createTextNode(i));
@@ -440,23 +450,8 @@ function createRefSelections() {
 
 	}
 }
-	// $('a[type="ref-selection"]').click(function() {
-	//     var selectedRefElement = $(this);
-	//     selectedText = $(this).text();
-	//     getReferenceText($(this).attr("data-value"), function(err, refContent) {
-	// 	if(err) {
-	// 		alertModal("Language!!", "The selected language on book for current chapter is not available!!");
-	// 	    return;
-	// 	}else{
-	// 		selectedRefElement.closest('ul[type="refs-list"]').siblings('button[role="ref-selector"]').text(selectedText);
-	// 	}
-	// 	selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent);
-	//     });
-	// });
- //    }).catch(function (err) {
- //    	alertModal("Language!!", "The selected language on book for current chapter is not available!!");
- //    });
- $('.ref-drop-down').change(function(event) {
+
+$('.ref-drop-down').change(function(event) {
  	var selectedRefElement = $(this);
  	getReferenceText($(this).val(), function(err, refContent) {
  		if(err) {
@@ -470,9 +465,6 @@ function createRefSelections() {
  		selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent);
  	});
  });
-
-
-
 
  function highlightRef() {
  	var i,
@@ -610,15 +602,6 @@ function setBookName(bookId){
   			console.error(error);
   	});
   	setChapterCookie('0');
-	// refDb.get('refChunks').then(function (chunkDoc) {
-	// 	console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
-	// 	currentBook = doc;
-	// 	createRefSelections();
-	// 	createVerseInputs(doc.chapters[parseInt(chapter,10)-1].verses, chunkDoc.chunks[parseInt(book,10)-1], chapter);
-	//  });
-
-	// $("#chapterBtn").click();
-	//location.reload();
 	createChaptersList(doc.chapters.length);
 	db.close();
 	closeModal($("#books"));
@@ -641,7 +624,6 @@ function setChapter(chapter){
 		refDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
 		db.get(book).then(function (doc) {
 			refDb.get('refChunks').then(function (chunkDoc) {
-				//console.log(doc.chapters[parseInt(chapter,10)-1].verses.length);
 				currentBook = doc;
 				chapter = chapter;
 				createRefSelections();
@@ -652,8 +634,7 @@ function setChapter(chapter){
 			setChapterButton(book, chapter);
 			setChapterCookie(chapter);
 			closeModal($("#chapters"));
-	//location.reload();
-	db.close();
+			db.close();
 }).catch(function (err) {
 	closeModal($("#chapters"));
 	console.log('Error: While retrieving document. ' + err);
@@ -681,7 +662,6 @@ function setChapterCookie(chapter){
 
 
 function onBookSelect(bookId) {
- // document.querySelector('.page-header').innerHTML = constants.booksList[parseInt(bookId.substring(1), 10)-1];
  const cookie = {url: 'http://book.autographa.com', name: 'book', value: bookId.substring(1)};
  session.defaultSession.cookies.set(cookie, (error) => {
  	if (error)
@@ -710,7 +690,6 @@ function getBookChapterList(bookId){
 	var db = new PouchDB(`${__dirname}/../../db/targetDB`);
 	db.get(bookId).then(function (doc) {
 		createChaptersList(doc.chapters.length)
-  	//document.getElementById("bookBtn").innerHTML = '<a class="btn btn-default" href="javascript:getBookList();" id="book-chapter-btn">'+doc.book_name+'</a><a class="btn btn-default" href="#" >1</a>'
   	db.close();
   }).catch(function (err) {
   	console.log('Error: While retrieving document. ' + err);
@@ -894,6 +873,7 @@ function isSameLanguage(){
 	var verseLangCode = ""
 	var db = new PouchDB(`${__dirname}/../../db/targetDB`);
 	var check_value = false;
+
 	return db.get('targetBible').then(function (doc) {
 		verseLangCode = doc.targetLang;
 		languagedropDown = $(".ref-drop-down").length
@@ -916,7 +896,7 @@ function isSameLanguage(){
 	}).then(function(response){
 		return response;
 	}).catch(function (err){
-		console.log(err);
+		return false;
 	});	
 }
 
@@ -991,6 +971,8 @@ $('#input-verses').on('keyup', debounce(function () {
 		})
 }, 3000));
 
+//======call above function after stopped typing in the target pane end here ==============
+
 $(".font-button").bind("click", function () {
     var size = parseInt($('.col-ref').css("font-size"));
     if ($(this).hasClass("plus")) {
@@ -1017,5 +999,191 @@ session.defaultSession.cookies.get({url: 'http://autosave.autographa.com'}, (err
 	}
 });
 
+/*=============================================================
+	================= find and replace call here ================
+	=============================================================
+*/
+function findAndReplaceText(searchVal, replaceVal, option) {
+	refDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
+	db = new PouchDB(`${__dirname}/../../db/targetDB`);
+	session.defaultSession.cookies.get({url: 'http://book.autographa.com'}, (error, cookie) => {
+		book = '1';
+		if(cookie.length > 0) {
+			book = cookie[0].value;
+		}
+	});
+	session.defaultSession.cookies.get({url: 'http://chapter.autographa.com'}, (error, cookie) => {
+		if(cookie.length > 0) {
+			chapter = cookie[0].value;
+		}
+	});
+	db.get(book).then(function (doc) {
+		refDb.get('refChunks').then(function (chunkDoc) {
+			currentBook = doc;
+			if(option == "current"){
+				var totalReplacedWord = findReplaceSearchInputs(doc.chapters[parseInt(chapter,10)-1].verses, chapter-1, searchVal, replaceVal, option);
+				allChapterReplaceCount.push(totalReplacedWord);
+				var replacedCount = allChapterReplaceCount.reduce(function (a, b) {return a + b;}, 0);
+				$("#searchTextModal").modal('toggle');
+				$("#replace-message").html("Book:"+currentBook.book_name+"<br>"+"Total word(s) replaced: "+replacedCount);
+				$("#replaced-text-change").modal('toggle');
+				replaceCount = 0;
+				allChapterReplaceCount = [];
+			}else{
+				for(var i=0; i < doc.chapters.length; i++) {
+					var totalReplacedWord = findReplaceSearchInputs(doc.chapters[parseInt(i+1,10)-1].verses, i, searchVal, replaceVal, option);
+					allChapterReplaceCount.push(totalReplacedWord);
+					totalReplacedWord = 0;
+					replaceCount = 0;
+				}
+				$("#searchTextModal").modal('toggle');
+				var replacedCount = allChapterReplaceCount.reduce(function (a, b) {return a + b;}, 0);
+				$("#replace-message").html("Book:"+currentBook.book_name+"<br>"+"Total word(s) replaced: "+replacedCount);
+				$("#replaced-text-change").modal('toggle');
+				allChapterReplaceCount = [];
+			}
+		})
+	}).catch(function (err) {
+		console.log('Error: While retrieving document. ' + err);
+	});
+}
+// ================== find and replace call end here ============
 
+/*==========================================================
+================ update replaced content ===================
+============================================================ */
+function findReplaceSearchInputs(verses, chapter, searchVal, replaceVal, option){
+	replacedVerse = {};
+	var i;
+	for (i=1; i<=verses.length; i++) {
+		if(option == "current"){
+			var originalVerse = verses[i-1].verse;
+			replacedVerse[i] = i;
+			if(originalVerse.search(new RegExp(searchVal, 'g')) >= 0){
+				modifiedVerse = originalVerse.replaceAll(searchVal, replaceVal);
+				replacedVerse[i] = modifiedVerse;
+				chapter_hash["verse"] = modifiedVerse;
+				chapter_hash["verse_number"] = i + 1;
+				verses_arr.push(chapter_hash);
+				chapter_hash = {};
+				replaceCount += originalVerse.match(new RegExp(searchVal, 'g')).length;
+			}else {
+				replacedVerse[i] = originalVerse;
+				chapter_hash["verse"] = originalVerse;
+		 		chapter_hash["verse_number"] = i + 1;
+		    verses_arr.push(chapter_hash);
+		    chapter_hash = {};
+			}
+		}else {
+			var originalVerse = verses[i-1].verse
+			replacedVerse[i] = i;
+			if(originalVerse.search(new RegExp(searchVal, 'g')) >= 0){
+				modifiedVerse = originalVerse.replaceAll(searchVal, replaceVal);
+				chapter_hash["verse"] = modifiedVerse;
+				chapter_hash["verse_number"] = i + 1;
+		    verses_arr.push(chapter_hash);
+		    chapter_hash = {};
+				replaceCount += originalVerse.match(new RegExp(searchVal, 'g')).length;
+			}else {
+				chapter_hash["verse"] = originalVerse;
+		 		chapter_hash["verse_number"] = i + 1;
+		    verses_arr.push(chapter_hash);
+		    chapter_hash = {};
+			}
+		}
+	}
+	replacedChapter[chapter] = replacedVerse;
+	allChapters["chapter"] = chapter + 1;
+	allChapters["verses"] = verses_arr;
+	chapter_arr.push(allChapters);
+	verses_arr = [];
+	allChapters = {};
+	highlightRef();
+	return replaceCount;
+}
+//==================== update replace content end here ======================
 
+//=========== save text after replace ====================
+//=========== by clicking on the save changes button =====
+function saveReplacedText(){
+	var option = $("#chapter-option").val();
+	db.get(currentBook._id).then(function (doc) {
+	if(option == "current"){
+		for(var c in replacedChapter){
+			var verses = currentBook.chapters[parseInt(c,10)].verses;
+			verses.forEach(function (verse, index) {
+				verse.verse = replacedChapter[c][index+1];
+			});
+			doc.chapters[parseInt(c,10)].verses = verses;
+			db.put(doc, function(err, response){
+				if(err) {
+					$("#replaced-text-change").modal('toggle');
+					alertModal("Error Message!!", "Something went wrong please try later!!");
+				}else{
+					db.close();
+					window.location.reload();
+				}
+			});
+		}
+		replacedChapter = {};
+		replacedVerse = {};
+	}else{
+			doc.chapters = chapter_arr
+			db.put(doc, function(err, res){
+				if(err){
+					chapter_arr = [];
+					$("#replaced-text-change").modal('toggle');
+					alertModal("Error Message!!", "Something went wrong please try later!!");
+				}else{
+					chapter_arr = [];
+					db.close();
+					replacedChapter = {};
+					replacedVerse = {};
+					window.location.reload();
+				}
+			})
+		}
+	})
+}
+//=========== replace change end ====================
+
+//========== find and replace popup call =============
+$("#btnfindReplace").click(function(){
+	$(".error").html("");
+	findVal = $("#searchTextBox").val();
+	replaceVal = $("#replaceTextBox").val();
+	option = $(".form-check-input:checked").val();
+	$("#chapter-option").val(option);
+	if(findVal == "" && findVal.length == 0){
+		$("#findError").html("Please enter value to search");
+		return
+	}
+	if(replaceVal == "" && replaceVal.length == 0){
+		$("#replaceError").html("Please enter value to replace");
+		return
+	}
+	findAndReplaceText(findVal, replaceVal, option);
+});
+$("#btnfind").click(function(){
+	findVal = $("#searchTextBox").val();
+	if(findVal == "" && findVal.length == 0){
+		$("#searchTextModal").modal('toggle');
+		alertModal("Find message!!", "Please enter find value to search.");
+		return
+	}
+	findAndReplaceText(findVal, "highlight");
+	$("#searchTextModal").modal('toggle');
+});
+$("#searchText").click(function(){
+	$("#searchTextModal").modal('toggle');
+	$(".error").html("");
+	$("#searchTextBox").val('');
+	$("#replaceTextBox").val('');
+});
+
+//============ replace cancel ============
+$("#replace-cancel").click(function(){
+	replacedChapter = {};
+	replacedVerse = {};
+	chapter_arr = [];
+})

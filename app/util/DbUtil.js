@@ -67,6 +67,8 @@ module.exports = {
 			  refHiUlbJson = require(`${__dirname}/../lib/hi_ulb.json`),
 			  chunksJson = require(`${__dirname}/../lib/chunks.json`),
 			  refsConfigJson = require(`${__dirname}/../lib/refs_config.json`);
+			  languageCodeJson = require(`${__dirname}/../lib/language_code.json`);
+
 		    refDb.put(chunksJson)	
 			.then(function (response) {
 			    return refDb.put(refsConfigJson);
@@ -79,6 +81,8 @@ module.exports = {
 			})
 			.then(function (response) {
 			    return refDb.bulkDocs(refHiUlbJson);
+			}).then(function(response){
+				return refDb.bulkDocs(languageCodeJson);
 			})
 			.then(function (response) {
 			    refDb.close();
