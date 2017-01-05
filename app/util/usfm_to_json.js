@@ -125,7 +125,7 @@ module.exports = {
 			}
 		    }
 		    db.put(doc).then(function (response) {
-			console.log(response);
+			//console.log(response);
 		    }).catch(function (err) {
 			console.log('Error: While trying to save to DB. ' + err);
 		    });

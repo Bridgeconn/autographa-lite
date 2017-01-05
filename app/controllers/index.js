@@ -460,7 +460,7 @@ function highlightRef() {
 }
 
 // Multi-reference windows
-function setMultiwindowReference(layout){
+function setMultiwindowReference(layout) {
 
     var children = $('div.row-col-fixed').children(),
 	editor = children[children.length-1],
@@ -526,10 +526,12 @@ function setMultiwindowReference(layout){
     }
 
 }
+
 $('a[role="multi-window-btn"]').click(function () {
     setMultiwindowReference($(this).data('output'));
     saveReferenceLayout($(this).data('output'));
 });
+
 function createBooksList(booksLimit) {
     document.getElementById('books-pane').innerHTML = "";
     for (var i=1; i<=booksLimit; i++) {
@@ -771,7 +773,7 @@ function saveReferenceLayout(layout){
     });
 }
 
-$(function(){
+$(function() {
     $('[type="checkbox"]').bootstrapSwitch();
     refDb.get('targetReferenceLayout').then(function (doc) {
 	setMultiwindowReference(doc.layout);
@@ -814,7 +816,7 @@ $(function(){
 
 });
 
-function isSameLanguage(){
+function isSameLanguage() {
     var verseLangCode = "",
 	check_value = false;
 
@@ -925,13 +927,14 @@ $(".font-button").bind("click", function () {
     $('.col-ref').css("font-size", size);
 });
 
-function setAutoSaveTime(dateTime){
+function setAutoSaveTime(dateTime) {
     const cookie = {url: 'http://autosave.autographa.com', name: 'autosave', value: dateTime};
     session.defaultSession.cookies.set(cookie, (error) => {
 	if (error)
 	    console.error(error);
     });
 }
+
 session.defaultSession.cookies.get({url: 'http://autosave.autographa.com'}, (error, cookie) => {
     if(cookie.length > 0) {
 	$("#saved-time").html("Last saved target at: "+ cookie[0].value);
@@ -984,7 +987,7 @@ function findAndReplaceText(searchVal, replaceVal, option) {
 // find and replace call end here
 
 // update replaced content
-function findReplaceSearchInputs(verses, chapter, searchVal, replaceVal, option){
+function findReplaceSearchInputs(verses, chapter, searchVal, replaceVal, option) {
     replacedVerse = {};
     var i;
     for (i=1; i<=verses.length; i++) {
@@ -1037,7 +1040,7 @@ function findReplaceSearchInputs(verses, chapter, searchVal, replaceVal, option)
 
 // save text after replace
 // by clicking on the save changes button 
-function saveReplacedText(){
+function saveReplacedText() {
     var option = $("#chapter-option").val();
     db.get(currentBook._id).then(function (doc) {
 	if(option == "current"){
@@ -1079,7 +1082,7 @@ function saveReplacedText(){
 // replace change end
 
 // find and replace popup call
-$("#btnfindReplace").click(function(){
+$("#btnfindReplace").click(function() {
     $(".error").html("");
     findVal = $("#searchTextBox").val();
     replaceVal = $("#replaceTextBox").val();
@@ -1096,7 +1099,7 @@ $("#btnfindReplace").click(function(){
     findAndReplaceText(findVal, replaceVal, option);
 });
 
-$("#btnfind").click(function(){
+$("#btnfind").click(function() {
     findVal = $("#searchTextBox").val();
     if(findVal == "" && findVal.length == 0){
 	$("#searchTextModal").modal('toggle');
