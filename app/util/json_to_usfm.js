@@ -3,8 +3,9 @@ module.exports = {
 	const PouchDB = require('pouchdb-core')
 	      .plugin(require('pouchdb-adapter-leveldb'));
 //	const PouchDB = require('pouchdb');
-	var db = new PouchDB(`${__dirname}/../../db/targetDB`),
-	    fs = require("fs"),
+	var db = require(`${__dirname}/data-provider`).targetDb()
+	//var db = new PouchDB(`${__dirname}/../../db/targetDB`);
+	var fs = require("fs"),
 	    path = require("path"),
 	    usfmContent = [];
 	var filePath;
@@ -25,7 +26,7 @@ module.exports = {
 		    filePath += '.usfm';
 		    fs.writeFileSync(filePath, usfmContent.join('\n'), 'utf8');
 		    console.log('File exported at ' + filePath);
-		    db.close();
+		    //db.close();
 		}
 	    });
 	    return filePath;

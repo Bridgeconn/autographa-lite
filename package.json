@@ -8,8 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "npm install bower && bower install bootstrap-sass-official && npm install gulp && ./node_modules/.bin/gulp",
     "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.4.12 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell",
-    "prepublish": "npm install electron-prebuilt"
+    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell"
   },
   "repository": {
     "type": "git",
@@ -34,7 +33,7 @@
     "pouchdb-quick-search": "^1.2.0"
   },
   "devDependencies": {
-    "electron-prebuilt": "1.4.12",
+    "electron": "1.4.12",
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
     "gulp-cached": "^1.1.0",

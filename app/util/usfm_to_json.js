@@ -6,13 +6,16 @@ module.exports = {
     
     toJson: function(options) {
 	try {
-	    patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
 	    var lineReader = require('readline').createInterface({
 		input: require('fs').createReadStream(options.usfmFile)
 	    });
-	    var book = {}, verse = [];
-	    var c = 0, v = 0, usfmBibleBook = false, validLineCount = 0;
-	    var id_prefix = options.lang + '_' + options.version + '_';
+	    var patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8'),
+		book = {}, verse = [],
+		db = require(`${__dirname}/../util/data-provider`).targetDb(),
+		refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
+		c = 0, v = 0, usfmBibleBook = false, validLineCount = 0,
+		id_prefix = options.lang + '_' + options.version + '_';
+	    
 	    book.chapters = [];
 	} catch(err) {
 	    throw new Error('usfm parser error');
@@ -78,28 +81,25 @@ module.exports = {
 	      flag: 'a'
 	      });*/
 
-	    const PouchDB = require('pouchdb-core')
-		  .plugin(require('pouchdb-adapter-leveldb'));
-//	    const PouchDB = require('pouchdb');
-	    var db;
+//	    const PouchDB = require('pouchdb-core')
+//		  .plugin(require('pouchdb-adapter-leveldb'));
 	    if(options.targetDb === 'refs') {
-		db = new PouchDB(`${__dirname}/../../db/referenceDB`);
-		db.get(book._id).then(function (doc) {
+		refDb.get(book._id).then(function (doc) {
 		    book._rev = doc._rev;
-		    db.put(book).then(function (doc) {
+		    refDb.put(book).then(function (doc) {
 			console.log("Successfully loaded and updated refs.");
 		    }).catch(function (err) {
 			console.log("Error: While updating refs. " + err);
 		    });
 		}).catch(function (err) {
-		    db.put(book).then(function (doc) {
+		    console.log(book);
+		    refDb.put(book).then(function (doc) {
 			console.log("Successfully loaded new refs.");
 		    }).catch(function (err) {
 			console.log("Error: While loading new refs. " + err);
 		    });
 		});
 	    } else if(options.targetDb === 'target') {
-		db = new PouchDB(`${__dirname}/../../db/targetDB`);
 		const booksCodes = require(`${__dirname}/constants.js`).bookCodeList;
 		var bookId = book._id.split('_');
 		bookId = bookId[bookId.length-1].toUpperCase();

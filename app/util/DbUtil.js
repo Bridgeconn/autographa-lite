@@ -1,9 +1,6 @@
 module.exports = {
     destroyDbs: function() {
-	const PouchDB = require('pouchdb-core')
-	      .plugin(require('pouchdb-adapter-leveldb')),
-	      //PouchDB = require('pouchdb'),	
-	      targetDb = new PouchDB('./db/targetDB');
+	const targetDb = require(`${__dirname}/data-provider`).targetDb();
 	targetDb.destroy().then(function (response) {
 	    console.log('targetDB destroyed!.');
 	    targetDb.close();
@@ -24,11 +21,7 @@ module.exports = {
 
     setupTargetDb: new Promise(
 	function(resolve, reject) {
-	    const PouchDB = require('pouchdb-core')
-	      .plugin(require('pouchdb-adapter-leveldb')),
-//	    const PouchDB = require('pouchdb'),
-		  targetDb = new PouchDB(`${__dirname}/../../db/targetDB`);
-		  //targetDb = new PouchDB('../../db/targetDB');
+	    const targetDb = require(`${__dirname}/data-provider`).targetDb();
 	    targetDb.get('isDBSetup')
 		.then(function (doc) {
 		    targetDb.close();
@@ -36,7 +29,6 @@ module.exports = {
 		})
 		.catch(function (err) {
 		    const bibleJson = require(`${__dirname}/../lib/full_bible_skel.json`);
-		    //const bibleJson = require('../lib/full_bible_skel.json');
 		    targetDb.bulkDocs(bibleJson)
 			.then(function (response) {
 			    targetDb.close();
@@ -51,11 +43,7 @@ module.exports = {
     
     setupRefDb: new Promise (
 	function(resolve, reject) {
-	    const PouchDB = require('pouchdb-core')
-		  .plugin(require('pouchdb-adapter-leveldb')),
-//	    const PouchDB = require('pouchdb'),	
-		  refDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
-		  //refDb = new PouchDB('../../db/referenceDB');
+	    const refDb = require(`${__dirname}/data-provider`).referenceDb();
 	    refDb.get('refs')
 		.then(function (doc) {
 		    refDb.close();
