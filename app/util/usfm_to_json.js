@@ -9,8 +9,8 @@ module.exports = {
 	    var lineReader = require('readline').createInterface({
 		input: require('fs').createReadStream(options.usfmFile)
 	    });
-	    var patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8'),
-		book = {}, verse = [],
+	    patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
+	    var book = {}, verse = [],
 		db = require(`${__dirname}/../util/data-provider`).targetDb(),
 		refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
 		c = 0, v = 0, usfmBibleBook = false, validLineCount = 0,
@@ -92,7 +92,6 @@ module.exports = {
 			console.log("Error: While updating refs. " + err);
 		    });
 		}).catch(function (err) {
-		    console.log(book);
 		    refDb.put(book).then(function (doc) {
 			console.log("Successfully loaded new refs.");
 		    }).catch(function (err) {

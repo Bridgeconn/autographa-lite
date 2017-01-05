@@ -351,7 +351,6 @@ function getReferenceText(refId, callback) {
 	    chapter = cookie[0].value;
 	}
     });
-    console.log(id);
     refDb.get(id).then(function (doc) {
 	for(i=0; i<doc.chapters.length; i++) {
 	    if(doc.chapters[i].chapter == parseInt(chapter, 10)) {
@@ -429,7 +428,6 @@ function createRefSelections() {
 
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
-    console.log($(this).val());
     getReferenceText($(this).val(), function(err, refContent) {
  	if(err) {
  	    selectedRefElement.val(selectedRefElement.next().val());
