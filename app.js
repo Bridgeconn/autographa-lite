@@ -1,5 +1,6 @@
 const electron = require('electron');
 const session = require('electron').session;
+if(require('electron-squirrel-startup')) return;
 
 // Module to control application life.
 const {app} = electron
@@ -29,7 +30,7 @@ function createWindow() {
     //loading window gracefully
     win.once('ready-to-show', () => {
 	// Open the DevTools.
-	win.webContents.openDevTools();	
+	//win.webContents.openDevTools();	
 	win.maximize();
         win.show();
     });
