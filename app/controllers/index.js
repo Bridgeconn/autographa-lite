@@ -28,25 +28,26 @@ var stringReplace = require('../util/string_replace.js'),
     allChapters = {},
     chapter_hash = {},
     verses_arr = [],
-    chapter_arr = [];
+    chapter_arr = [],
+    check_diff_click = false;
 
 
 document.getElementById("save-btn").addEventListener("click", function (e) {
     var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
     verses.forEach(function (verse, index) {
-	var vId = 'v'+(index+1);
-	verse.verse = document.getElementById(vId).textContent;
+		var vId = 'v'+(index+1);
+		verse.verse = document.getElementById(vId).textContent;
     });
     currentBook.chapters[parseInt(chapter,10)-1].verses = verses;
     db.get(currentBook._id).then(function (doc) {
-	doc.chapters[parseInt(chapter,10)-1].verses = verses;
-	db.put(doc).then(function (response) {
-	    alertModal("Save Message!!", "Edited Content saved successfully!!");
-	}).catch(function (err) {
-	    console.log(err);
-	});
+		doc.chapters[parseInt(chapter,10)-1].verses = verses;
+		db.put(doc).then(function (response) {
+		    alertModal("Save Message!!", "Edited Content saved successfully!!");
+		}).catch(function (err) {
+		    console.log(err);
+		});
     }).catch(function (err) {
-	console.log('Error: While retrieving document. ' + err);
+		console.log('Error: While retrieving document. ' + err);
     });
 });
 
@@ -190,13 +191,13 @@ function getDifferenceCount(verse_diff){
 function setDiffReferenceText() {
     var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
     verses.forEach(function (verse, index) {
-	var vId = 'v'+(index+1);
-	verse.verse = document.getElementById(vId).textContent;
+		var vId = 'v'+(index+1);
+		verse.verse = document.getElementById(vId).textContent;
     });
     currentBook.chapters[parseInt(chapter,10)-1].verses = verses;
     db.put(currentBook).then(function (response) {
     }).catch(function (err) {
-	console.log(err);
+		console.log(err);
     });
     // save document after edit
     var j=0;
@@ -819,52 +820,53 @@ $(function() {
 function isSameLanguage() {
     var verseLangCode = "",
 	check_value = false;
-
     return db.get('targetBible').then(function (doc) {
-	verseLangCode = doc.targetLang;
-	languagedropDown = $(".ref-drop-down").length
-	for(var i = 0; i < languagedropDown-1; i++){
-	    v1 = $($('.ref-drop-down :selected')[i]).val().split("_")[0]
-	    v2=""
-	    if($($('.ref-drop-down :selected')[i+1]).length){
-		v2 = $($('.ref-drop-down :selected')[i+1]).val().split("_")[0]
-	    }
-	    if((verseLangCode != v1) || (verseLangCode != v2 )){
-		return false;
-	    }
-	}
-	if(languagedropDown == 1){
-	    if((verseLangCode != $($('.ref-drop-down :selected')[0]).val().split("_")[0]) ){
-		return false;
-	    }
-	}
-	return true;
+		verseLangCode = doc.targetLang;
+		languagedropDown = $(".ref-drop-down").length
+		for(var i = 0; i < languagedropDown-1; i++){
+		    v1 = $($('.ref-drop-down :selected')[i]).val().split("_")[0]
+		    v2=""
+		    if($($('.ref-drop-down :selected')[i+1]).length){
+				v2 = $($('.ref-drop-down :selected')[i+1]).val().split("_")[0]
+		    }
+		    if((verseLangCode != v1) || (verseLangCode != v2 )){
+				return false;
+		    }
+		}
+		if(languagedropDown == 1){
+		    if((verseLangCode != $($('.ref-drop-down :selected')[0]).val().split("_")[0]) ){
+				return false;
+		    }
+		}
+		return true;
     }).then(function(response){
-	return response;
+		return response;
     }).catch(function (err){
-	return false;
+		return false;
     });	
 }
 
 $('.check-diff').on('switchChange.bootstrapSwitch', function (event, state) {
     if(state === true) {
-	promise = isSameLanguage();
-	promise.then(function(response){
-	    if(response == false){
-		alertModal("Language!!", "Differences are not meaningful between different languages."
-			   +"Kindly select the same language across all panes to continue.");
-		$('.check-diff').bootstrapSwitch('state', false);
-		return false;
-	    }else{
-		setDiffReferenceText();
-		$(".verse-diff-on a").attr( "disabled" , "true" ).addClass("disable_a_href");
-		$(".ref-drop-down").attr("disabled", "true");
-	    }
-	});
+    	check_diff_click = true;
+		promise = isSameLanguage();
+		promise.then(function(response){
+		    if(response == false){
+				alertModal("Language!!", "Differences are not meaningful between different languages."
+				   +"Kindly select the same language across all panes to continue.");
+				$('.check-diff').bootstrapSwitch('state', false);
+				return false;
+		    }else{
+				setDiffReferenceText();
+				$(".verse-diff-on a").attr( "disabled" , "true" ).addClass("disable_a_href").css({ 'pointer-events': 'none' });
+				$(".ref-drop-down").attr("disabled", "true");
+		    }
+		});
     }else{
-	setReferenceTextBack();
-	$(".verse-diff-on a").removeAttr( "disabled").removeClass("disable_a_href");
-	$(".ref-drop-down").removeAttr("disabled", "true");
+    	check_diff_click = false;
+		setReferenceTextBack();
+		$(".verse-diff-on a").removeAttr( "disabled").removeClass("disable_a_href").css({ 'pointer-events': '' });;
+		$(".ref-drop-down").removeAttr("disabled", "true");
     }
 });
 
@@ -872,45 +874,47 @@ $('.check-diff').on('switchChange.bootstrapSwitch', function (event, state) {
 function debounce(func, wait, immediate) {
     var timeout;
     return function() {
-	var context = this, args = arguments;
-	var later = function() {
-	    timeout = null;
-	    if (!immediate) func.apply(context, args);
-	};
-	var callNow = immediate && !timeout;
-	clearTimeout(timeout);
-	timeout = setTimeout(later, wait);
-	if (callNow) func.apply(context, args);
+		var context = this, args = arguments;
+		var later = function() {
+		timeout = null;
+		if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
     };
 };
 
 // This will apply the debounce effect on the keyup event
 // And it only fires 3000ms after the user stopped typing
 $('#input-verses').on('keyup', debounce(function () {
-    var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
-    verses.forEach(function (verse, index) {
-	var vId = 'v'+(index+1);
-	verse.verse = document.getElementById(vId).textContent;
-    });
-    currentBook.chapters[parseInt(chapter,10)-1].verses = verses;
-    db.get(currentBook._id).then(function(book){
-	currentBook._rev = book._rev;
-	db.put(currentBook).then(function(response){
-	    var dateTime = new Date().toLocaleString();
-	    $("#saved-time").html("Last saved target at: "+ dateTime);
-	    setAutoSaveTime(dateTime)
-	    clearInterval(intervalId);
-	}).catch(function(err){
-	    db.put(currentBook).then(function(response){
-		var dateTime = new Date().toLocaleString();
-		$("#saved-time").html("Last saved target at: "+ dateTime);
-		setAutoSaveTime(dateTime);
-	    }).catch(function(err){
-		clearInterval(intervalId);
-	    })
-		clearInterval(intervalId);
-	})
-	    })
+	if(check_diff_click == false){
+	    var verses = currentBook.chapters[parseInt(chapter,10)-1].verses;
+	    verses.forEach(function (verse, index) {
+			var vId = 'v'+(index+1);
+			verse.verse = document.getElementById(vId).textContent;
+	    });
+	    currentBook.chapters[parseInt(chapter,10)-1].verses = verses;
+	    db.get(currentBook._id).then(function(book){
+			currentBook._rev = book._rev;
+			db.put(currentBook).then(function(response){
+			    var dateTime = new Date().toLocaleString();
+			    $("#saved-time").html("Last saved target at: "+ dateTime);
+			    setAutoSaveTime(dateTime);
+			    clearInterval(intervalId);
+			}).catch(function(err){
+			    db.put(currentBook).then(function(response){
+					var dateTime = new Date().toLocaleString();
+					$("#saved-time").html("Last saved target at: "+ dateTime);
+					setAutoSaveTime(dateTime);
+			    }).catch(function(err){
+					clearInterval(intervalId);
+			    });
+				clearInterval(intervalId);
+			});
+		});
+	}
 }, 3000));
 
 // call above function after stopped typing in the target pane end here

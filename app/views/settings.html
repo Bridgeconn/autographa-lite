@@ -17,7 +17,7 @@
     script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
     -->
     <style type="text/css">
-        #divResult
+        .lang-code
         {
           position:absolute;
           width:294px;
@@ -71,7 +71,7 @@
               <div class="form-group">
                 <label>Reference Bible Language Code</label>
                 <input class="form-control" id="ref-lang-code" placeholder="hi">
-                <div id="divResult"></div>
+                <div id="reference-lang-result" class="lang-code"></div>
                 <input type="hidden" id="langCode" />
               </div>
               <div class="form-group">
@@ -89,6 +89,8 @@
               <div class="form-group">
                 <label>Target Language Code</label>
                 <input class="form-control" id="target-lang" placeholder="hi">
+                <div id="target-lang-result" class="lang-code"></div>
+                <input type="hidden" id="target-lang-code" />
               </div>
               <div class="form-group">
                 <label>Target Version</label>
@@ -115,9 +117,20 @@
                   <input id="target-import-path" class="form-control" placeholder="/path/to/import/target/from" readonly>
                 </div>
                 <button id="target-import-btn" class="btn btn-success">Import Target</button>
+
             </div>
           </div>
         </div>
+      </div>
+      <div style="margin-top: 10px;"><h3>Modify Reference</h3></div>
+      <div>
+        <table class="table table-bordered table-hover table-striped">
+          <th>Reference Name</th>
+          <th>Action</th>
+          <tbody id="reference-list">
+
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="modal fade"  tabindex="-1" role="dialog" id="dynamicModal">
@@ -130,6 +143,23 @@
           <div class="modal-body" id="content"></div>
           <div class="modal-footer">
             <span class="btn btn-primary" data-dismiss="modal">Close</span>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
+    <div class="modal fade"  tabindex="-1" role="dialog" id="confirmModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title" id="heading"></h4>
+          </div>
+          <div class="modal-body" id="confirmMessage"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="confirmOk">Ok</button>
+            <span class="btn btn-primary" id="btnDelete" data-dismiss="modal" id="confirmCancel">Close</span>
           </div>
         </div>
         <!-- /.modal-content-->
