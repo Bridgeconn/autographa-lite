@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,289 +11,298 @@
     <title>Autographa Lite</title>
     <!-- Bootstrap core CSS-->
     <link href="../assets/stylesheets/style.css" rel="stylesheet">
-    
+</head>
 
-  </head>
-  <body>
-
+<body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="index.html"  data-toggle="tooltip" data-placement="bottom" title="Home"><img alt="Brand" src="../assets/images/logo.png"></a>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                <a class="navbar-brand navigation-btn" href="index.html" data-toggle="tooltip" data-placement="bottom" title="Home"><img alt="Brand" src="../assets/images/logo.png"></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <div class="btn-group navbar-btn strong verse-diff-on" role="group" aria-label="..." id="bookBtn">
+                            <a class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Select Book" href="javascript:getBookList();" id="book-chapter-btn">Genesis</a><span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" href="javascript:getBookChapterList('1');" data-toggle="tooltip" data-placement="bottom"  title="Select Chapter" >1</a></span>
+                        </div>
+                        <div class="btn-group navbar-btn verse-diff-on" role="group" aria-label="..."><a class="btn btn-default font-button minus" data-toggle="tooltip" data-placement="bottom" title="Decrease Font" href="JavaScript:void(0)">A-</a><a class="btn btn-default font-button plus" data-toggle="tooltip" data-placement="bottom" title="Increase Font" href="JavaScript:void(0);">A+</a></div>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right verse-diff-on">
+                    <li>
+                        <a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="search" id="searchText"><i class="fa fa-search fa-2x"></i></a></li>
+                    </li>
+                    <li>
+                        <div style="margin-top:10px;">
+                            <input type="checkbox" class="check-diff" />
+                        </div>
+                        <!-- <a href="javascript:void(0);" onClick="setDiffReferenceText('', '');" >Check Difference</a> -->
+                    </li>
+                    <li><a href="settings.html" data-toggle="tooltip" data-placement="bottom" title="Settings" class="navigation-btn"><i class="fa fa-cog fa-2x"></i></a></li>
+                    <li><a href="about.html" data-toggle="tooltip" data-placement="bottom" title="About" class="navigation-btn"><i class="fa fa-info fa-2x"></i></a></li>
+                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Export" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i></a>
+                </ul>
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li>
-              <div class="btn-group navbar-btn strong verse-diff-on" role="group" aria-label="..." id="bookBtn">
-              <a class="btn btn-default" data-toggle="tooltip" data-placement="bottom"  title="Select Book" href="javascript:getBookList();" id="book-chapter-btn">Genesis</a><span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" href="javascript:getBookChapterList('1');" data-toggle="tooltip" data-placement="bottom"  title="Select Chapter" >1</a></span>
-              </div>
-              <div class="btn-group navbar-btn verse-diff-on" role="group" aria-label="..."><a class="btn btn-default font-button minus" data-toggle="tooltip" data-placement="bottom"  title="Decrease Font" href="JavaScript:void(0)">A-</a><a class="btn btn-default font-button plus" data-toggle="tooltip" data-placement="bottom"  title="Increase Font" href="JavaScript:void(0);">A+</a></div>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right verse-diff-on">
-            <li>
-              <a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="search" id="searchText"><i class="fa fa-search fa-2x"></i></a></li>
-            </li>
-            <li>
-                <div style="margin-top:10px;">
-                  <input type="checkbox" class="check-diff"/> 
-                </div>
-                <!-- <a href="javascript:void(0);" onClick="setDiffReferenceText('', '');" >Check Difference</a> -->
-            </li>
-            <li><a href="settings.html" data-toggle="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-cog fa-2x"></i></a></li>
-            <li><a href="about.html" data-toggle="tooltip" data-placement="bottom" title="About"><i class="fa fa-info fa-2x"></i></a></li>
-            <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Export" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i></a>
-          </ul>
-        </div>
-      </div>
     </nav>
     <div class="container-fluid">
-      <div class="row row-col-fixed">
-        <div class="col-sm-6 col-fixed" id="section-0">
-          <div class="row">
-            <div class="col-12 center-align">
-              <div class="btn-group">
-               <!--  <button role="ref-selector" class="btn btn-primary" type="button"></button>
+        <div class="row row-col-fixed">
+            <div class="col-sm-6 col-fixed" id="section-0">
+                <div class="row">
+                    <div class="col-12 center-align">
+                        <div class="btn-group">
+                            <!--  <button role="ref-selector" class="btn btn-primary" type="button"></button>
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
                 <ul type="refs-list" class="dropdown-menu"></ul> -->
-                <select class="ref-drop-down"  title="Select Reference Text"></select>
-                <input type="hidden"  class="current-val">
-                <span class="diff-count"></span>
-              </div>
+                            <select class="ref-drop-down" title="Select Reference Text"></select>
+                            <input type="hidden" class="current-val">
+                            <span class="diff-count"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div type="ref" class="col-12 col-ref">
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div type="ref" class="col-12 col-ref">
+            <div class="col-sm-6 col-fixed col-editor">
+                <div class="row">
+                    <div class="col-12 center-align">
+                        <div class="btn-group" role="group" aria-label="..."><a class="btn btn-success btn-default" href="#">Translation</a>
+                            <span class="diff-count-target"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="input-verses" class="col-12 col-ref">
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="col-sm-6 col-fixed col-editor">
-          <div class="row">
-            <div class="col-12 center-align">
-              <div class="btn-group" role="group" aria-label="..."><a class="btn btn-success btn-default" href="#">Translation</a>
-              <span class="diff-count-target"></span>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div id="input-verses" class="col-12 col-ref">
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">
-      <div class="container-fluid">
-        <div class="collapse navbar-collapse">
-          <div class="nav navbar-nav verse-diff-on">
-            <div class="btn-group navbar-btn" role="group" aria-label="..."><a class="btn btn-primary btn-default" href="#" data-output="2x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="2 Column Layout">2x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="3x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="3 Column Layout">3x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="4x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="4 Column Layout">4x &nbsp;<i class="fa fa-columns fa-lg"></i></a></div>
-            <a id="save-btn" data-toggle="tooltip" data-placement="top" title="Save To Target" class="btn btn-success btn-save navbar-btn navbar-right" href="#" role="button" style="float:none !important;">Save</a>
-            <span id="saved-time" style="position: absolute;right: 0;top: 14px;"></span>
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <div class="nav navbar-nav verse-diff-on">
+                    <div class="btn-group navbar-btn" role="group" aria-label="..."><a class="btn btn-primary btn-default" href="#" data-output="2x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="2 Column Layout">2x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="3x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="3 Column Layout">3x &nbsp;<i class="fa fa-columns fa-lg"></i></a><a class="btn btn-primary btn-default" href="#" data-output="4x" role="multi-window-btn" data-toggle="tooltip" data-placement="top" title="4 Column Layout">4x &nbsp;<i class="fa fa-columns fa-lg"></i></a></div>
+                    <a id="save-btn" data-toggle="tooltip" data-placement="top" title="Save To Target" class="btn btn-success btn-save navbar-btn navbar-right" href="#" role="button" style="float:none !important;">Save</a>
+                    <span id="saved-time" style="position: absolute;right: 0;top: 14px;"></span>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        </div>
     </nav>
     <div class="modal fade" id="books" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Books</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="wrap-center">
-                  <div class="btn-group" role="group" aria-label="...">
-                    <button class="btn btn-default" type="button" id="allBooksBtn">ALL</button>
-                    <button class="btn btn-default" type="button" id="otBooksBtn">OT</button>
-                    <button class="btn btn-default" type="button" id="ntBooksBtn">NT</button>
-                  </div>
-                  <ul class="books" id="books-pane">
-                    
-                  </ul>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Books</h4>
                 </div>
-              </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="wrap-center">
+                                <div class="btn-group" role="group" aria-label="...">
+                                    <button class="btn btn-default" type="button" id="allBooksBtn">ALL</button>
+                                    <button class="btn btn-default" type="button" id="otBooksBtn">OT</button>
+                                    <button class="btn btn-default" type="button" id="ntBooksBtn">NT</button>
+                                </div>
+                                <ul class="books" id="books-pane">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-
-     <div class="modal fade" id="chapters" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Chapters</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-sm-12">
-                <ul class="chapter-picker" id="chaptersList">
-                  
-                </ul>
-              </div>
+    <div class="modal fade" id="chapters" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Chapters</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <ul class="chapter-picker" id="chaptersList">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    
-
     <div class="modal fade" id="login" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Login</h4>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Enter the API Key to start using Autographer</label>
-              <input class="form-control" id="api-code" placeholder="API KEY">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Enter the API Key to start using Autographer</label>
+                        <input class="form-control" id="api-code" placeholder="API KEY">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button">Save changes</button>
+                </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" type="button">Save changes</button>
-          </div>
+            <!-- /.modal-content-->
         </div>
-        <!-- /.modal-content-->
-      </div>
-      <!-- /.modal-dialog-->
+        <!-- /.modal-dialog-->
     </div>
     <!-- /.modal-->
-    <div class="modal fade"  tabindex="-1" role="dialog" id="dynamicModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title" id="heading"></h4>
-          </div>
-          <div class="modal-body" id="content"></div>
-          <div class="modal-footer">
-            <span class="btn btn-primary" data-dismiss="modal">Close</span>
-          </div>
-        </div>
-        <!-- /.modal-content-->
-      </div>
-      <!-- /.modal-dialog-->
-    </div>
-
-    <div class="modal fade"  tabindex="-1" role="dialog" id="exportChoice">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title" id="heading">Export Option</h4>
-          </div>
-          <div class="modal-body" id="content">
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="input-group">
-                  <input type="text" class="form-control" aria-label="..." id="stageText">
-                  <div class="input-group-btn">
-                    <button id="dropdownBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Stage <span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                      <li><a href="#" data-value="stage1">Stage 1</a></li>
-                      <li><a href="#" data-value="stage2">Stage 2</a></li>
-                      <li><a href="#" data-value="stage3">Stage 3</a></li>
-                      <li><a href="#" data-value="stage4">Stage 4</a></li>
-                      <li><a href="#" data-value="stage4">Stage 5</a></li>
-                    </ul>
-                  </div><!-- /btn-group -->
-                </div><!-- /input-group -->
-              </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary" id="exportUsfm" disabled="disabled">Export</button>
-            <span class="btn btn-primary" data-dismiss="modal">Close</span>
-          </div>
-        </div>
-        <!-- /.modal-content-->
-      </div>
-      <!-- /.modal-dialog-->
-    </div>
-
-    <div class="modal fade"  tabindex="-1" role="dialog" id="searchTextModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title" id="heading">Search Text:</h4>
-          </div>
-          <div class="modal-body" id="content">
-            <div class="row">
-              <div class="col-lg-6">
-                <label class="form-check-inline">
-                  <input type="radio" name="searchOption"  checked class="form-check-input" value="current" /> Current Chapter
-                </label>
-                <label class="form-check-inline">
-                  <input type="radio" name="searchOption"  class="form-check-input" value="all"/> All Chapters
-                </label>
-              </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="dynamicModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="heading"></h4>
+                </div>
+                <div class="modal-body" id="content"></div>
+                <div class="modal-footer">
+                    <span class="btn btn-primary" data-dismiss="modal">Close</span>
+                </div>
             </div>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group">
-                <label>Find:</label>
-                  <input type="text" class="form-control" aria-label="..." id="searchTextBox">
-                  <span class="error help-inline" id="findError"></span>
-                </div><!-- /input-group -->
-                <div class="form-group">
-                <label>Replace With:</label>
-                  <input type="text" class="form-control" aria-label="..." id="replaceTextBox">
-                  <span class="error help-inline" id="replaceError"></span>
-                </div><!-- /input-group -->
-              </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-          </div>
-          <div class="modal-footer">
-            <!-- <button class="btn btn-primary" id="btnfind">Find</button> -->
-            <button class="btn btn-primary" id="btnfindReplace">Replace</button>
-            <span class="btn btn-primary" data-dismiss="modal">Close</span>
-          </div>
+            <!-- /.modal-content-->
         </div>
-        <!-- /.modal-content-->
-      </div>
-      <!-- /.modal-dialog-->
+        <!-- /.modal-dialog-->
     </div>
-
-    <div class="modal fade"  tabindex="-1" role="dialog" id="replaced-text-change">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title" id="heading">Information!!</h4>
-          </div>
-          <div class="modal-body" id="content">
-            <div class="row">
-              <div class="col-lg-6" id="replace-message">
-              </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-          </div>
-          <div class="modal-footer" id="btn-replace">
-            <input type="hidden" id="chapter-option" />
-            <button class="btn btn-primary" onclick="saveReplacedText();">Save Changes</button>
-            <button class="btn btn-primary" data-dismiss="modal" id="replace-cancel">Cancel</button>
-          </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="exportChoice">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="heading">Export Option</h4>
+                </div>
+                <div class="modal-body" id="content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" aria-label="..." id="stageText">
+                                <div class="input-group-btn">
+                                    <button id="dropdownBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Stage <span class="caret"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="#" data-value="stage1">Stage 1</a></li>
+                                        <li><a href="#" data-value="stage2">Stage 2</a></li>
+                                        <li><a href="#" data-value="stage3">Stage 3</a></li>
+                                        <li><a href="#" data-value="stage4">Stage 4</a></li>
+                                        <li><a href="#" data-value="stage4">Stage 5</a></li>
+                                    </ul>
+                                </div>
+                                <!-- /btn-group -->
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                        <!-- /.col-lg-6 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="exportUsfm" disabled="disabled">Export</button>
+                    <span class="btn btn-primary" data-dismiss="modal">Close</span>
+                </div>
+            </div>
+            <!-- /.modal-content-->
         </div>
-        <!-- /.modal-content-->
-      </div>
-      <!-- /.modal-dialog-->
+        <!-- /.modal-dialog-->
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="searchTextModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="heading">Search Text:</h4>
+                </div>
+                <div class="modal-body" id="content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label class="form-check-inline">
+                                <input type="radio" name="searchOption" checked class="form-check-input" value="current" /> Current Chapter
+                            </label>
+                            <label class="form-check-inline">
+                                <input type="radio" name="searchOption" class="form-check-input" value="all" /> All Chapters
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Find:</label>
+                                <input type="text" class="form-control" aria-label="..." id="searchTextBox">
+                                <span class="error help-inline" id="findError"></span>
+                            </div>
+                            <!-- /input-group -->
+                            <div class="form-group">
+                                <label>Replace With:</label>
+                                <input type="text" class="form-control" aria-label="..." id="replaceTextBox">
+                                <span class="error help-inline" id="replaceError"></span>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                        <!-- /.col-lg-6 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="modal-footer">
+                    <!-- <button class="btn btn-primary" id="btnfind">Find</button> -->
+                    <button class="btn btn-primary" id="btnfindReplace">Replace</button>
+                    <span class="btn btn-primary" data-dismiss="modal">Close</span>
+                </div>
+            </div>
+            <!-- /.modal-content-->
+        </div>
+        <!-- /.modal-dialog-->
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="replaced-text-change">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="heading">Information!!</h4>
+                </div>
+                <div class="modal-body" id="content">
+                    <div class="row">
+                        <div class="col-lg-6" id="replace-message">
+                        </div>
+                        <!-- /.col-lg-6 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <div class="modal-footer" id="btn-replace">
+                    <input type="hidden" id="chapter-option" />
+                    <button class="btn btn-primary" onclick="saveReplacedText();">Save Changes</button>
+                    <button class="btn btn-primary" data-dismiss="modal" id="replace-cancel">Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content-->
+        </div>
+        <!-- /.modal-dialog-->
     </div>
     <!--
     Bootstrap core JavaScript
     ==================================================
     -->
     <!-- Placed at the end of the document so the pages load faster-->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>
+      if (typeof module === 'object') {
+          window.module = module;
+          module = undefined;
+      }
+    </script>
     <script src="../assets/javascript/vendor/jquery.min.js"></script>
     <script src="../assets/javascript/vendor/bootstrap.min.js"></script>
     <script src="../assets/javascript/vendor/bootstrap-switch.js"></script>
     <script src="../controllers/index.js"></script>
-    <script>if (window.module) module = window.module;</script>
-  </body>
+    <script>
+      if (window.module) module = window.module;
+    </script>
+</body>
+
 </html>
