@@ -59,7 +59,7 @@ module.exports = {
 
 		    refDb.put(chunksJson)	
 			.then(function (response) {
-			    return refDb.put(refsConfigJson);
+			    return refDb.bulkDocs(refsConfigJson);
 			})
 			.then(function (response) {
 			    return refDb.bulkDocs(refEnUlbJson);
