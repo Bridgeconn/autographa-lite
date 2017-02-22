@@ -1,12 +1,26 @@
 # Autographa Lite
 
-This is a desktop application built on Electron which we hope would make life as a Bible Translator much easier. We have built the application with the principle that 'less is more'- which means that it doesn't have a host of flashy features but should serve the purpose of at least getting things of the ground. 
+This is a standalone desktop application which would make life as a Bible Translator much easier. In essence it is a basic [USFM](http://paratext.org/about/usfm) editor which is capable of import and export as USFM files. It has handy features like color-coded diffs across imported texts for comparison between revisions and search and replace. It is currently under active development and encourages contributions!
 
-### Prerquisite  
-node 6.5.0   
+## Developer Setup
+It is relatively easy to setup the application locally for developement.
 
 
-### Unix Setup  
+### Prerequisite
+[Node JS 6.5.0](https://nodejs.org/download/release/v6.5.0/)
+
+### *nix Setup  
 Fork this repository.   
 ```> cd bib-edit && npm install ```   
 ```> npm start```
+<br>
+This should start the application and open up the main screen.
+
+### Contributing
+Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+### License
+This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for details.
+
+### Acknowledgments
+* Friends of Agape for their support and contributions.
