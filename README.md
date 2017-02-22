@@ -16,11 +16,11 @@ Fork this repository.
 <br>
 This should start the application and open up the main screen.
 
-### Contributing
+## Contributing
 Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-### License
+## License
 This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for details.
 
-### Acknowledgments
+## Acknowledgments
 * Friends of Agape for their support and contributions.
