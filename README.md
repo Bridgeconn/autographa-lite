@@ -1,6 +1,6 @@
 # Autographa Lite
 
-This is a standalone desktop application which would make life as a Bible Translator much easier. In essence it is a basic [USFM](http://paratext.org/about/usfm) editor which is capable of import and export as USFM files. It has handy features like color-coded diffs across imported texts for comparison between revisions and search and replace. It is currently under active development and encourages contributions!
+This is a standalone desktop application which would make life as a Bible Translator much easier. In essence it is a basic [USFM](http://paratext.org/about/usfm) editor which is capable of import and export of USFM files. It has handy features like color-coded diffs across imported texts for comparison between revisions and search and replace. It is currently under active development and encourages contributions!
 
 ## Developer Setup
 It is relatively easy to setup the application locally for developement.
@@ -17,10 +17,10 @@ Fork this repository.
 This should start the application and open up the main screen.
 
 ## Contributing
-Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) page for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
-This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for details.
+This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for more details.
 
 ## Acknowledgments
 * Friends of Agape for their support and contributions.
