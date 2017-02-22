@@ -17,10 +17,14 @@ Fork this repository.
 This should start the application and open up the main screen.
 
 ## Contributing
+If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
 Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) page for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for more details.
+
+## Contact
+Let us know if face any bugs/problems by opening an issue in Github. We'll do our best to respond promptly.
 
 ## Acknowledgments
 * Friends of Agape for their support and contributions.
