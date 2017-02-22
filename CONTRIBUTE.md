@@ -3,7 +3,7 @@
 When contributing to this repository, kindly first discuss the change you wish to make via Github issue or
 email with the owners of this repository before making the change. 
 
-Please note we have a code of conduct, which need to observed in all your interactions with the project.
+Please note we have a code of conduct, which needs to observed in all your interactions with the project.
 
 ## Pull Request Process
 
