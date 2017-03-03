@@ -9,7 +9,7 @@ It is relatively easy to setup the application locally for developement.
 ### Prerequisite
 [Node JS 6.5.0](https://nodejs.org/download/release/v6.5.0/)
 
-### *nix Setup  
+### Mac (tested on MacOS Sierra 10.12.3) and *nix Setup (tested on Ububtu 16.04) 
 Fork this repository.   
 ```> cd bib-edit && npm install ```   
 ```> npm start```
