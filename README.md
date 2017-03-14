@@ -1,6 +1,6 @@
 # Autographa Lite
 
-This is a standalone desktop application which hopes to aid and be a friendly companion of the Bible Translator. In essence it is a basic [USFM](http://paratext.org/about/usfm) editor which is capable of import and export of USFM files. It has handy features like color-coded diffs across imported texts for comparison between revisions and search and replace. It is currently under active development and encourages contributions!
+This is a standalone desktop application which hopes to aid and be a friendly companion of the Bible Translator. In essence it is a basic [USFM](http://paratext.org/about/usfm) editor which is capable of import and export of USFM files. It has handy features like color-coded diffs across imported texts for comparison between revisions and search and replace. The application is currently under active development and we encourage you to contribute to the project!
 
 ## Developer Setup
 It is relatively easy to setup the application locally for developement.
