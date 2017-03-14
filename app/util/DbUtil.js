@@ -55,7 +55,6 @@ module.exports = {
 			  refHiUlbJson = require(`${__dirname}/../lib/hin_ulb.json`),
 			  chunksJson = require(`${__dirname}/../lib/chunks.json`),
 			  refsConfigJson = require(`${__dirname}/../lib/refs_config.json`);
-			  languageCodeJson = require(`${__dirname}/../lib/language_code.json`);
 
 		    refDb.put(chunksJson)	
 			.then(function (response) {
@@ -69,8 +68,6 @@ module.exports = {
 			})
 			.then(function (response) {
 			    return refDb.bulkDocs(refHiUlbJson);
-			}).then(function(response){
-				return refDb.bulkDocs(languageCodeJson);
 			})
 			.then(function (response) {
 			    refDb.close();
@@ -79,6 +76,27 @@ module.exports = {
 			.catch(function (err) {
 			    refDb.close();
 			    reject('Error loading reference data.' + err);
+			});
+		});
+	}),
+	setupLookupsDb: new Promise(
+	function(resolve, reject) {
+	    const lookupsDB = require(`${__dirname}/data-provider`).lookupsDb();
+	    lookupsDB.get('english_eng')
+		.then(function (doc) {
+		    lookupsDB.close();
+		    resolve('LookupsDB exists.');
+		})
+		.catch(function (err) {
+		    const langCodeJson = require(`${__dirname}/../lib/language_code.json`);
+		    lookupsDB.bulkDocs(langCodeJson)
+			.then(function (response) {
+			    lookupsDB.close();
+			    resolve('Successfully setup Looks up DB.');
+			})
+			.catch(function (err) {
+			    lookupsDB.close();
+			    reject(err);
 			});
 		});
 	})

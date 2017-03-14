@@ -1,6 +1,7 @@
 var targetDb,
     referenceDb,
-    referenceDbSearch;
+    referenceDbSearch,
+    lookupsDb;
 
 module.exports = {
     targetDb: function() {
@@ -19,5 +20,14 @@ module.exports = {
 	    referenceDb = new PouchDB(`${__dirname}/../../db/referenceDB`);
 	}
 	return referenceDb;
-    }
+    },
+    lookupsDb: function() {
+	if(typeof lookupsDb === 'undefined') {
+	    var PouchDB = require('pouchdb-core')
+	      	.plugin(require('pouchdb-adapter-leveldb'));
+	    lookupsDb = new PouchDB(`${__dirname}/../../db/lookupsDB`);
+	}
+	return lookupsDb;
+	}
+
 }

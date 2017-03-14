@@ -96,19 +96,19 @@ function createVerseInputs(verses, chunks, chapter) {
 function lastVisitFromSession(success, failure) {
     session.defaultSession.cookies.get({ url: 'http://book.autographa.com' }, (error, cookie) => {
         if (cookie.length > 0) {
-	    book = cookie[0].value;
-	    session.defaultSession.cookies.get({ url: 'http://chapter.autographa.com' }, (error, cookie) => {
-		if (cookie.length > 0) {
+            book = cookie[0].value;
+            session.defaultSession.cookies.get({ url: 'http://chapter.autographa.com' }, (error, cookie) => {
+                if (cookie.length > 0) {
                     chapter = cookie[0].value;
-		    initializeTextInUI(book, chapter);
-		    success(book, chapter);
-		} else {
-		    failure();
-		}
+                    // initializeTextInUI(book, chapter);
+                    success(book, chapter);
+                } else {
+                    failure();
+                }
             });
         } else {
-	    failure();
-	}
+            failure();
+        }
     });
 }
 

@@ -58,9 +58,13 @@ var dbSetup = new Promise(
 	    })
 	    .then((response) => {
 		console.log(response);
-		resolve(response);
+        return dbUtil.setupLookupsDb;
 	    })
-	    .catch((err) => {
+        .then((response)=>{
+            console.log(response)
+            resolve(response)
+        })
+        .catch((err) => {
 		console.log('Error while DB setup. ' + err);
 		reject(err);
 	    });

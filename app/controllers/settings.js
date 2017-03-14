@@ -1,8 +1,8 @@
 const { dialog } = require('electron').remote;
-
 var bibUtil = require(`${__dirname}/../util/usfm_to_json`),
     db = require(`${__dirname}/../util/data-provider`).targetDb(),
     refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
+    lookupsDb = require(`${__dirname}/../util/data-provider`).lookupsDb(),
     fs = require("fs"),
     path = require("path"),
     codeClicked = false,
@@ -250,16 +250,8 @@ function setReferenceSetting() {
 //get reference setting
 $(function() {
     setReferenceSetting();
-    buildIndex();
     buildReferenceList();
 });
-
-function buildIndex() {
-    refDb.search({
-        fields: ['_id', 'names'],
-        build: true
-    })
-}
 
 function alertModal(heading, formContent) {
     $("#heading").html(heading);
@@ -269,23 +261,32 @@ function alertModal(heading, formContent) {
 }
 
 function matchCode(input) {
-    var matches = []
-    return refDb.search({
-        query: input,
-        limit: 10,
-        fields: ['_id', 'names'],
-        include_docs: true,
-        stale: 'ok'
+    // var matches = []
+    var filteredResults = {};
+    return lookupsDb.allDocs({
+        startkey: input,
+        endkey: input+'\uffff',
+        include_docs: true
     }).then(function(response) {
+        console.log(response)
         var data = ""
         if (response != undefined && response.rows.length > 0) {
             $.each(response.rows, function(index, value) {
                 doc = value.doc
                 if (doc) {
-                    matches.push({ name: doc.names + " " + "(" + (doc._id) + ")", id: doc._id });
+                    //matches.push({ name: doc.name+' ('+doc.lang_code+') ' , id: doc._id });
+                    if (!filteredResults.hasOwnProperty(doc.lang_code)) {
+                        filteredResults[doc.lang_code] = doc.name; // 0 duplicates
+                    } else {
+                        existingValue = filteredResults[doc.lang_code]
+                        filteredResults[doc.lang_code] = (existingValue+" , "+doc.name);
+                    }
                 }
+
             })
-            return matches;
+            // return matches;
+            console.log(filteredResults)
+            return filteredResults
         } else {
             return [];
         }
@@ -296,26 +297,28 @@ function matchCode(input) {
 
 function changeInput(val, inputId, fieldValue, listId) {
     codeClicked = false; // flag to check language code clicked on list or not
-    var autoCompleteResult = matchCode(val)
-    autoCompleteResult.then(function(res) {
-        var parent_ul = "<ul>";
-        if (res) {
-            $.each(res, function(index, value) {
-                // CREATE AND ADD SUB LIST ITEMS.
-                parent_ul += "<li><span class='code-name'>" + value['name'] + "</span><input type='hidden' value=" + "'" + value['id'] + "'" + "class='code-id'/> </li>"
-            });
-            parent_ul += "</ul>"
-            $(listId).html(parent_ul).show();
-            $(listId + " li").on("click", function(e) {
-                var $clicked = $(this);
-                codeName = $clicked.children().select(".code-name").text();
-                codeId = $clicked.find(".code-id");
-                $(inputId).val(codeName);
-                $(fieldValue).val(codeId.val());
-                codeClicked = true;
-            });
-        }
-    });
+    if(val.length>=2){
+     var autoCompleteResult = matchCode(val)
+        autoCompleteResult.then(function(res) {
+            var parent_ul = "<ul>";
+            if (res) {
+                $.each(res, function(langCode, names) {
+                    // CREATE AND ADD SUB LIST ITEMS.
+                    parent_ul += "<li><span class='code-name'>" + names + ' ('+langCode+') ' + "</span><input type='hidden' value=" + "'" + langCode + "'" + "class='code-id'/> </li>"
+                });
+                parent_ul += "</ul>"
+                $(listId).html(parent_ul).show();
+                $(listId + " li").on("click", function(e) {
+                    var $clicked = $(this);
+                    codeName = $clicked.children().select(".code-name").text();
+                    codeId = $clicked.find(".code-id");
+                    $(inputId).val(codeName);
+                    $(fieldValue).val(codeId.val());
+                    codeClicked = true;
+                });
+            }
+        });   
+    }
     $(document).on("click", function(e) {
         var $clicked = $(e.target);
         if (!$clicked.hasClass("search")) {
