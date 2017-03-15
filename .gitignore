@@ -40,3 +40,4 @@ reference
 app/assets/
 db/referenceDB
 db/targetDB
+.DS_Store
