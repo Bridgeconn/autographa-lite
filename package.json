@@ -2,7 +2,7 @@
   "name": "Autographa",
   "version": "0.0.1",
   "ProductName": "Autographa Lite",
-  "description": "Yet another Bible translation editor.",
+  "description": "A Bible translation editor for everyone.",
   "main": "app.js",
   "scripts": {
     "start": "electron .",
