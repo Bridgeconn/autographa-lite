@@ -1,6 +1,6 @@
 {
   "name": "Autographa",
-  "version": "0.0.1",
+  "version": "0.1",
   "ProductName": "Autographa Lite",
   "description": "A Bible translation editor for everyone.",
   "main": "app.js",
