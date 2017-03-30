@@ -285,7 +285,6 @@ function matchCode(input) {
 
             })
             // return matches;
-            console.log(filteredResults)
             return filteredResults
         } else {
             return [];
