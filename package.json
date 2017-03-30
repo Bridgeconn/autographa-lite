@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Bridgeconn/bib-edit.git"
+    "url": "git+https://github.com/Bridgeconn/autographa-lite.git"
   },
   "keywords": [
     "Desktop",
@@ -26,9 +26,9 @@
   "author": "Bridgeconn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Bridgeconn/bib-edit/issues"
+    "url": "https://github.com/Bridgeconn/autographa-lite/issues"
   },
-  "homepage": "https://github.com/Bridgeconn/bib-edit#readme",
+  "homepage": "http://http://www.autographa.com",
   "dependencies": {
     "diff-match-patch": "^1.0.0",
     "electron-squirrel-startup": "^1.0.0",
