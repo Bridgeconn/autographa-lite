@@ -155,4 +155,10 @@ div.tabs a:focus, .active {background-color: #ccc; color: rgba(11,130,255,1);}
 // // @media (min-width: 1440px) {.col-fixed{min-height: 985px;}}
 
 // #input-verse div span{direction: rtl;}
+.verse-num {margin-left: 10px}
 @media screen and (max-width: 760px) {.rmvflex{display: block !important;}}
+.mdl-textfield__label {color: #0b82ff !important}
+div .mdl-textfield__label:after {
+  background: #05aaf4
+  }
+body {line-height: inherit !important;}

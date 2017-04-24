@@ -40,7 +40,6 @@
   },
   "devDependencies": {
     "electron": "1.4.12",
-    "rimraf": "^2.5.4",
     "electron-winstaller": "^2.5.1",
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
@@ -54,7 +53,9 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.0.0",
     "gulp-util": "^3.0.6",
-    "main-bower-files": "^2.9.0"
+    "main-bower-files": "^2.9.0",
+    "rimraf": "^2.5.4",
+    "rtl-detect": "^1.0.0"
   },
   "build": {
     "appId": "oa.autographa.lite",
