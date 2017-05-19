@@ -2,30 +2,45 @@ const path = require("path")
 const electron = require('electron')
 const fs = require('fs');
 let loadedLanguage;
-let app = electron.app ? electron.app : electron.remote.app
-const rtlDetect = require('rtl-detect'); 
+let app = electron.app ? electron.app : electron.remote.app;
+const rtlDetect = require('rtl-detect');
+const refDb = require("../app/util/data-provider").referenceDb();
 
 module.exports = i18n;
 
 
 
 function i18n() {
-	if(fs.existsSync(path.join(__dirname, app.getLocale() + '.js'))) {
-		loadedLanguage = JSON.parse(fs.readFileSync(path.join(__dirname, app.getLocale() + '.js'), 'utf8'))
-	}
-	else {
-		loadedLanguage = JSON.parse(fs.readFileSync(path.join(__dirname, 'en.js'), 'utf8'))
-	}
+	loadedLanguage = refDb.get('app_locale').then(function(doc) {
+		if(fs.existsSync(path.join(__dirname, doc.appLang + '.js'))) {
+			return JSON.parse(fs.readFileSync(path.join(__dirname, doc.appLang + '.js'), 'utf8'))
+		}
+		else {
+			return JSON.parse(fs.readFileSync(path.join(__dirname, 'en.js'), 'utf8'))
+		}
+	}).catch(function(error){
+		return JSON.parse(fs.readFileSync(path.join(__dirname, 'en.js'), 'utf8'))
+	})
+}
+
+i18n.prototype.getLocale = function() {
+	return refDb.get('app_locale').then(function(doc) {
+		return doc.appLang;
+	}).catch(function(error){
+		return 'en';
+	});
 }
 
 i18n.prototype.isRtl = function(){
-	return rtlDetect.isRtlLang(app.getLocale());
+	return this.getLocale().then((res) => rtlDetect.isRtlLang(res));
 }
 
 i18n.prototype.__ = function(phrase) {
-	let translation = loadedLanguage[phrase]
-  if(translation === undefined) {
-    translation = phrase
-  }
-	return translation
+	return loadedLanguage.then(function(res){
+		let translation = res[phrase]
+		if(translation === undefined) {
+	    	translation = phrase
+	  	}
+	  	return translation;
+	})
 }

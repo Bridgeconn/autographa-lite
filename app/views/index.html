@@ -106,7 +106,24 @@
                             <a href="javascript:void(0)" class="tablinks" onclick="settings(event, 'target-usfm')" id="label-import-translation">Import Translation</a>
                             <a href="javascript:void(0)" id="label-import-ref-text" class="tablinks" onclick="settings(event, 'usfm-settings')" >Import Reference Text</a>
                             <a href="javascript:void(0)" id="label-manage-ref-texts"class="tablinks" onclick="settings(event, 'modify-reference')">Manage Reference Texts</a>
+                            <a href="javascript:void(0)" class="tablinks" id="label-language" onclick="settings(event, 'app-lang-setting')">App Language</a>
                         </div>
+                        <div id="app-lang-setting" class="tabcontent">
+                            <div class="form-group">
+                                <form>
+                                <div class="mdl-selectfield mdl-js-selectfield">
+                                    <label for="app-lang-setting" id="language-select" class="mdl-selectfield__label" style="color: #0b82ff; margin-top: 20px; font-size: 12px">Select the language to setup the application in:</label><br/>
+                                    <select class="mdl-selectfield__select" id="localeList">
+                                        <option value="en">English</option>
+                                        <option value="hi">Hindi</option>
+                                        <option value="ar">Arabic</option>
+                                    </select>
+                                </div>
+                                </form>
+                            </div>
+                            <button style="float:right; margin-right: 33px; margin-top: 257px;" class="btn btn-success btn-save" id="btnSaveLang">Save</button>
+                        </div>
+
                         <div id="usfm-settings" class="tabcontent">
                             <div class="form-group">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -157,7 +174,7 @@
                                     <label class="mdl-textfield__label" for="export-path" id="label-export-folder-location">Export Folder Location</label>
                                 </div>
                             </div>
-                            <button style="float:right; margin-right: 33px;" class="btn btn-success btn-save" id="save-settings">Save</button>
+                            <button style="float:right; margin-right: 33px; margin-top: 100px" class="btn btn-success btn-save" id="save-settings">Save</button>
                         </div>
                         <div id="target-usfm" class="tabcontent">
                             <div class="form-group">
@@ -166,7 +183,7 @@
                                     <label class="mdl-textfield__label label-folder-location" for="target-import-path "> Folder Location</label>
                                 </div>
                             </div>
-                            <button style="float:right; margin-right: 33px;" id="target-import-btn" class="btn btn-success btn-import">Import</button>
+                            <button style="float:right; margin-right: 33px; margin-top: 257px" id="target-import-btn" class="btn btn-success btn-import">Import</button>
                         </div>
                         <div id="modify-reference" class="tabcontent">
                             <div>
@@ -301,7 +318,7 @@
                             <div class="btn-group navbar-btn strong verse-diff-on" role="group" aria-label="..." id="bookBtn" style="margin-left:200px;">
                                 <a href="#" onclick="getBookList()" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Select Book"  id="book-chapter-btn">
                                 </a>
-                                <span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" data-target="#myModal" href="javascript:getBookChapterList('1');" data-toggle="modal" data-placement="bottom"  title="Select Chapter" ></a></span>
+                                <span id="chapterBtnSpan"><a class="btn btn-default" id="chapterBtn" data-target="#myModal" href="javascript:getBookChapterList('1');" data-toggle="tooltip" data-placement="bottom"  title="Select Chapter" ></a></span>
                             </div>
                             
                         </li>

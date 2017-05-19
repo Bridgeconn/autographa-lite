@@ -1,91 +1,56 @@
+var elementsList = [{".verse-diff-on #label-on" : 'btn-switch-on'}, {".verse-diff-on #label-off" : 'btn-switch-off'}, {'.translation': 'label-translation'}, {'#defaultOpen': 'label-translation-details'}, 
+{'#label-import-translation': 'label-import-translation' }, {"#label-import-ref-text": "label-import-ref-text"}, 
+{"#label-manage-ref-texts": "label-manage-ref-texts"}, {".label-language-code": "label-language-code" }, 
+{".label-version": "label-version"}, {"#label-export-folder-location": "label-export-folder-location"},
+{".label-folder-location": "label-folder-location"}, {"#label-bible-name": "label-bible-name"}, 
+{"#label-book-chapter": "label-book-chapter"}, {".btn-save":'btn-save'},{".btn-import":'btn-import'},
+{"#exportUsfm":'btn-export'},{"#btn-ok":'btn-ok'},{"#btnfindReplace":'btn-replace'},
+{"#btn-save-changes":'btn-save-changes'},{"#tbl-header-name":'tbl-header-name'},
+{"#tbl-header-action":'tbl-header-action'},{"#modal-title-setting":'modal-title-setting'},
+{"#label-find-replace":'label-find-replace'},{"#label-current-chapter":'label-current-chapter'},
+{"#label-current-book":'label-current-book'},{"#label-find":'label-find'},
+{"#label-replace-with":'label-replace-with'},{"#export-heading":'tooltip-export-usfm'},
+{"#replace-information":'label-replaced-information'},{"#replace-cancel":'btn-cancel'},
+{"#modal-title-about":'modal-title-about'},{"#overviewtab":'label-overview-tab'},
+{"#licensetab":'label-license-tab'},{"#booksTab":'label-books-tab'},{"#chapterTab":'label-chapter-tab'},
+{"#allBooksBtn":'btn-all'},{"#otBooksBtn":'btn-ot'}, {"#ntBooksBtn":'btn-nt'},
+{"#app-name":'app-name-Autographa-Lite'},{"#label-hosted-url":'label-hosted-url'},{".stage":'label-stage'}, {"#label-language": "label-language"}, {"#language-select": "label-select-language"}  ]
+
+var elementsTitleList = {'placeholder': [{"#searchTextBox":'placeholder-search-text'},{"#replaceTextBox":'placeholder-replace-text'},{"#export-path":'placeholder-path-to-destination'},{".import":'placeholder-path-of-usfm-files'},{"#ref-name":'placeholder-eng-translation'},{"#stageText":'placeholder-stage-trans'}], 'title': [{"#book-chapter-btn":'tooltip-select-book'},{"#chapterBtn":'tooltip-select-chapter'},{"#switchLable":'tooltip-compare-mode'},{"#searchText":'tooltip-find-and-replace'},{"#btnfindReplace":'tooltip-run-find-and-replace'},{"#btnAbout":'tooltip-about'},{"#btnSettings":'tooltip-settings'},{".minus":'tooltip-minus-font-size'},{".plus":'tooltip-plus-font-size'},{"#2-column-layout":'tooltip-2-column'},{"#3-column-layout":'tooltip-3-column'},{"#4-column-layout":'tooltip-4-column'},{"#save-btn":'tooltip-btn-save'},{".close":'tooltip-modal-close'},{".ref-drop-down":'tooltip-select-reference-text'},{"#allBooksBtn":'tooltip-all'},{"#otBooksBtn":'tooltip-old-testament'},{"#ntBooksBtn":'tooltip-new-testament'}, {"#export-usfm":'tooltip-export-usfm'}]}
+
+
 window.localization = window.localization || {},
-function(n) {
-    localization.translate = {
-
-      menu: function() {
-        $(".verse-diff-on #label-on").text(i18n.__('btn-switch-on'));
-        $(".verse-diff-on #label-off").text(i18n.__('btn-switch-off'));
-      },
-      translation: function() {
-        $('#learn-more-button').text(i18n.__('Learn more'));
-        $('.translation').text(i18n.__('label-translation'));
-        $(document).find("title").text(i18n.__('app-name-Autographa-Lite'))
-      },
-      settings: function(){
-        $("#defaultOpen").text(i18n.__('label-translation-details'))
-        $("#label-import-translation").text(i18n.__('label-import-translation'))
-        $("#label-import-ref-text").text(i18n.__('label-import-ref-text'))
-        $("#label-manage-ref-texts").text(i18n.__('label-manage-ref-texts'))
-        $(".label-language-code").text(i18n.__('label-language-code'))
-        $(".label-version").text(i18n.__('label-version'))
-        $("#label-export-folder-location").text(i18n.__('label-export-folder-location'))
-        $(".label-folder-location").text(i18n.__('label-folder-location'))
-        $("#label-bible-name").text(i18n.__('label-bible-name'))
-        $("#label-book-chapter").text(i18n.__('label-book-chapter'))
-        $(".btn-save").text(i18n.__('btn-save'))
-        $(".btn-import").text(i18n.__('btn-import'))
-        $("#exportUsfm").text(i18n.__('btn-export'))
-        $("#btn-ok").text(i18n.__('btn-ok'))
-        $("#btnfindReplace").text(i18n.__('btn-replace'))
-        $("#btn-save-changes").text(i18n.__('btn-save-changes'))
-        $("#tbl-header-name").text(i18n.__('tbl-header-name'))
-        $("#tbl-header-action").text(i18n.__('tbl-header-action'))
-        $("#modal-title-setting").text(i18n.__('modal-title-setting'))
-        $("#book-chapter-btn").attr('title', i18n.__('tooltip-select-book'))
-        $("#chapterBtn").attr('title', i18n.__('tooltip-select-chapter'))
-        $("#switchLable").attr('title', i18n.__('tooltip-compare-mode'))
-        $("#searchText").attr('title', i18n.__('tooltip-find-and-replace'))
-        $("#btnfindReplace").attr('title', i18n.__('tooltip-run-find-and-replace'))
-        $("#label-find-replace").text(i18n.__('label-find-replace'))
-        $("#label-current-chapter").text(i18n.__('label-current-chapter'))
-        $("#label-current-book").text(i18n.__('label-current-book'))
-        $("#label-find").text(i18n.__('label-find'))
-        $("#label-replace-with").text(i18n.__('label-replace-with'))
-        $("#export-heading").text(i18n.__('tooltip-export-usfm'))
-        $("#replace-information").text(i18n.__('label-replaced-information'))
-        $("#replace-cancel").text(i18n.__('btn-cancel'))
-        $("#searchTextBox").attr('placeholder', i18n.__('placeholder-search-text'))
-        $("#replaceTextBox").attr('placeholder', i18n.__('placeholder-replace-text'))
-        $("#export-usfm").attr('title', i18n.__('tooltip-export-usfm'))
-        $("#export-path").attr('placeholder', i18n.__('placeholder-path-to-destination'))
-        $(".import").attr('placeholder', i18n.__('placeholder-path-of-usfm-files'))
-        $("#ref-name").attr('placeholder', i18n.__('placeholder-eng-translation'))
-        $("#btnAbout").attr('title', i18n.__('tooltip-about'))
-        $("#btnSettings").attr('title', i18n.__('tooltip-settings'))
-        $(".minus").attr('title', i18n.__('tooltip-minus-font-size'))
-        $(".plus").attr('title', i18n.__('tooltip-plus-font-size'))
-        $("#2-column-layout").attr('title', i18n.__('tooltip-2-column'))
-        $("#3-column-layout").attr('title', i18n.__('tooltip-3-column'))
-        $("#4-column-layout").attr('title', i18n.__('tooltip-4-column'))
-        $("#save-btn").attr('title', i18n.__('tooltip-btn-save'))
-        $(".close").attr('title', i18n.__('tooltip-modal-close'))
-        $(".ref-drop-down").attr('title', i18n.__('tooltip-select-reference-text'))
-        $("#modal-title-about").text(i18n.__('modal-title-about'))
-        $("#overviewtab").text(i18n.__('label-overview-tab'))
-        $("#licensetab").text(i18n.__('label-license-tab'))
-        $("#booksTab").text(i18n.__('label-books-tab'))
-        $("#chapterTab").text(i18n.__('label-chapter-tab'))
-        $("#allBooksBtn").text(i18n.__('btn-all'))
-        $("#otBooksBtn").text(i18n.__('btn-ot'))
-        $("#allBooksBtn").attr('title', i18n.__('tooltip-all'))
-        $("#otBooksBtn").attr('title', i18n.__('tooltip-old-testament'))
-        $("#ntBooksBtn").text(i18n.__('btn-nt'))
-        $("#ntBooksBtn").attr('title', i18n.__('tooltip-new-testament'))
-        $("#app-name").text(i18n.__('app-name-Autographa-Lite'))
-        $("#label-hosted-url").text(i18n.__('label-hosted-url'))
-        $(".stage").text(i18n.__('label-stage'))
-        $("#stageText").attr('placeholder', i18n.__('placeholder-stage-trans'))
-      },
-
-      init: function() {
-        this.translation();
-        this.menu();
-        this.settings();
-      }
-    };
-
-    n(function() {
-        localization.translate.init();
-    })
+    function(n) {
+        localization.translate = {
+            setLanguageText: function(id, phrase){
+                $.each(elementsList, function(index, object){
+                     for (var o in object) {
+                        if (object.hasOwnProperty(o)) {
+                            i18n.__(object[o]).then((trans) => $(o).text(trans))
+                            
+                        }
+                    }
+                })
+            },
+            setLanguageTitleAttr: function(id, phrase){
+                $.each(elementsTitleList, function(key, object){
+                    $.each(object, function(index, titleObj){
+                         for (var tobj in titleObj) {
+                            if (titleObj.hasOwnProperty(tobj)) {
+                                i18n.__(titleObj[tobj]).then((trans) => $(tobj).attr(key, trans).tooltip('fixTitle').tooltip('setContent'))
+                            }
+                        }
+                    })  
+                })
+            },
+            init: function() {
+                i18n.__('app-name-Autographa-Lite').then((trans)=> $(document).find("title").text(trans))
+                this.setLanguageText();
+                this.setLanguageTitleAttr();
+            }
+        };
+        n(function() {
+            localization.translate.init();
+        })
 
 }(jQuery);
