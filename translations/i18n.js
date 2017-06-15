@@ -1,10 +1,12 @@
 const path = require("path")
-const electron = require('electron')
+const electron = require('electron');
+const electronRemote = require('electron').remote;
 const fs = require('fs');
 let loadedLanguage;
 let app = electron.app ? electron.app : electron.remote.app;
 const rtlDetect = require('rtl-detect');
-const refDb = require("../app/util/data-provider").referenceDb();
+// const refDb = require("../app/util/data-provider").referenceDb();
+const refDb = electronRemote.getCurrentWindow().refDb
 
 module.exports = i18n;
 

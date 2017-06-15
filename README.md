@@ -7,24 +7,24 @@ It is relatively easy to setup the application locally for developement.
 
 
 ### Prerequisite
-[Node JS 6.5.0](https://nodejs.org/download/release/v6.5.0/)
+[Node JS 7.4.0](https://nodejs.org/download/release/v7.4.0/)
 
-### Mac (tested on MacOS Sierra 10.12.3) and *nix Setup (tested on Ububtu 16.04) 
+### Mac (tested on MacOS Sierra 10.12.4) and *nix Setup (tested on Ububtu 16.04) 
 Fork this repository.   
-```> cd bib-edit && npm install ```   
+```> cd autographa-lite && npm install ```   
 ```> npm start```
 <br>
 This should start the application and open up the main screen.
 
 ## Contributing
 If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
-Please read the [CONTRIBUTE](https://github.com/Bridgeconn/bib-edit/blob/master/CONTRIBUTE.md) page for details on our code of conduct, and the process for submitting pull requests to us.
+Please read the [CONTRIBUTE](https://github.com/Bridgeconn/autographa-lite/blob/master/CONTRIBUTE.md) page for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
-This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/bib-edit/blob/master/LICENSE) for more details.
+This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/autographa-lite/blob/master/LICENSE) for more details.
 
 ## Contact
 Let us know if face any bugs/problems by opening an issue in Github. We'll do our best to respond promptly.
 
 ## Acknowledgments
-* Friends of Agape for their support and contributions.
+* Friends of Agape, for their support and contributions.

@@ -7,12 +7,12 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npm install bower && bower install bootstrap-sass-official && npm install gulp && ./node_modules/.bin/gulp",
+    "prepublish": "npm install bower && bower install bootstrap-sass-official && npm install gulp && ./node_modules/.bin/gulp",
     "pack-win": "electron-packager . Autographa  --overwrite --platform=win32 --arch=x64 --icon=app/assets/images/autographa.ico --out=dist  --win32metadata.CompanyName='OA' --win32metadata.ProductName='Autographa Lite' --prune=true",
-    "pack-mac": "electron-packager . \"Autographa Lite\"  --overwrite --platform=darwin --arch=x64 --icon=app/assets/images/autographa.icns --out=dist --electronVersion=1.4.12 --osx-sign.identity='Autographa Lite' --prune=true",
-    "pack-linux": " electron-packager . Autographa  --overwrite --platform=linux --arch=x64 --icon=app/assets/images/autographa-linux.png --out=dist --electron-version=1.4.12 --prune=true",
-    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.4.12 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.4.12 --dist-url=https://atom.io/download/atom-shell",
+    "pack-mac": "electron-packager . \"Autographa Lite\"  --overwrite --platform=darwin --arch=x64 --icon=app/assets/images/autographa.icns --out=dist --electronVersion=1.6.10 --osx-sign.identity='Autographa Lite' --prune=true",
+    "pack-linux": " electron-packager . Autographa  --overwrite --platform=linux --arch=x64 --icon=app/assets/images/autographa-linux.png --out=dist --electron-version=1.6.10 --prune=true",
+    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.6.10 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
+    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.6.10 --dist-url=https://atom.io/download/atom-shell",
     "installer": "node ./script/installer.js"
   },
   "repository": {
@@ -40,7 +40,7 @@
     "rtl-detect": "^1.0.0"
   },
   "devDependencies": {
-    "electron": "1.4.12",
+    "electron": "1.6.10",
     "electron-winstaller": "^2.5.1",
     "gulp": "^3.9.1",
     "gulp-bower": "0.0.13",
