@@ -1,14 +1,15 @@
 const session = require('electron').remote.session;
-const { dialog } = require('electron').remote;
+const { dialog} = require('electron').remote;
+const electron = require('electron').remote
 var bibUtil = require("../util/json_to_usfm.js"),
     DiffMatchPatch = require('diff-match-patch'),
     dmp_diff = new DiffMatchPatch();
     i18n = new(require('../../translations/i18n')),
     app = require('electron').remote.app;
 
-var db = require(`${__dirname}/../util/data-provider`).targetDb(),
-    refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
-    lookupsDb = require(`${__dirname}/../util/data-provider`).lookupsDb(),
+var db = electron.getCurrentWindow().targetDb,
+    refDb = electron.getCurrentWindow().refDb,//require(`${__dirname}/../util/data-provider`).referenceDb(),
+    lookupsDb = electron.getCurrentWindow().lookupsDb,
     book,
     chapter,
     currentBook,

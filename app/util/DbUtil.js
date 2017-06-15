@@ -24,14 +24,14 @@ module.exports = {
 	    const targetDb = require(`${__dirname}/data-provider`).targetDb();
 	    targetDb.get('isDBSetup')
 		.then(function (doc) {
-		    targetDb.close();
+		    // targetDb.close();
 		    resolve('TargetDB exists.');
 		})
 		.catch(function (err) {
 		    const bibleJson = require(`${__dirname}/../lib/full_bible_skel.json`);
 		    targetDb.bulkDocs(bibleJson)
 			.then(function (response) {
-			    targetDb.close();
+			    // targetDb.close();
 			    resolve('Successfully setup Target DB.');
 			})
 			.catch(function (err) {
@@ -46,7 +46,7 @@ module.exports = {
 	    const refDb = require(`${__dirname}/data-provider`).referenceDb();
 	    refDb.get('refs')
 		.then(function (doc) {
-		    refDb.close();
+		    // refDb.close();
 		    resolve('ReferenceDB exists.');
 		})
 		.catch(function (err) {
@@ -70,7 +70,7 @@ module.exports = {
 			    return refDb.bulkDocs(refHiUlbJson);
 			})
 			.then(function (response) {
-			    refDb.close();
+			    // refDb.close();
 			    resolve('Successfully loaded reference texts.');
 			})
 			.catch(function (err) {
@@ -84,14 +84,14 @@ module.exports = {
 	    const lookupsDB = require(`${__dirname}/data-provider`).lookupsDb();
 	    lookupsDB.get('english_eng')
 		.then(function (doc) {
-		    lookupsDB.close();
+		    // lookupsDB.close();
 		    resolve('LookupsDB exists.');
 		})
 		.catch(function (err) {
 		    const langCodeJson = require(`${__dirname}/../lib/language_code.json`);
 		    lookupsDB.bulkDocs(langCodeJson)
 			.then(function (response) {
-			    lookupsDB.close();
+			    // lookupsDB.close();
 			    resolve('Successfully setup Looks up DB.');
 			})
 			.catch(function (err) {
