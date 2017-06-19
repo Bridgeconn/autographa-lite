@@ -13,7 +13,11 @@ var db = electron.getCurrentWindow().targetDb,
     book,
     chapter,
     currentBook,
-    intervalId;
+    intervalId,
+    lastVerse,
+    verseLength = 0;
+    versesLength = 0,
+    chunkGroup = [];
 
 
 var constants = require('../util/constants.js'),
@@ -102,15 +106,52 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerse.appendChild(document.createTextNode(verses[i - 1].verse));
             spanVerseNum.setAttribute("class", "verse-num");
             spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
+            divContainer.id = "verseCon" + i;
             divContainer.appendChild(spanVerseNum);
             divContainer.appendChild(spanVerse);
             document.getElementById('input-verses').appendChild(divContainer);
             $(".diff-count-target").html("");
         }
+        lastVerse = i;
+        versesLength  = verses.length;
         highlightRef();
     });
     
 }
+
+//keeping last verse id by concate "verseCon" + lastVerse-1;
+$("#rmVerse").click(function(){
+    if(lastVerse > 1 && (lastVerse - 1) <= versesLength){
+        let verseContainer = $("#verseCon"+(lastVerse -1).toString());
+        chunkGroup.push((verseContainer.children().last().attr('chunk-group')).toString());
+        verseContainer.remove();
+        lastVerse--;
+    }
+    dynChunkIndex = 0;
+});
+
+$("#addVerse").click(function(){
+    
+    if(lastVerse <= versesLength){    
+        var divContainer = document.createElement('div'),
+            spanVerseNum = document.createElement('span'),
+            spanVerse = document.createElement('span');
+        spanVerse.setAttribute("chunk-group", chunkGroup.pop());
+        spanVerse.contentEditable = true;
+        spanVerse.id = "v" + lastVerse;
+        spanVerse.appendChild(document.createTextNode(""));
+        spanVerseNum.setAttribute("class", "verse-num");
+        spanVerseNum.appendChild(document.createTextNode(lastVerse.toLocaleString()));
+        divContainer.id = "verseCon" + lastVerse;
+        divContainer.appendChild(spanVerseNum);
+        divContainer.appendChild(spanVerse);
+        document.getElementById('input-verses').appendChild(divContainer);
+        lastVerse ++;
+        highlightRef();                
+    } 
+   
+});
+
 
 function lastVisitFromSession(success, failure) {
     session.defaultSession.cookies.get({ url: 'http://book.autographa.com' }, (error, cookie) => {
@@ -743,6 +784,7 @@ function setChapter(chapter) {
         closeModal($("#bookChapTabModal"));
         console.log('Error: While retrieving document. ' + err);
     });
+    chunkGroup = [];
 }
 function setChapterButton(bookId, chapterId) {
     i18n.getLocale().then((locale) => {

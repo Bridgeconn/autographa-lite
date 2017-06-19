@@ -79,16 +79,16 @@ html, body {height: 100%; }
 ul {list-style-type: none; } 
 #myModalLabel {font-weight: bold;}
 .modal-header {border-bottom: 0px; padding-bottom: inherit; } 
-.modal-content {width: 710px;}
+.modal-content {width: 750px;}
 // Books tab css
-.books-li {width: 100%; column-count: 4; column-gap: 25%;}
+.books-li {width: 105%; padding-right: 30px; column-count: 4; column-gap: 25%;}
 .books-li ul {padding-left: 50px;}
-.books-li ul li a{color: #0b63bf !important;}
+.books-li ul li a{color: #0b63bf !important;}	
 .selected .books-li a.link-active {font-weight: bold !important;background-color:#0070e6;color: #ffffff !important;padding: 4px 4px 4px 4px;margin-left: -5px;}
 .selected .chapter-no a.link-active {font-weight: bold !important; background-color: rgba(11, 99, 191, 0.8) !important; color: white !important;}
 // chapter tab css
 .chapter-no{width: 100%; min-height: 485px; padding: 20px 0 0 10px;}
-.chapter-no ul {margin: 0; padding: 0; float: left; width: 100%;}
+.chapter-no ul {margin: 0; padding: 0; float: left; width: 100%}
 .chapter-no ul li {margin: 5px 0; padding: 0; float: left; text-align: center; width: 8%;}
 .chapter-no ul li a:focus {background-color: #ccc !important;}
 .chapter-no ul li a:hover {text-decoration: none;}
@@ -150,7 +150,7 @@ div.tabs a:focus, .active {background-color: #ccc; color: rgba(11,130,255,1);}
 .col-xs-6 h3 {margin-top:79px; margin-bottom:0; font-size:30px}
 .col-xs-6 p {margin: 0;}
 // #input-verses span {font-size: 14px;font-family: "Helvetica","Arial",sans-serif; font-weight: 400;}
-.verse-num {font-size: 10px; font-weight: bold;} 
+.verse-num {font-size: 10px; font-weight: bold; padding-top: 4px !important;} 
 // @media screen and (max-width: 2880px) {.col-fixed{min-height: 1690px;}}
 // @media screen and (max-width: 1280px) {.col-fixed{min-height: 765px;}}
 // // @media (min-width: 1440px) {.col-fixed{min-height: 985px;}}
@@ -164,3 +164,9 @@ div .mdl-textfield__label:after {
   background: #05aaf4
   }
 body {line-height: inherit !important;}
+.left-pane div {display: flex;}
+.mdl-spinner__circle {border-color: #0b82ff !important; }
+.border-class {border-bottom:3px solid #0b82ff; position: relative; font-style: italic; margin-top: -21px; font-weight: bold;}
+.border-class:after {padding:0;margin:0;display:block;/* not really needed */content: "";width:48%; height:3px; background-color:white; position: absolute; right:0; bottom:-3px;}
+.heading-loading{color: rgba(0, 0, 0, 0.5);margin-left: 20px; margin-top: 0px; font-style: italic}
+.custom-loading{margin-left: 220px; width: 50px !important; height: 50px !important; color: #0070e6;}
