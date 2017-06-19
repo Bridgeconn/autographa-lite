@@ -44,6 +44,7 @@ var stringReplace = require('../util/string_replace.js'),
     constants = require(`${__dirname}/../util/constants.js`),
     removeReferenceLink = '',
     ref_select = '';
+    langcodeLimit = 100;
 
 
 
@@ -1754,17 +1755,20 @@ $("#target-lang").keyup(function() {
     });
 });
 
+var langOptions = {limit : 50, include_docs: true};
 
 function loadLanguageCode(inputId, fieldValue, listId){
     i18n.getLocale().then((locale) => {
         if(locale != 'en'){
             let filteredResults = {};
-            lookupsDb.allDocs({
-                include_docs: true
-            }).then(function(response) {
+            lookupsDb.allDocs(
+                langOptions
+            ).then(function(response) {
                 var data = ""
                 if (response != undefined && response.rows.length > 0) {
+                    // console.log(response.rows[0].doc.lang_code)                  
                     $.each(response.rows, function(index, value) {
+                      
                             doc = value.doc
                             if (doc) {
                                 //matches.push({ name: doc.name+' ('+doc.lang_code+') ' , id: doc._id });
@@ -1775,6 +1779,8 @@ function loadLanguageCode(inputId, fieldValue, listId){
                                     filteredResults[doc.lang_code] = (existingValue + " , " + doc.name);
                                 }
                             }
+                            langOptions.startkey = response.rows[response.rows.length - 1].doc._id;
+                            langOptions.skip = 1;
 
                     })
                     var parent_ul = "<ul>";
@@ -1784,7 +1790,7 @@ function loadLanguageCode(inputId, fieldValue, listId){
                             parent_ul += "<li><span class='code-name'>" + names + ' (' + langCode + ') ' + "</span><input type='hidden' value=" + "'" + langCode + "'" + "class='code-id'/> </li>"
                         });
                         parent_ul += "</ul>"
-                        $(listId).html(parent_ul).show();
+                        $(listId).append(parent_ul).show();
                         $(listId + " li").on("click", function(e) {
                             var $clicked = $(this);
                             codeName = $clicked.children().select(".code-name").text();
@@ -1804,16 +1810,26 @@ function loadLanguageCode(inputId, fieldValue, listId){
                 var $clicked = $(e.target);
                 if (!$clicked.hasClass("search")) {
                     $(".lang-code").fadeOut();
+                    codeClicked = false;
                 }
-            });
-            $('#inputSearch').click(function() {
-                $(".lang-code").fadeIn();
             });
         }
     });
 }
+$("#target-lang-result").scroll( function(){
+    if($(this).scrollTop() + $(this).height() == $(this)[0].scrollHeight ){
+        loadLanguageCode("#ref-lang-code", "#langCode", "#target-lang-result");
+    }
+});
+$('#reference-lang-result').scroll( function(){
+    if($(this).scrollTop() + $(this).height() == $(this)[0].scrollHeight ){
+        loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");
+    }
+});
+
 
 $("#label-import-ref-text").click(function(){
+    langOptions = {limit: 5, include_docs: true};
     loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");        
 });
 
@@ -1822,11 +1838,11 @@ $("#defaultOpen").click(function(){
 });
 $("#target-lang").focus(function(){
     loadLanguageCode("#target-lang", "#target-lang-code", "#target-lang-result");        
-})
+});
 
 $("#ref-lang-code").focus(function(){
     loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");        
-})
+});
 
 $('#ref-lang-code').on('blur', function() {
     if (!codeClicked) {
@@ -2047,6 +2063,6 @@ $("#label-language").click(function(){
     refDb.get('app_locale').then(function(doc) {
             $("#localeList").val(doc.appLang);
         }).catch(function(err) {
-            console.log(err);
+            $("#localeList").val();
         });
 });
