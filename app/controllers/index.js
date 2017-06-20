@@ -119,40 +119,6 @@ function createVerseInputs(verses, chunks, chapter) {
     
 }
 
-//keeping last verse id by concate "verseCon" + lastVerse-1;
-$("#rmVerse").click(function(){
-    if(lastVerse > 1 && (lastVerse - 1) <= versesLength){
-        let verseContainer = $("#verseCon"+(lastVerse -1).toString());
-        chunkGroup.push((verseContainer.children().last().attr('chunk-group')).toString());
-        verseContainer.remove();
-        lastVerse--;
-    }
-    dynChunkIndex = 0;
-});
-
-$("#addVerse").click(function(){
-    
-    if(lastVerse <= versesLength){    
-        var divContainer = document.createElement('div'),
-            spanVerseNum = document.createElement('span'),
-            spanVerse = document.createElement('span');
-        spanVerse.setAttribute("chunk-group", chunkGroup.pop());
-        spanVerse.contentEditable = true;
-        spanVerse.id = "v" + lastVerse;
-        spanVerse.appendChild(document.createTextNode(""));
-        spanVerseNum.setAttribute("class", "verse-num");
-        spanVerseNum.appendChild(document.createTextNode(lastVerse.toLocaleString()));
-        divContainer.id = "verseCon" + lastVerse;
-        divContainer.appendChild(spanVerseNum);
-        divContainer.appendChild(spanVerse);
-        document.getElementById('input-verses').appendChild(divContainer);
-        lastVerse ++;
-        highlightRef();                
-    } 
-   
-});
-
-
 function lastVisitFromSession(success, failure) {
     session.defaultSession.cookies.get({ url: 'http://book.autographa.com' }, (error, cookie) => {
         if (cookie.length > 0) {
@@ -2108,3 +2074,4 @@ $("#label-language").click(function(){
             $("#localeList").val();
         });
 });
+
