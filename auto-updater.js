@@ -1,61 +1,150 @@
-'use strict'
-const os = require('os')
-const platform = os.platform() + '_' + os.arch()
-const  autoUpdater  = require('electron').autoUpdater
-const fs = require('fs');
-const path = require('path');
-module.exports = function update (options) {
-  if (!options.url) {
-    console.info('Automatic updates disabled')
+const app = require('electron').app
+const autoUpdater = require('electron').autoUpdater
+const ChildProcess = require('child_process')
+const Menu = require('electron').Menu
+const path = require('path')
+const configFile = require('./package.json')
+
+var state = 'checking'
+
+exports.initialize = function (options) {
+  if (process.mas) return
+
+  autoUpdater.on('checking-for-update', function () {
+    state = 'checking'
+    exports.updateMenu()
+  })
+
+  autoUpdater.on('update-available', function () {
+    state = 'checking'
+    exports.updateMenu()
+  })
+
+  autoUpdater.on('update-downloaded', function () {
+    state = 'installed'
+    exports.updateMenu()
+  })
+
+  autoUpdater.on('update-not-available', function () {
+    state = 'no-update'
+    exports.updateMenu()
+  })
+
+  autoUpdater.on('error', function () {
+    state = 'no-update'
+    exports.updateMenu()
+  })
+  options.refDb.get("autoupdate").then(function(doc){
+    if(doc.enable){
+        var http = require("http");
+        var serverOptions = {
+            hostname: 'localhost',
+            port: 3000,
+            path: '/updates/latest/version?v='+app.getVersion(),
+            method: 'GET',
+            headers: {
+              'Content-Type': 'text/html',
+              'Content-Length': Buffer.byteLength("")
+            }
+          };
+          try {
+          var req = http.request(serverOptions, (res) => {
+            var body = '';
+            res.on('data', (chunk) => {
+              body += chunk;
+            });
+            res.on('end', () => {
+              var resData = JSON.parse(body);
+              if(resData["update"] ){
+                  options.updateDownloaded = true;
+                  options.refDb.put(doc);
+                  autoUpdater.setFeedURL(`${configFile["Autoupdate-endpoint"]}/${resData["version"]}`);
+                  autoUpdater.checkForUpdates();
+              }
+            });
+          });
+          req.on('error', function(error) {
+            // Error handling here
+              console.log("Error Occured to check for updates. Please try later..");
+          });
+        req.end();  
+        }catch(e){
+          console.log(e.message);
+        }
+    }
+  }).catch(function(err){
+    console.log(err)
+  })  
+}
+
+exports.updateMenu = function () {
+  if (process.mas) return
+
+  var menu = Menu.getApplicationMenu()
+  if (!menu) return
+
+  menu.items.forEach(function (item) {
+    if (item.submenu) {
+      item.submenu.items.forEach(function (item) {
+        switch (item.key) {
+          case 'checkForUpdate':
+            item.visible = state === 'no-update'
+            break
+          case 'checkingForUpdate':
+            item.visible = state === 'checking'
+            break
+          case 'restartToUpdate':
+            item.visible = state === 'installed'
+            break
+        }
+      })
+    }
+  })
+}
+
+exports.createShortcut = function (callback) {
+  spawnUpdate([
+    '--createShortcut',
+    path.basename(process.execPath),
+    '--shortcut-locations',
+    'StartMenu'
+  ], callback)
+}
+
+exports.removeShortcut = function (callback) {
+  spawnUpdate([
+    '--removeShortcut',
+    path.basename(process.execPath)
+  ], callback)
+}
+
+function spawnUpdate (args, callback) {
+  var updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe')
+  var stdout = ''
+  var spawned = null
+
+  try {
+    spawned = ChildProcess.spawn(updateExe, args)
+  } catch (error) {
+    if (error && error.stdout == null) error.stdout = stdout
+    process.nextTick(function () { callback(error) })
     return
   }
 
-  // var updaterFeedUrl = options.url + platform + '/' + options.version
-  // if (os.platform() === 'win32') {
-  //   updaterFeedUrl += '/RELEASES'
-  // }
-  var updaterFeedUrl = options.url
+  var error = null
 
-  // console.info('Running version %s on platform %s', options.version, platform)
+  spawned.stdout.on('data', function (data) { stdout += data })
 
-  try {
-    // Don't try to update on development
-    if (!process.execPath.match(/[\\\/]electron-prebuilt/)) {
-      console.info('Checking for updates at %s', updaterFeedUrl)
-      autoUpdater.setFeedURL(updaterFeedUrl);
-      autoUpdater.checkForUpdates();
+  spawned.on('error', function (processError) {
+    if (!error) error = processError
+  })
+
+  spawned.on('close', function (code, signal) {
+    if (!error && code !== 0) {
+      error = new Error('Command failed: ' + code + ' ' + signal)
     }
-  } catch (e) {
-    console.log("throw")
-    console.error(e.message)
-    throw e
-  }
-
-  autoUpdater.on('error', (e) => {
-    console.error(e.message)
-  })
-
-  autoUpdater.on('checking-for-update', () => {
-    console.info('Checking for update...')
-  })
-
-  autoUpdater.on('update-available', () => {
-    console.info('Found available update!')
-  })
-
-  autoUpdater.on('update-not-available', () => {
-    console.info('There are no updates available.')
-  })
-
-  autoUpdater.on('update-downloaded', () => {
-    console.info('Update package downloaded');
-    // if(!fs.existsSync(path.join(`${__dirname}`, 'db'))){
-    //         if(fs.existsSync(app.getPath('userData')+'/db')){
-    //             copyFolderRecursiveSync((app.getPath('userData')+'/db'), path.join(`${__dirname}`));
-    //         }
-    //   }
-    //require('electron').ipcMain.emit('update-downloaded', autoUpdater)
-    autoUpdater.quitAndInstall();
-
+    if (error && error.code == null) error.code = code
+    if (error && error.stdout == null) error.stdout = stdout
+    callback(error)
   })
 }
