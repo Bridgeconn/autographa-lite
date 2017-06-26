@@ -1,7 +1,7 @@
 {
 	
 	"label-translation": "Translation",	
-	"app-name-Autographa-Lite" : "Autographa Lite",
+	"app-name-Autographa-Lite" : "Autographa Lite 0.1.0",
 	"btn-switch-off": "OFF",
 	"btn-switch-on": "ON",
 	"btn-all" : "ALL",
@@ -96,7 +96,11 @@
 	"dynamic-msg-name-taken" : "That name is already taken please try a different name.",
 	"dynamic-msg-ref-name-validation" : "Reference name is required.",
 	"dynamic-msg-book" : "Book", 
-	"dynamic-msg-save-language": "Successfully saved changes.Restart the application for the changes to take effect.",
+	"dynamic-msg-save-language": "Successfully saved changes. Restart the application for the changes to take effect.",
+	"label-auto-update-info" : "If enabled this would allow the application to automatically connect to the internet (when available), download and thereafter install updates that are released by the Autographa team.",
+	"label-auto-update" : "Auto-update",
+	"label-radio-enable": "Enable",
+	"label-radio-disable": "Disable",
 	"book-genesis" : "Genesis",
 	"book-exodus" : "Exodus",
 	"book-leviticus" : "Leviticus",
