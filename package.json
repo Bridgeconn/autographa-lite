@@ -4,6 +4,7 @@
   "ProductName": "Autographa Lite",
   "description": "A Bible translation editor for everyone.",
   "main": "app.js",
+  "Autoupdate-endpoint": "http://localhost:3000/releases/win32",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
