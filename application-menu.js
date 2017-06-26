@@ -8,9 +8,6 @@ var dbBackedUp = false;
 const fs = require('fs');
 const path = require('path');
 
-// const autrequire('electron').autoUpdater
-
-
 let template = [{
   label: 'Edit',
   submenu: [{
@@ -118,92 +115,13 @@ function addUpdateMenuItems (items, position) {
     label: 'Checking for Update',
     enabled: false,
     key: 'checkingForUpdate'
-  }, {
-    label: 'Check for Update',
+    }, {
+    label: 'Restart and Install Update',
+    enabled: true,
     visible: false,
-    key: 'checkForUpdate',
-    click: function (item, focusedWindow) {
-      // Basic solution: display a message box to the user
-      var http = require("http");
-      var options = {
-          hostname: 'autographaus.bridgeconn.com',
-          path: '/updates/latest/version?v='+app.getVersion(),
-          method: 'GET',
-          headers: {
-            'Content-Type': 'text/html',
-            'Content-Length': Buffer.byteLength("")
-          }
-        };
-        try {
-        var req = http.request(options, (res) => {
-          var body = '';
-          res.on('data', (chunk) => {
-            body += chunk;
-          });
-          res.on('end', () => {
-            var resData = JSON.parse(body);
-            if(resData["update"]){
-                var updateNow = dialog.showMessageBox(focusedWindow, {
-                type: 'question',
-                buttons: ['Yes', 'No'],
-                defaultId: 0,
-                cancelId: 1,
-                title: 'Update available',
-                message: 'There is an update available, do you want to restart and install it now?'
-              });
-              if (updateNow === 0) {
-                  const refDb = require(`${__dirname}/app/util/data-provider`).referenceDb();
-                  const targetDb = require(`${__dirname}/app/util/data-provider`).targetDb();
-                  const lookupsDb = require(`${__dirname}/app/util/data-provider`).lookupsDb();
-                  refDb.close().then(function(response){
-                    lookupsDb.close();
-                    return targetDb.close();
-                  })
-                  .then(function(){
-                    console.log("response")
-                    if(fs.existsSync(path.join(`${__dirname}`, 'db'))){
-                      copyFolderRecursiveSync(path.join(`${__dirname}`, 'db'), path.join(app.getPath('userData')));
-                      var ds = (new Date()).toISOString().replace(/[^0-9]/g, "");
-                      copyFolderRecursiveSync(path.join(`${__dirname}`, 'db'), path.join(app.getPath('userData'), "db_backup_"+ds));
-                      try {
-                        require('./auto-updater')({
-                          url: 'http://autographaus.bridgeconn.com/releases/win32/0.2.0/Autographa',
-                          version: app.getVersion()
-                        });
-                        focusedWindow.hide();
-                        let child = new BrowserWindow({parent: focusedWindow, modal: true, show: false, skipTaskbar: true, frame: false, width: 500, height: 200})
-                            child.loadURL(`file:${__dirname}/app/views/loading.html`);
-                            child.once('ready-to-show', () => {
-                              child.show()
-                            });
-                      } catch (e) {
-                        console.log(e.message)
-                        dialog.showErrorBox('Update Error', e.message)
-                      }
-                    }
-                  }).catch((err) => {
-                    console.log('Error while DB setup. ' + err);
-                  });
-                // if(fs.existsSync(path.join(`${__dirname}`, 'db'))){
-                //   copyFolderRecursiveSync(path.join(`${__dirname}`, 'db'), app.getPath('userData'));
-                //   dbBackedUp = true;
-                // }
-                
-              }else{
-                console.log("cancel")
-              }
-            }
-          });
-        });
-        req.on('error', function(error) {
-          // Error handling here
-          dialog.showErrorBox('Update Error', "Error Occured to check for updates. Please try later..");
-        });
-        req.end();
-      } catch (e) {
-        console.log(e.message);
-      }
-      // require('electron').autoUpdater.checkForUpdates()
+    key: 'restartToUpdate',
+    click: function () {
+      require('electron').autoUpdater.quitAndInstall()
     }
   }]
 
