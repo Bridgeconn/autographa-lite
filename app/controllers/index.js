@@ -1018,6 +1018,15 @@ $(function() {
             $("#exportUsfm").prop('disabled', true);
         }
     });
+
+    refDb.get('autoupdate').then(function(doc) {
+        if(doc.enable){
+            $("#label-autoupdate-enable")[0].MaterialRadio.check();
+
+        }
+    }).catch(function(err){
+        console.log(err)
+    });
 });
 //check same langauge in the reference
 function isSameLanguage() {
@@ -2048,6 +2057,20 @@ $("#btnSaveLang").click(function(){
                     alert_message(".alert-danger", "dynamic-msg-went-wrong");
                 });
             } 
+        });
+})
+
+$("#btnSaveAutoupdate").click(function(){
+    refDb.get('autoupdate').then(function(doc) {
+           if($("#autoupdate-enable").is(":checked")){
+                doc.enable = true
+           }else{
+                doc.enable = false
+           }
+           refDb.put(doc)
+           alert_message(".alert-success", "dynamic-msg-save-language");
+        }).catch(function(err) {
+            alert_message(".alert-danger", "dynamic-msg-went-wrong");
         });
 })
 

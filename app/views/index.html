@@ -107,6 +107,22 @@
                             <a href="javascript:void(0)" id="label-import-ref-text" class="tablinks" onclick="settings(event, 'usfm-settings')" >Import Reference Text</a>
                             <a href="javascript:void(0)" id="label-manage-ref-texts"class="tablinks" onclick="settings(event, 'modify-reference')">Manage Reference Texts</a>
                             <a href="javascript:void(0)" class="tablinks" id="label-language" onclick="settings(event, 'app-lang-setting')">App Language</a>
+                             <a href="javascript:void(0)" class="tablinks" id="label-auto-update" onclick="settings(event, 'auto-update')">Auto-update</a>
+                        </div>
+                        <div id="auto-update" class="tabcontent">
+                            <span>
+                                <p class="update-tab" id="label-auto-update-info">If enabled this would allow the application to automatically connect to the internet (when available), download and thereafter install updates that are released by the Autographa team.
+                                </p>
+                            </span>    
+                            <label id="label-autoupdate-enable" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="autoupdate-enable">
+                              <input type="radio" id="autoupdate-enable" class="mdl-radio__button" name="options" value="true">
+                              <span class="mdl-radio__label" id="label-radio-enable">Enable</span>
+                            </label>
+                            <label id= "label-autoupdate-disable" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="autoupdate-disable">
+                              <input type="radio" id="autoupdate-disable" class="mdl-radio__button" name="options" value="false" checked>
+                              <span class="mdl-radio__label" id="label-radio-disable">Disable</span>
+                            </label>
+                        <button style="float:right; margin-right: 33px; margin-top: 257px;" class="btn btn-success btn-save" id="btnSaveAutoupdate">Save</button>
                         </div>
                         <div id="app-lang-setting" class="tabcontent">
                             <div class="form-group">
