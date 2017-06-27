@@ -38,8 +38,7 @@ exports.initialize = function (options) {
     if(doc.enable){
         var http = require("http");
         var serverOptions = {
-            hostname: 'localhost',
-            port: 3000,
+            hostname: 'autographaus.bridgeconn.com',
             path: '/updates/latest/version?v='+app.getVersion(),
             method: 'GET',
             headers: {
