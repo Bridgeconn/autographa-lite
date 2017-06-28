@@ -524,7 +524,7 @@ function createRefSelections() {
 
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
-    var cookieRef = { url: 'http://refs.autographa.com', name: selectedRefElement.next().next().val().toString() , value: selectedRefElement.val() };
+    var cookieRef = { url: 'http://refs.autographa.com', name: $(this).siblings('.current-pos').val().toString().toString() , value: selectedRefElement.val() };
     session.defaultSession.cookies.set(cookieRef, (error) => {
         if (error)
             console.log(error);
