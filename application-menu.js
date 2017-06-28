@@ -111,11 +111,7 @@ function addUpdateMenuItems (items, position) {
   let updateItems = [{
     label: `Version ${version}`,
     enabled: false
-  }, {
-    label: 'Checking for Update',
-    enabled: false,
-    key: 'checkingForUpdate'
-    }, {
+  },  {
     label: 'Restart and Install Update',
     enabled: true,
     visible: false,
