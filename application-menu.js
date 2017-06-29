@@ -97,7 +97,7 @@ let template = [{
   label: 'Help',
   role: 'help',
   submenu: [{
-    label: 'Learn More About',
+    label: 'Learn More',
     click: function () {
       electron.shell.openExternal('http://www.autographa.com')
     }
