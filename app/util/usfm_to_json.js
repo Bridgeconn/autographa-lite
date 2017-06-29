@@ -72,11 +72,11 @@ module.exports = {
 		throw new Error('not usfm file');
 
 	    /*console.log(book);
-	      require('fs').writeFileSync('/home/joel/output.json', JSON.stringify(book), {
+	      require('fs').writeFileSync('/Users/fox/output.json', JSON.stringify(book), {
 	      encoding: 'utf8',
 	      flag: 'a'
 	      });
-	      require('fs').writeFileSync('/home/joel/output.json', ',\n', {
+	      require('fs').writeFileSync('/Users/fox/output.json', ',\n', {
 	      encoding: 'utf8',
 	      flag: 'a'
 	      });*/
