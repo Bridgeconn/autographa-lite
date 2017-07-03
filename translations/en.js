@@ -1,7 +1,7 @@
 {
 	
 	"label-translation": "Translation",	
-	"app-name-Autographa-Lite" : "Autographa Lite 0.1.0",
+	"app-name-Autographa-Lite" : "Autographa Lite",
 	"btn-switch-off": "OFF",
 	"btn-switch-on": "ON",
 	"btn-all" : "ALL",
@@ -68,7 +68,7 @@
 	"label-chapter-tab" : "Chapters",
 	"label-overview-tab" : "Overview",
 	"label-license-tab" : "License",
-	"label-hosted-url": "Source code hosted at",
+	"label-hosted-url": "Source available at:",
 	"label-stage" : "Stage",
 	"error-msg-search-validation" : "Please enter value to search",
 	"error-msg-replace-validation" : "Please enter value to replace",
