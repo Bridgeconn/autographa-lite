@@ -34,10 +34,10 @@ bower_components
 .node_repl_history
 
 # User-defined
-database
-test-data
-reference
-app/assets/
-db/referenceDB
+db/lookupsDB
 db/targetDB
+db/referenceDB
+app/assets/
 .DS_Store
+*~
+\#*
