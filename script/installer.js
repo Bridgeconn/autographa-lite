@@ -20,9 +20,11 @@ function getInstallerConfig () {
     appDirectory: path.join(outPath, 'Autographa-win32-x64'),
     // iconUrl: 'https://raw.githubusercontent.com/electron/electron-api-demos/master/assets/app-icon/win/app.ico',
     // loadingGif: path.join(rootPath, 'assets', 'img', 'loading.gif'),
+    certificateFile: "1fbb63d87f4fd1b5a72ef156c402ba96.cer",
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
-    exe: "Autographa.exe"
+    exe: "Autographa.exe",
+    setupIcon: path.join(rootPath, 'app', 'assets', 'images', 'autographa.ico')
     // setupIcon: path.join(rootPath, 'app', 'assets', 'images', 'icon.ico'),
     // skipUpdateIcon: true
   })

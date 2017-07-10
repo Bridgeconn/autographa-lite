@@ -62,8 +62,8 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <h3 id="app-name">Autographa Lite</h3>
-                                        <p><span class="label-version">Version</span> 0.1</p>
-                                        <p><span id="label-hosted-url">Source code hosted at</span>: https://github.com/Bridgeconn/autographa-lite</p>
+                                        <p><span class="label-version">Version</span> 0.1.0</p>
+                                        <p><span id="label-hosted-url">Source code hosted at</span>: <a href="javascript:void(0);" id="source-code-url">https://github.com/Bridgeconn/autographa-lite</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -107,6 +107,22 @@
                             <a href="javascript:void(0)" id="label-import-ref-text" class="tablinks" onclick="settings(event, 'usfm-settings')" >Import Reference Text</a>
                             <a href="javascript:void(0)" id="label-manage-ref-texts"class="tablinks" onclick="settings(event, 'modify-reference')">Manage Reference Texts</a>
                             <a href="javascript:void(0)" class="tablinks" id="label-language" onclick="settings(event, 'app-lang-setting')">App Language</a>
+                             <a href="javascript:void(0)" class="tablinks" id="label-auto-update" onclick="settings(event, 'auto-update')">Auto-update</a>
+                        </div>
+                        <div id="auto-update" class="tabcontent">
+                            <span>
+                                <p class="update-tab" id="label-auto-update-info">If enabled this would allow the application to automatically connect to the internet (when available), download and thereafter install updates that are released by the Autographa team.
+                                </p>
+                            </span>    
+                            <label id="label-autoupdate-enable" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="autoupdate-enable">
+                              <input type="radio" id="autoupdate-enable" class="mdl-radio__button" name="options" value="true">
+                              <span class="mdl-radio__label" id="label-radio-enable">Enabled</span>
+                            </label>
+                            <label id= "label-autoupdate-disable" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="autoupdate-disable">
+                              <input type="radio" id="autoupdate-disable" class="mdl-radio__button" name="options" value="false" checked>
+                              <span class="mdl-radio__label" id="label-radio-disable">Disabled</span>
+                            </label>
+                        <button style="float:right; margin-right: 33px; margin-top: 257px;" class="btn btn-success btn-save" id="btnSaveAutoupdate">Save</button>
                         </div>
                         <div id="app-lang-setting" class="tabcontent">
                             <div class="form-group">
@@ -114,9 +130,11 @@
                                 <div class="mdl-selectfield mdl-js-selectfield">
                                     <label for="app-lang-setting" id="language-select" class="mdl-selectfield__label" style="color: #0b82ff; margin-top: 20px; font-size: 12px">Select the language to setup the application in:</label><br/>
                                     <select class="mdl-selectfield__select" id="localeList">
+                                        <option value="ar">Arabic</option>
                                         <option value="en">English</option>
                                         <option value="hi">Hindi</option>
-                                        <option value="ar">Arabic</option>
+                                        <option value="pt">Portuguese</option>
+                                        <option value="es">Spanish</option>
                                     </select>
                                 </div>
                                 </form>
@@ -133,7 +151,7 @@
                             </div>
                         <div class="form-group">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="ref-lang-code" placeholder="eng">
+                                    <input class="mdl-textfield__input search" type="text" id="ref-lang-code" placeholder="eng">
                                     <label class="mdl-textfield__label label-language-code" for="ref-lang-code">Language Code</label>
                                 </div>
                                 <div id="reference-lang-result" class="lang-code"></div>
@@ -156,7 +174,7 @@
                         <div id="language-settings" class="tabcontent">
                             <div class="form-group">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="target-lang" placeholder="eng" dir="auto">
+                                    <input class="mdl-textfield__input search" type="text" id="target-lang" placeholder="eng" dir="auto">
                                     <label class="mdl-textfield__label label-language-code" for="target-lang">Language Code</label>
                                     <div id="target-lang-result" class="lang-code"></div>
                                     <input type="hidden" id="target-lang-code" />
@@ -377,7 +395,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div type="ref" class="col-12 col-ref"></div>
+                        <div type="ref" class="col-12 col-ref left-pane"></div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-fixed col-editor">

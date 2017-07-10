@@ -1,18 +1,23 @@
 const session = require('electron').remote.session;
-const { dialog } = require('electron').remote;
+const { dialog} = require('electron').remote;
+const electron = require('electron').remote
 var bibUtil = require("../util/json_to_usfm.js"),
     DiffMatchPatch = require('diff-match-patch'),
     dmp_diff = new DiffMatchPatch();
     i18n = new(require('../../translations/i18n')),
     app = require('electron').remote.app;
 
-var db = require(`${__dirname}/../util/data-provider`).targetDb(),
-    refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
-    lookupsDb = require(`${__dirname}/../util/data-provider`).lookupsDb(),
+var db = electron.getCurrentWindow().targetDb,
+    refDb = electron.getCurrentWindow().refDb,//require(`${__dirname}/../util/data-provider`).referenceDb(),
+    lookupsDb = electron.getCurrentWindow().lookupsDb,
     book,
     chapter,
     currentBook,
-    intervalId;
+    intervalId,
+    lastVerse,
+    verseLength = 0;
+    versesLength = 0,
+    chunkGroup = [];
 
 
 var constants = require('../util/constants.js'),
@@ -43,6 +48,7 @@ var stringReplace = require('../util/string_replace.js'),
     constants = require(`${__dirname}/../util/constants.js`),
     removeReferenceLink = '',
     ref_select = '';
+    langcodeLimit = 100;
 
 
 
@@ -100,11 +106,14 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerse.appendChild(document.createTextNode(verses[i - 1].verse));
             spanVerseNum.setAttribute("class", "verse-num");
             spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
+            divContainer.id = "verseCon" + i;
             divContainer.appendChild(spanVerseNum);
             divContainer.appendChild(spanVerse);
             document.getElementById('input-verses').appendChild(divContainer);
             $(".diff-count-target").html("");
         }
+        lastVerse = i;
+        versesLength  = verses.length;
         highlightRef();
     });
     
@@ -515,7 +524,7 @@ function createRefSelections() {
 
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
-    var cookieRef = { url: 'http://refs.autographa.com', name: selectedRefElement.next().next().val().toString() , value: selectedRefElement.val() };
+    var cookieRef = { url: 'http://refs.autographa.com', name: $(this).siblings('.current-pos').val().toString().toString() , value: selectedRefElement.val() };
     session.defaultSession.cookies.set(cookieRef, (error) => {
         if (error)
             console.log(error);
@@ -741,6 +750,7 @@ function setChapter(chapter) {
         closeModal($("#bookChapTabModal"));
         console.log('Error: While retrieving document. ' + err);
     });
+    chunkGroup = [];
 }
 function setChapterButton(bookId, chapterId) {
     i18n.getLocale().then((locale) => {
@@ -1007,6 +1017,15 @@ $(function() {
         } else {
             $("#exportUsfm").prop('disabled', true);
         }
+    });
+
+    refDb.get('autoupdate').then(function(doc) {
+        if(doc.enable){
+            $("#label-autoupdate-enable")[0].MaterialRadio.check();
+
+        }
+    }).catch(function(err){
+        console.log(err)
     });
 });
 //check same langauge in the reference
@@ -1753,17 +1772,20 @@ $("#target-lang").keyup(function() {
     });
 });
 
+var langOptions = {limit : 50, include_docs: true};
 
 function loadLanguageCode(inputId, fieldValue, listId){
     i18n.getLocale().then((locale) => {
         if(locale != 'en'){
             let filteredResults = {};
-            lookupsDb.allDocs({
-                include_docs: true
-            }).then(function(response) {
+            lookupsDb.allDocs(
+                langOptions
+            ).then(function(response) {
                 var data = ""
                 if (response != undefined && response.rows.length > 0) {
+                    // console.log(response.rows[0].doc.lang_code)                  
                     $.each(response.rows, function(index, value) {
+                      
                             doc = value.doc
                             if (doc) {
                                 //matches.push({ name: doc.name+' ('+doc.lang_code+') ' , id: doc._id });
@@ -1774,6 +1796,8 @@ function loadLanguageCode(inputId, fieldValue, listId){
                                     filteredResults[doc.lang_code] = (existingValue + " , " + doc.name);
                                 }
                             }
+                            langOptions.startkey = response.rows[response.rows.length - 1].doc._id;
+                            langOptions.skip = 1;
 
                     })
                     var parent_ul = "<ul>";
@@ -1783,7 +1807,7 @@ function loadLanguageCode(inputId, fieldValue, listId){
                             parent_ul += "<li><span class='code-name'>" + names + ' (' + langCode + ') ' + "</span><input type='hidden' value=" + "'" + langCode + "'" + "class='code-id'/> </li>"
                         });
                         parent_ul += "</ul>"
-                        $(listId).html(parent_ul).show();
+                        $(listId).append(parent_ul).show();
                         $(listId + " li").on("click", function(e) {
                             var $clicked = $(this);
                             codeName = $clicked.children().select(".code-name").text();
@@ -1803,16 +1827,26 @@ function loadLanguageCode(inputId, fieldValue, listId){
                 var $clicked = $(e.target);
                 if (!$clicked.hasClass("search")) {
                     $(".lang-code").fadeOut();
+                    codeClicked = false;
                 }
-            });
-            $('#inputSearch').click(function() {
-                $(".lang-code").fadeIn();
             });
         }
     });
 }
+$("#target-lang-result").scroll( function(){
+    if($(this).scrollTop() + $(this).height() == $(this)[0].scrollHeight ){
+        loadLanguageCode("#ref-lang-code", "#langCode", "#target-lang-result");
+    }
+});
+$('#reference-lang-result').scroll( function(){
+    if($(this).scrollTop() + $(this).height() == $(this)[0].scrollHeight ){
+        loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");
+    }
+});
+
 
 $("#label-import-ref-text").click(function(){
+    langOptions = {limit: 5, include_docs: true};
     loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");        
 });
 
@@ -1821,11 +1855,11 @@ $("#defaultOpen").click(function(){
 });
 $("#target-lang").focus(function(){
     loadLanguageCode("#target-lang", "#target-lang-code", "#target-lang-result");        
-})
+});
 
 $("#ref-lang-code").focus(function(){
     loadLanguageCode("#ref-lang-code", "#langCode", "#reference-lang-result");        
-})
+});
 
 $('#ref-lang-code').on('blur', function() {
     if (!codeClicked) {
@@ -1994,13 +2028,9 @@ function formatDate(date) {
   var hours = date.getHours();
   var seconds = date.getSeconds();
   var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
 
-  return hours+ ':' + minutes + ':' + seconds +' '+ ampm
+  return hours+ ':' + minutes  
 }
 
 $("#btnSaveLang").click(function(){
@@ -2026,6 +2056,20 @@ $("#btnSaveLang").click(function(){
         });
 })
 
+$("#btnSaveAutoupdate").click(function(){
+    refDb.get('autoupdate').then(function(doc) {
+           if($("#autoupdate-enable").is(":checked")){
+                doc.enable = true
+           }else{
+                doc.enable = false
+           }
+           refDb.put(doc)
+           alert_message(".alert-success", "dynamic-msg-save-language");
+        }).catch(function(err) {
+            alert_message(".alert-danger", "dynamic-msg-went-wrong");
+        });
+})
+
 function setLocaleText(id, phrase, option){
     switch(option){
         case 'text':
@@ -2046,6 +2090,11 @@ $("#label-language").click(function(){
     refDb.get('app_locale').then(function(doc) {
             $("#localeList").val(doc.appLang);
         }).catch(function(err) {
-            console.log(err);
+            $("#localeList").val();
         });
 });
+
+$("#source-code-url").click(function(){
+    electron.shell.openExternal('https://github.com/Bridgeconn/autographa-lite');
+})
+

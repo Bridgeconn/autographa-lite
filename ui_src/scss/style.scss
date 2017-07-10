@@ -128,7 +128,7 @@ div.tabs a:focus, .active {background-color: #fff !important; border-left: 3px s
 *{box-sizing: border-box}
 body{font-family: "Lato", sans-serif;}
 /* Style the tab */
-div.tabs {float: left; background-color: rgba(241, 241, 241, 0.52);; width: 30%; height: 345px; padding-top: 2px; margin-top: 21px;}
+div.tabs {float: left; background-color: rgba(241, 241, 241, 0.52);; width: 30%; height:410px; padding-top: 2px; margin-top: 21px;}
 /* Style the links inside the tab */
 div.tabs a {display: block; color: black; padding: 22px 16px; text-decoration: none; transition: 0.3s; font-size: 17px;}
 /* Change background color of links on hover */
@@ -160,7 +160,6 @@ div.tabs a:focus, .active {background-color: #ccc; color: rgba(11,130,255,1);}
 .rtl .verse-num{font-size: 12px;}
 @media screen and (max-width: 760px) {.rmvflex{display: block !important;}}
 .mdl-textfield__label {color: #0b82ff !important}
-div .mdl-textfield__label:after {
-  background: #05aaf4
-  }
+div .mdl-textfield__label:after {background: #05aaf4}
 body {line-height: inherit !important;}
+.update-tab{font-style: italic; color:rgba(0, 0, 0, 0.66);}
