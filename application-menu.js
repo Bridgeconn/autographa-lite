@@ -40,23 +40,6 @@ let template = [{
 }, {
   label: 'View',
   submenu: [{
-    label: 'Reload',
-    accelerator: 'CmdOrCtrl+R',
-    click: function (item, focusedWindow) {
-      if (focusedWindow) {
-        // on reload, start fresh and close any old
-        // open secondary windows
-        if (focusedWindow.id === 1) {
-          BrowserWindow.getAllWindows().forEach(function (win) {
-            if (win.id > 1) {
-              win.close()
-            }
-          })
-        }
-        focusedWindow.reload()
-      }
-    }
-  }, {
     label: 'Toggle Full Screen',
     accelerator: (function () {
       if (process.platform === 'darwin') {
@@ -78,20 +61,8 @@ let template = [{
     label: 'Minimize',
     accelerator: 'CmdOrCtrl+M',
     role: 'minimize'
-  }, {
-    label: 'Close',
-    accelerator: 'CmdOrCtrl+W',
-    role: 'close'
-  }, {
+  },  {
     type: 'separator'
-  }, {
-    label: 'Reopen Window',
-    accelerator: 'CmdOrCtrl+Shift+T',
-    enabled: false,
-    key: 'reopenMenuItem',
-    click: function () {
-      app.emit('activate')
-    }
   }]
 }, {
   label: 'Help',
