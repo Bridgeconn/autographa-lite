@@ -3,7 +3,7 @@ module.exports = {
 	const PouchDB = require('pouchdb-core')
 	      .plugin(require('pouchdb-adapter-leveldb'));
 //	const PouchDB = require('pouchdb');
-	var db = require(`${__dirname}/data-provider`).targetDb()
+	var db = electron.getCurrentWindow().targetDb;
 	//var db = new PouchDB(`${__dirname}/../../db/targetDB`);
 	var fs = require("fs"),
 	    path = require("path"),

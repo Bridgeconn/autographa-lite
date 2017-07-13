@@ -11,8 +11,8 @@ module.exports = {
 	    });
 	    patterns = require('fs').readFileSync(`${__dirname}/patterns.prop`, 'utf8');
 	    var book = {}, verse = [],
-		db = require(`${__dirname}/../util/data-provider`).targetDb(),
-		refDb = require(`${__dirname}/../util/data-provider`).referenceDb(),
+		db = electron.getCurrentWindow().targetDb,
+		refDb = electron.getCurrentWindow().refDb,
 		c = 0, v = 0, usfmBibleBook = false, validLineCount = 0,
 		id_prefix = options.lang + '_' + options.version + '_';
 	    
@@ -20,7 +20,6 @@ module.exports = {
 	} catch(err) {
 	    throw new Error('usfm parser error');
 	}
-
 	lineReader.on('line', function (line) {
 	    // Logic to tell if the input file is a USFM book of the Bible.
 	    if(!usfmBibleBook)
@@ -68,8 +67,9 @@ module.exports = {
 	});
 
 	lineReader.on('close', function(line) {
+
 	    if(!usfmBibleBook)
-		throw new Error('not usfm file');
+			throw new Error('not usfm file');
 
 	    /*console.log(book);
 	      require('fs').writeFileSync('/Users/fox/output.json', JSON.stringify(book), {
@@ -113,10 +113,11 @@ module.exports = {
 		    for(i=0; i<doc.chapters.length; i++) {
 			for(j=0; j<book.chapters.length; j++) {
 			    if(book.chapters[j].chapter === doc.chapters[i].chapter) {
+
 				var versesLen = Math.min(book.chapters[j].verses.length, doc.chapters[i].verses.length);
 				for(k=0; k<versesLen; k++) {
 				    var verseNum = book.chapters[j].verses[k].verse_number;
-				    doc.chapters[i].verses[verseNum-1] = book.chapters[j].verses[k];
+				    doc.chapters[i].verses[verseNum-1].verse = book.chapters[j].verses[k].verse;
 				    book.chapters[j].verses[k] = undefined;
 				}
 				//check for extra verses in the imported usfm here.

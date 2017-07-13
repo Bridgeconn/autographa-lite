@@ -1496,19 +1496,28 @@ document.getElementById('ref-import-btn').addEventListener('click', function(e) 
         return;
     var ref_id_value = document.getElementById('langCode').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
         ref_entry = {},
+        ref_arr = [],
         files = fs.readdirSync(document.getElementById('ref-path').value);
     ref_entry.ref_id = ref_id_value;
     ref_entry.ref_name = document.getElementById('ref-name').value;
     ref_entry.isDefault = false;
+    ref_arr.push(ref_entry);
         refDb.get('refs').then(function(doc) {
+            ref_entry = {}
             var refExistsFlag = false;
             var updatedDoc = doc.ref_ids.forEach(function(ref_doc) {
                 if (ref_doc.ref_id === ref_id_value) {
                     refExistsFlag = true;
                 }
+                ref_entry.ref_id = ref_doc.ref_id;
+                ref_entry.ref_name = ref_doc.ref_name;
+                ref_entry.isDefault = ref_doc.isDefault;
+                ref_arr.push(ref_entry)
+                ref_entry= {};
             });
             if (!refExistsFlag) {
-                doc.ref_ids.push(ref_entry);
+                // doc.ref_ids.push(ref_entry);
+                doc.ref_ids = ref_arr;
                 refDb.put(doc).then(function(res) {
                     saveJsonToDB(files);
                     buildReferenceList();
