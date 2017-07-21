@@ -1027,6 +1027,17 @@ $(function() {
     }).catch(function(err){
         console.log(err)
     });
+
+    refDb.get('appFirstRun').then(function(doc){
+        if(doc.isFirstRun){
+            doc.isFirstRun = false;
+            refDb.put(doc);
+            $('#bannerformmodal').modal('toggle');
+            document.getElementById("label-auto-update").click();
+        }
+    }).catch(function(error){
+        console.log(error)
+    })
 });
 //check same langauge in the reference
 function isSameLanguage() {

@@ -10,15 +10,77 @@ const {BrowserWindow} = electron;
 require('./application-menu.js');
 const autoUpdater = require('./auto-updater');
 var http = require("http");
-var dbBackedUp = false;
-const fs = require('fs');
+const fs = require('original-fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const dialog = require('electron').dialog;
+const dir = path.join(app.getPath('temp'), '..', 'Autographa');
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 let willQuitApp = false;
+
+let getLatestRelease = () => {
+  const versionsDesc = fs.readdirSync(dir).filter((file) => {
+    if(file.startsWith("app-")){
+      const filePath = path.join(dir, file);
+      return fs.statSync(filePath).isDirectory();
+    }
+  }).reverse();
+  return versionsDesc[0];
+}
+
+
+function deleteFile(dir, file) {
+    return new Promise(function (resolve, reject) {
+        var filePath = path.join(dir, file);
+        fs.lstat(filePath, function (err, stats) {
+            if (err) {
+                return reject(err);
+            }
+            if (stats.isDirectory()) {
+                resolve(deleteDirectory(filePath));
+            } else {
+                fs.unlink(filePath, function (err) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve();
+                });
+            }
+        });
+    });
+};
+
+function deleteDirectory(dir) {
+    return new Promise(function (resolve, reject) {
+        fs.access(dir, function (err) {
+            if (err) {
+                return reject(err);
+            }
+            fs.readdir(dir, function (err, files) {
+                if (err) {
+                    return reject(err);
+                }
+                Promise.all(files.map(function (file) {
+                    return deleteFile(dir, file);
+                })).then(function () {
+                    fs.rmdir(dir, function (err) {
+                        if (err) {
+                          console.log(err)
+                            return reject(err);
+                        }
+                        resolve();
+                    });
+                }).catch(reject);
+            });
+        });
+    });
+};
+
+
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
@@ -64,10 +126,12 @@ function createWindow() {
     });
 }
 
+
 function preProcess() {
     return new Promise(
     function (resolve, reject) {
-    // If DB does not exist in the application dir
+    
+        // If DB does not exist in the application dir
         if(!fs.existsSync(path.join(`${__dirname}`, 'db'))){ 
             if(fs.existsSync(app.getPath('userData')+'/db')){
                 copyFolderRecursiveSync((app.getPath('userData')+'/db'), path.join(`${__dirname}`));
@@ -109,6 +173,18 @@ function preProcess() {
         });
      })
      .then((response) => {
+            if (fs.existsSync(dir)){
+              fs.readdirSync(dir).filter((file) => {
+                  if(file.startsWith("app-") && file != getLatestRelease()){
+                    const filePath = path.join(dir, file);
+                    deleteDirectory(filePath).then(function(res){
+                      console.log(res)
+                    }).catch(function(err){
+                      console.log(err);
+                    })
+                  }
+              });
+            }
             createWindow(); 
             win.refDb = require(`${__dirname}/app/util/data-provider`).referenceDb();
             win.targetDb =  require(`${__dirname}/app/util/data-provider`).targetDb();
@@ -146,6 +222,8 @@ app.on('activate', () => {
     createWindow();
     }
 });
+
+
 
 function copyFileSync( source, target ) {
 

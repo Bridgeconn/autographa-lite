@@ -4,7 +4,6 @@ const ChildProcess = require('child_process')
 const Menu = require('electron').Menu
 const path = require('path')
 const configFile = require('./package.json')
-
 var state = 'checking'
 
 exports.initialize = function (options) {
@@ -38,7 +37,7 @@ exports.initialize = function (options) {
     if(doc.enable){
         var http = require("http");
         var serverOptions = {
-            hostname: 'autographaus.bridgeconn.com',
+            hostname: configFile["hostname"],
             path: '/updates/latest/version?v='+app.getVersion(),
             method: 'GET',
             headers: {
@@ -56,8 +55,7 @@ exports.initialize = function (options) {
               var resData = JSON.parse(body);
               if(resData["update"] ){
                   options.updateDownloaded = true;
-                  options.refDb.put(doc);
-                  autoUpdater.setFeedURL(`${configFile["Autoupdate-endpoint"]}/${resData["version"]}`);
+                  autoUpdater.setFeedURL(`${configFile["autoupdate-endpoint"]}/${resData["version"]}`);
                   autoUpdater.checkForUpdates();
               }
             });
