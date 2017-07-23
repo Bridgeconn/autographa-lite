@@ -1505,6 +1505,7 @@ document.getElementById('save-settings').addEventListener('click', function(e) {
 document.getElementById('ref-import-btn').addEventListener('click', function(e) {
     if (reference_setting() == false)
         return;
+    $("#loading-img").show();
     var ref_id_value = document.getElementById('langCode').value.toLowerCase() + '_' + document.getElementById('ref-version').value.toLowerCase(),
         ref_entry = {},
         ref_arr = [],
@@ -1569,7 +1570,7 @@ document.getElementById('ref-import-btn').addEventListener('click', function(e) 
 document.getElementById('target-import-btn').addEventListener('click', function(e) {
     if (import_sync_setting() == false)
         return;
-
+    $("#loading-img").show();
     var inputPath = document.getElementById('target-import-path').value;
     var files = fs.readdirSync(inputPath);
     files.forEach(function(file) {
@@ -1585,7 +1586,7 @@ document.getElementById('target-import-btn').addEventListener('click', function(
             bibUtil_to_json.toJson(options);
         }
     });
-    $("#importModal").modal('toggle');
+    
 });
 
 $('#importModal').on('hidden.bs.modal', function () {

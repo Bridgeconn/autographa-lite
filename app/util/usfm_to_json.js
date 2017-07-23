@@ -87,15 +87,18 @@ module.exports = {
 		refDb.get(book._id).then(function (doc) {
 		    book._rev = doc._rev;
 		    refDb.put(book).then(function (doc) {
-			console.log("Successfully loaded and updated refs.");
+		    	$("#loading-img").hide();
+				console.log("Successfully loaded and updated refs.");
 		    }).catch(function (err) {
-			console.log("Error: While updating refs. " + err);
+		    	$("#loading-img").hide();
+				console.log("Error: While updating refs. " + err);
 		    });
 		}).catch(function (err) {
 		    refDb.put(book).then(function (doc) {
-			console.log("Successfully loaded new refs.");
+		    	$("#loading-img").hide();
+				console.log("Successfully loaded new refs.");
 		    }).catch(function (err) {
-			console.log("Error: While loading new refs. " + err);
+				console.log("Error: While loading new refs. " + err);
 		    });
 		});
 	    } else if(options.targetDb === 'target') {
@@ -127,14 +130,20 @@ module.exports = {
 		    }
 		    db.put(doc).then(function (response) {
 			//console.log(response);
+				// $("#loading-img").hide();
+				$("#importModal").modal('toggle');
 		    }).catch(function (err) {
-			console.log('Error: While trying to save to DB. ' + err);
+		    	// $("#loading-img").hide();
+		    	$("#importModal").modal('toggle');
+				console.log('Error: While trying to save to DB. ' + err);
 		    });
 		});
 	    }
 	});
 
 	lineReader.on('error', function(lineReaderErr) {
+	  $("#loading-img").hide();
+	  $("#importModal").modal('toggle');
 	    if(lineReaderErr.message === 'not usfm file')
 		console.log(options.usfmFile + ' is not a valid USFM file.');
 	    else

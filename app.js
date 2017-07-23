@@ -98,9 +98,9 @@ function createWindow() {
     win.loadURL(`file:${__dirname}/app/views/index.html`);
     //loading window gracefully
     win.once('ready-to-show', () => {
-	// Open the DevTools.
-	// win.webContents.openDevTools();	
-	win.maximize();
+  // Open the DevTools.
+  // win.webContents.openDevTools();  
+  win.maximize();
         win.show();
     });
 

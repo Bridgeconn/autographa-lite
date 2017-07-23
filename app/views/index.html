@@ -28,14 +28,19 @@
     <!-- material design files -->
     <style type="text/css">
     .navbar-nav.navbar-center {
-    position: absolute;
-    left: 50%;
-    transform: translatex(-50%);
-  }
+        position: absolute;
+        left: 50%;
+        transform: translatex(-50%);
+    }
     </style>
     
 </head>
     <body>
+         <div id="loading-img">
+           <div><img class="loader-css" src="../assets/images/loader.gif" />
+            <p class="loading">Please wait</p></div>
+
+        </div>
         <div class="modal fade aboutmodal" tabindex="-1" role="dialog" aria-labelledby="aboutmodal" aria-hidden="true" id="aboutmodal">
             <div class="modal-dialog modal-sm" style="margin-right: 55%;">
                 <div class="modal-content">
@@ -90,7 +95,9 @@
             <!--modal dialog-->
         </div>
 
+       
         <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="bannerformmodal">
+
             <div class="modal-dialog modal-sm" style="margin-right: 55%;">
                 <div class="modal-content">
                     <button style="padding: 13px 22px;" type="button" class="close" data-dismiss="modal" data-toggle = "tooltip" data-placement="bottom" title = "Close">&times;</button>
@@ -101,6 +108,7 @@
                     </div>
                     <div class="modal-body" style="height:475px">
                         <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+                        
                         <div class="tabs" style="">
                              <a href="javascript:void(0)" class="tablinks" onclick="settings(event, 'language-settings')" id="defaultOpen">Translation Details</a>
                             <a href="javascript:void(0)" class="tablinks" onclick="settings(event, 'target-usfm')" id="label-import-translation">Import Translation</a>
