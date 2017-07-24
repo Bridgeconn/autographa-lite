@@ -45,18 +45,21 @@ exports.initialize = function (options) {
               'Content-Length': Buffer.byteLength("")
             }
           };
-          try {
           var req = http.request(serverOptions, (res) => {
             var body = '';
             res.on('data', (chunk) => {
               body += chunk;
             });
             res.on('end', () => {
-              var resData = JSON.parse(body);
-              if(resData["update"] ){
-                  options.updateDownloaded = true;
-                  autoUpdater.setFeedURL(`${configFile["autoupdate-endpoint"]}/${resData["version"]}`);
-                  autoUpdater.checkForUpdates();
+              try{
+                var resData = JSON.parse(body);
+                if(resData["update"] ){
+                    options.updateDownloaded = true;
+                    autoUpdater.setFeedURL(`${configFile["autoupdate-endpoint"]}/${resData["version"]}`);
+                    autoUpdater.checkForUpdates();
+                }
+              }catch(e){
+                console.log(e);
               }
             });
           });
@@ -65,9 +68,7 @@ exports.initialize = function (options) {
               console.log("Error Occured to check for updates. Please try later..");
           });
         req.end();  
-        }catch(e){
-          console.log(e.message);
-        }
+       
     }
   }).catch(function(err){
     console.log(err)
