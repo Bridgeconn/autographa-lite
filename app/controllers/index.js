@@ -427,7 +427,8 @@ function getReferenceText(refId, callback) {
                     }
                 }
                 ref_string = doc.chapters[i].verses.map(function(verse, verseNum) {
-                    return '<div data-verse="r' + (verseNum + 1) + '"><span class="verse-num">' + (verseNum + 1) + '</span><span>' + verse.verse + '</span></div>';
+                    let transLatedVerse = refId === "arb_vdt" ? (verseNum+1).toLocaleString('ar') : (verseNum+1);
+                    return '<div data-verse="r' + (verseNum + 1) + '"><span class="verse-num">' + transLatedVerse + '</span><span>' + verse.verse + '</span></div>';
                 }).join('');
                 callback(null, ref_string);
             }).catch(function(err) {
@@ -450,8 +451,11 @@ function createRefSelections() {
                             console.log('Info: No references found in database. ' + err);
                             return;
                         }
-                        $('div[type="ref"]').html(refContent);
-
+                        if(ref_doc.ref_id == "arb_vdt"){
+                             $('div[type="ref"]').html(refContent).attr("dir", "rtl").addClass("rtl");
+                        }else{
+                            $('div[type="ref"]').html(refContent);
+                        }
                     });
                 }
                 /*==================== old drop down commented =============================*/
@@ -489,11 +493,20 @@ function createRefSelections() {
                                 if (err) {
                                     console.log("This chapter is not available in the selected reference version.");
                                 }
-                                $('div[type="ref"]').html(refContent);
+                                if(val === "arb_vdt"){
+                                    $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
+                                }else{
+                                    $('div[type="ref"]').html(refContent);
+
+                                }
                             })
                             return;
+                        }                        
+                        if(val === "arb_vdt"){
+                            $("#section-" + i).find('div[type="ref"]').html(refContent).attr('dir', 'rtl').addClass('rtl');
+                        }else{
+                            $("#section-" + i).find('div[type="ref"]').html(refContent);
                         }
-                        $("#section-" + i).find('div[type="ref"]').html(refContent);
                     });
                 });
             }else {
@@ -506,9 +519,16 @@ function createRefSelections() {
                                 if (err) {
                                     console.log("This chapter is not available in the selected reference version.");
                                 }
+                                alert("hi")
                                 $('div[type="ref"]').html(refContent);
                             })
                             return;
+                        }
+                        if($(selected).val() == "arb_vdt") {
+                            $('div[type="ref"]').attr("dir", "rtl");
+                            $('div[type="ref"]').addClass('rtl');
+                        }else{
+                            $('div[type="ref"]').removeAttr("dir", "rtl");
                         }
                         if ($("#section-" + i).length > 0) {
                             $("#section-" + i).find('div[type="ref"]').html(refContent);
@@ -532,14 +552,16 @@ $('.ref-drop-down').change(function(event) {
     getReferenceText($(this).val(), function(err, refContent) {
         if (err) {
             selectedRefElement.val(selectedRefElement.next().val());
-            console.log(err);
             alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
             return;
         } else {
             selectedRefElement.next().val(selectedRefElement.val());
-
-        }
-        selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent);
+        }        
+        if(selectedRefElement.val() === 'arb_vdt'){
+            selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent).attr("dir", "rtl").addClass("rtl");
+        }else{
+            selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent).removeAttr("dir")
+        }        
     });
 });
 
@@ -987,6 +1009,7 @@ $(function() {
     });
 
     session.defaultSession.cookies.get({ url: 'http://refs.autographa.com' }, (error, cookie) => {
+        console.log(cookie)
         if(cookie.length < 2 ){
             var cookieRefCol1 = { url: 'http://refs.autographa.com', name: '0', value: 'eng_ulb'};
             session.defaultSession.cookies.set(cookieRefCol1, (error) => {
@@ -1038,6 +1061,7 @@ $(function() {
     }).catch(function(error){
         console.log(error)
     })
+
 });
 //check same langauge in the reference
 function isSameLanguage() {
@@ -2117,5 +2141,4 @@ $("#label-language").click(function(){
 
 $("#source-code-url").click(function(){
     electron.shell.openExternal('https://github.com/Bridgeconn/autographa-lite');
-})
-
+});
