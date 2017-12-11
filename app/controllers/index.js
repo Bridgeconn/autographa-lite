@@ -519,7 +519,6 @@ function createRefSelections() {
                                 if (err) {
                                     console.log("This chapter is not available in the selected reference version.");
                                 }
-                                alert("hi")
                                 $('div[type="ref"]').html(refContent);
                             })
                             return;
@@ -979,6 +978,13 @@ $(function() {
             $("#input-verses").attr("dir", "rtl");
             $("#input-verses").addClass('rtl');
         }
+    });
+    db.get('targetBible').then((doc) => {
+        if(doc.langScript == "RTL"){
+            $("#input-verses").attr("dir", "rtl").addClass("rtl");
+        }
+    }, (err) => {
+        alert(err)
     })
     setReferenceSetting();
     buildReferenceList();
@@ -1502,25 +1508,25 @@ document.getElementById('target-import-path').addEventListener('click', function
 document.getElementById('save-settings').addEventListener('click', function(e) {
     if (target_setting() == false)
         return;
-    db.get('targetBible').then(function(doc) {
-        db.put({
-            _id: 'targetBible',
-            _rev: doc._rev,
-            targetLang: document.getElementById('target-lang-code').value,
-            targetVersion: document.getElementById('target-version').value,
-            targetPath: document.getElementById('export-path').value
-        }).then(function(e) {
-            alert_message(".alert-success", "dynamic-msg-saved-trans");
+    const settingData = { 
+        _id: 'targetBible',
+        targetLang: document.getElementById('target-lang-code').value,
+        targetVersion: document.getElementById('target-version').value,
+        targetPath: document.getElementById('export-path').value,
+        langScript: $("#lang-script-switch").is(':checked') ? "RTL" : "LTR"
+    }
+    db.get('targetBible').then((doc) => {
+        settingData._rev = doc._rev;
+        db.put(settingData).then((res) => {
+            window.location.reload();
+            // alert_message(".alert-success", "dynamic-msg-saved-trans");
         });
-    }).catch(function(err) {
-        db.put({
-            _id: 'targetBible',
-            targetLang: document.getElementById('target-lang-code').value,
-            targetVersion: document.getElementById('target-version').value,
-            targetPath: document.getElementById('export-path').value
-        }).then(function(e) {
-            alert_message(".alert-success", "dynamic-msg-saved-trans");
-        }).catch(function(err) {
+    }, (err) => {
+        db.put(settingData).then((res) => {
+            // alert_message(".alert-success", "dynamic-msg-saved-trans");
+            window.location.reload();
+        }, (err) => {
+            console.log(err)
             alert_message(".alert-danger", "dynamic-msg-went-wrong");
         });
     });
@@ -1907,14 +1913,18 @@ $("#ref-lang-code").focus(function(){
 });
 
 $('#ref-lang-code').on('blur', function() {
-    if (!codeClicked) {
-        $(this).val('') // clear language code textbox
-    }
+    // if (!codeClicked) {
+    //     $(this).val('') // clear language code textbox
+    // }
+    $("#target-lang-code").val($(this).val());
+    $(".lang-code").fadeOut();
 });
 $('#target-lang').on('blur', function() {
-    if (!codeClicked) {
-        $(this).val('') // clear language code textbox
-    }
+    // if (!codeClicked) {
+    //     $(this).val('') // clear language code textbox
+    // }
+    $("#target-lang-code").val($(this).val());
+    $(".lang-code").fadeOut();
 });
 
 function buildReferenceList() {
