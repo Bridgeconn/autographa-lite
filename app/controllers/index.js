@@ -981,7 +981,7 @@ $(function() {
     });
     db.get('targetBible').then((doc) => {
         if(doc.langScript == "RTL"){
-            $("#input-verses").attr("dir", "rtl").addClass("arabic");
+            $("#input-verses").attr("dir", "rtl").addClass("arabic").removeClass("english");
             $("#lang-script-label")[0].MaterialSwitch.on();
         }
     }, (err) => {
