@@ -150,7 +150,7 @@ div.tabs a:focus, .active {background-color: #ccc; color: rgba(11,130,255,1);}
 .col-xs-6 h3 {margin-top:79px; margin-bottom:0; font-size:30px}
 .col-xs-6 p {margin: 0;}
 // #input-verses span {font-size: 14px;font-family: "Helvetica","Arial",sans-serif; font-weight: 400;}
-.verse-num {font-size: 10px; font-weight: bold;} 
+.verse-num {font-size: 10px; font-weight: bold; padding-top: 2px !important} 
 // @media screen and (max-width: 2880px) {.col-fixed{min-height: 1690px;}}
 // @media screen and (max-width: 1280px) {.col-fixed{min-height: 765px;}}
 // // @media (min-width: 1440px) {.col-fixed{min-height: 985px;}}
@@ -229,4 +229,7 @@ body {line-height: inherit !important;}
     height: 10%;
     width: 10%;
     margin-top: 22%;
+}
+.rtl div {
+  display: flex;
 }
