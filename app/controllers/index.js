@@ -985,7 +985,6 @@ $(function() {
             $("#lang-script-label")[0].MaterialSwitch.on();
         }
     }, (err) => {
-        alert(err)
     })
     setReferenceSetting();
     buildReferenceList();
@@ -1671,7 +1670,15 @@ function reference_setting() {
     } else if (langCode === null || langCode === "") {
         alert_message(".alert-danger", "dynamic-msg-bib-code-validation");
         isValid = false;
-    } else if (version === null || version === "") {
+    }else if(langCode.match(/^\d/)) {
+        alert_message(".alert-danger", "dynamic-msg-bib-code-start-with-number");
+        isValid = false;
+    }
+    else if((/^([a-zA-Z0-9_-]){3,8}$/).test(langCode) === false){
+        alert_message(".alert-danger", "dynamic-msg-bib-code-start-with-number");
+        isValid = false;
+    }
+    else if (version === null || version === "") {
         alert_message(".alert-danger", "dynamic-msg-bib-version-validation");
         isValid = false;
     } else if (path === null || path === "") {
@@ -1690,11 +1697,18 @@ function target_setting() {
         version = $("#target-version").val(),
         path = $("#export-path").val(),
         isValid = true;
-
     if (langCode === null || langCode === "") {
         alert_message(".alert-danger", "dynamic-msg-bib-code-validation");
         isValid = false;
-    } else if (version === null || version === "") {
+    }else if(langCode.match(/^\d/)) {
+        alert_message(".alert-danger", "dynamic-msg-bib-code-start-with-number");
+        isValid = false;
+    }
+    else if((/^([a-zA-Z0-9_-]){3,8}$/).test(langCode) === false){
+        alert_message(".alert-danger", "dynamic-msg-bib-code-start-with-number");
+        isValid = false;
+    }
+    else if (version === null || version === "") {
         alert_message(".alert-danger", "dynamic-msg-bib-version-validation");
         isValid = false;
     } else if (path === null || path === "") {
@@ -1917,7 +1931,7 @@ $('#ref-lang-code').on('blur', function() {
     // if (!codeClicked) {
     //     $(this).val('') // clear language code textbox
     // }
-    $("#target-lang-code").val($(this).val());
+    $("#langCode").val($(this).val());
     $(".lang-code").fadeOut();
 });
 $('#target-lang').on('blur', function() {
