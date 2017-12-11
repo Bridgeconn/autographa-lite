@@ -230,6 +230,9 @@ body {line-height: inherit !important;}
     width: 10%;
     margin-top: 22%;
 }
-.rtl div {
-  display: flex;
-}
+.rtl div {display: flex;}
+#input-verses div .verse-num {display:inline-block; float:left; width:3%}
+#input-verses div span:nth-child(2){display:inline-block; float:left; width:97%; margin-bottom: 10px;}
+.arabic div .verse-num {display:inline-block; float:right; width:3%}
+.arabic div span:nth-child(2){display:inline-block; float:right; width:97%; margin-bottom: 10px;}
+
