@@ -231,8 +231,55 @@ body {line-height: inherit !important;}
     margin-top: 22%;
 }
 .rtl div {display: flex;}
-.english div .verse-num {display:inline-block; float:left; width:3%}
+.english div .verse-num {display:inline-block; float:left; width:3%; margin-top: 2px}
 .english div span:nth-child(2){display:inline-block; float:left; width:97%; margin-bottom: 10px;}
-.arabic div .verse-num {display:inline-block; float:right; width:3%}
-.arabic div span:nth-child(2){display:inline-block; float:right; width:97%; margin-bottom: 10px;}
+.arabic div .verse-num {display:inline-block; float:right; width:3%;margin-top: 2px}
+.arabic div span:nth-child(2){display:inline-block; float:right; width:97%; margin-bottom: 10px;padding-right: 3px}
 
+[data-tip] {
+  position:relative;
+
+}
+[data-tip]:before {
+  content:'';
+  /* hides the tooltip when not hovered */
+  display:none;
+  content:'';
+  border-left: 10px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 10px solid #1a1a1a;
+  position: absolute;
+  top: 30px;
+  left: 175px;
+  z-index:8;
+  font-size:0;
+  line-height:0;
+  width:0;
+  height:0;
+}
+[data-tip]:after {
+  display:none;
+    content: attr(data-tip);
+    position: absolute;
+    top: 0px;
+    left: 185px;
+    padding: 5px 8px;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-style: italic;
+    font-weight: 800;
+    z-index: 9;
+    font-size: 0.75em;
+    height: 65px;
+    line-height: 18px;
+    width: 180px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    word-wrap: normal;
+    border: black solid 1px;
+}
+[data-tip]:hover:before,
+[data-tip]:hover:after {
+  display:block;
+}

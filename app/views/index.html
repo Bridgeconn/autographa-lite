@@ -157,9 +157,9 @@
                                     <label class="mdl-textfield__label" for="ref-name" id="label-bible-name">Bible name</label>
                                 </div>
                             </div>
-                        <div class="form-group">
+                        <div data-tip="Length should be between 3 and 8 characters and can’t start with a number." class="form-group">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input search" type="text" id="ref-lang-code" placeholder="eng">
+                                    <input  class="mdl-textfield__input search" type="text" id="ref-lang-code" placeholder="eng">
                                     <label class="mdl-textfield__label label-language-code" for="ref-lang-code">Language Code</label>
                                 </div>
                                 <div id="reference-lang-result" class="lang-code"></div>
@@ -180,7 +180,7 @@
                             <button style="float:right; margin-right: 33px;" class="btn btn-success btn-import" id="ref-import-btn">Import</button>
                         </div>
                         <div id="language-settings" class="tabcontent">
-                            <div class="form-group">
+                            <div data-tip="Length should be between 3 and 8 characters and can’t start with a number." class="form-group">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                     <input class="mdl-textfield__input search" type="text" id="target-lang" placeholder="eng" dir="auto">
                                     <label class="mdl-textfield__label label-language-code" for="target-lang">Language Code</label>
@@ -201,7 +201,19 @@
                                 </div>
                             </div>
                             <div>
-                                <div style="display: flex;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <div style="display: flex;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <label style="margin-top: -24px;margin-left: 10px;font-size: 12px;" class="mdl-textfield__label" for="export-path" id="language-script">Language Script</label>
+                                <label style = "margin-left:8px" id="label-autoupdate-enable" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="autoupdate-enable">
+                              <input type="radio" id="autoupdate-enable" class="mdl-radio__button" name="options" value="true">
+                              <span class="mdl-radio__label" id="label-radio-enable">LTR</span>
+                            </label>
+                            <label id= "label-autoupdate-disable" class="mdl-radio gap mdl-js-radio mdl-js-ripple-effect" for="autoupdate-disable">
+                              <input type="radio" id="autoupdate-disable" class="mdl-radio__button" name="options" value="false" checked>
+                              <span class="mdl-radio__label" id="label-radio-disable">RTL</span>
+                            </label>
+                            </div>
+
+                                <!-- <div style="display: flex;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                    
                                     <label style="margin-top: -9px; margin-left: 9px;" class="mdl-textfield__label" for="export-path" id="language-script">Language Script</label>
                                     <span style="margin-top: 22px; margin-right: 7px;    margin-left: 10px;font-style:italic">LTR</span>
@@ -213,7 +225,7 @@
                                     </label>
                                         <span style="margin-right: 194px;margin-top: 21px;font-style: italic">RTL</span>
 
-                                </div>
+                                </div> -->
                             </div>
                             <button style="float:right; margin-right: 33px; margin-top: 80px" class="btn btn-success btn-save" id="save-settings">Save</button>
                         </div>
