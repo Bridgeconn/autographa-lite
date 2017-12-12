@@ -265,7 +265,7 @@ body {line-height: inherit !important;}
     left: 185px;
     padding: 5px 8px;
     background: #ffffff;
-    color: #1a1a1a;
+    color: rgba(26, 26, 26, 0.65);
     font-style: italic;
     font-weight: 800;
     z-index: 9;
@@ -277,7 +277,7 @@ body {line-height: inherit !important;}
     -moz-border-radius: 3px;
     border-radius: 3px;
     word-wrap: normal;
-    border: black solid 1px;
+    border: #0b82ff solid 1px;
 }
 [data-tip]:hover:before,
 [data-tip]:hover:after {
