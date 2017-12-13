@@ -17,7 +17,8 @@ var db = electron.getCurrentWindow().targetDb,
     lastVerse,
     verseLength = 0;
     versesLength = 0,
-    chunkGroup = [];
+    chunkGroup = [],
+    activeRefs = {};
 
 
 var constants = require('../util/constants.js'),
@@ -476,12 +477,12 @@ function createRefSelections() {
         });
     } else {
         var refCookieValue = {}
-        session.defaultSession.cookies.get({ url: 'http://refs.autographa.com' }, (error, cookie) => {
-            if (cookie.length > 0) {
-                $.each(cookie, function(i, v){
-                    refCookieValue[v.name.toString()] = v.value
-                });
-                $.each(refCookieValue, function(i, val){
+        refDb.get('activeRefs').then((doc) => {
+            if (doc.activeRefs) {
+                // $.each(doc.activeRefs, function(i, v){
+                //     doc.activeRefs[v.name.toString()] = v.value
+                // });
+                $.each(doc.activeRefs, function(i, val){
                     if($('.ref-drop-down')[i] && $('.ref-drop-down')[i].length > 0 ){
                         $('.ref-drop-down')[i].value = val;
                         $(".current-val")[i].value = val;
@@ -543,10 +544,22 @@ function createRefSelections() {
 
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
-    var cookieRef = { url: 'http://refs.autographa.com', name: $(this).siblings('.current-pos').val().toString().toString() , value: selectedRefElement.val() };
+    let refDropDownPos = $(this).siblings('.current-pos').val().toString();
+    var cookieRef = { url: 'http://refs.autographa.com', name: refDropDownPos , value: selectedRefElement.val() };
     session.defaultSession.cookies.set(cookieRef, (error) => {
         if (error)
             console.log(error);
+    });
+    activeRefs[refDropDownPos] = selectedRefElement.val();
+    refDb.get('activeRefs').then((doc) => {
+        doc._rev = doc._rev;
+        doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+        refDb.put(doc);
+    }, (err) => {
+        refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+        }, (err) => {
+            console.log(err);
+        });
     });
     getReferenceText($(this).val(), function(err, refContent) {
         if (err) {
@@ -645,7 +658,7 @@ function setMultiwindowReference(layout) {
 
             $(children[i]).removeClass(function(index, css) {
                 return (css.match(/(^|\s)col-sm-\S+/g) || []).join(' ');
-            });
+            });$
             $(children[i]).addClass('col-sm-3').attr("id", "section-" + i);
             if (i == 2) {
                 count = 2;
@@ -982,7 +995,8 @@ $(function() {
     db.get('targetBible').then((doc) => {
         if(doc.langScript == "RTL"){
             $("#input-verses").attr("dir", "rtl").addClass("arabic").removeClass("english");
-            $("#lang-script-label")[0].MaterialSwitch.on();
+            $("#script-dir-rtl")[0].MaterialRadio.check();
+
         }
     }, (err) => {
     })
@@ -1013,27 +1027,6 @@ $(function() {
             });
         }
     });
-
-    session.defaultSession.cookies.get({ url: 'http://refs.autographa.com' }, (error, cookie) => {
-        console.log(cookie)
-        if(cookie.length < 2 ){
-            var cookieRefCol1 = { url: 'http://refs.autographa.com', name: '0', value: 'eng_ulb'};
-            session.defaultSession.cookies.set(cookieRefCol1, (error) => {
-                if (error)
-                console.log(error);
-            });
-            var cookieRefCol2 = { url: 'http://refs.autographa.com', name: '1', value: 'eng_ulb'};
-            session.defaultSession.cookies.set(cookieRefCol2, (error) => {
-                if (error)
-                console.log(error);
-            });
-            var cookieRefCol3 = { url: 'http://refs.autographa.com', name: '2', value: 'eng_ulb'};
-            session.defaultSession.cookies.set(cookieRefCol3, (error) => {
-                if (error)
-                console.log(error);
-            });
-        }
-    })
     $(".dropdown-menu").on('click', 'li a', function() {
         $(this).parent().parent().siblings(".btn:first-child").html($(this).text() + ' <span class="caret"></span>');
         $(this).parent().parent().siblings(".btn:first-child").val($(this).text());
@@ -1051,7 +1044,6 @@ $(function() {
     refDb.get('autoupdate').then(function(doc) {
         if(doc.enable){
             $("#label-autoupdate-enable")[0].MaterialRadio.check();
-
         }
     }).catch(function(err){
         console.log(err)
@@ -1513,7 +1505,7 @@ document.getElementById('save-settings').addEventListener('click', function(e) {
         targetLang: document.getElementById('target-lang-code').value,
         targetVersion: document.getElementById('target-version').value,
         targetPath: document.getElementById('export-path').value,
-        langScript: $("#lang-script-switch").is(':checked') ? "RTL" : "LTR"
+        langScript: $("#lang-script-ltr").is(':checked') ? "LTR" : "RTL"
     }
     db.get('targetBible').then((doc) => {
         settingData._rev = doc._rev;
