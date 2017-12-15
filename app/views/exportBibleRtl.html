@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+   /* body {
+        font-family: Arial, Helvetica, sans-serif;
+    }*/
+
+    .body {
+        background-color: #f5f8fa;
+        line-height: 10px;
+    }
+
+    .newspaper {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+
+   /* .newspaper>ol>li:first-child {
+        list-style: none;
+    }*/
+
+    /*.chapter {
+        display: inline;
+        font-size: 40px;*/
+        /*margin-left: -4%
+*/    }
+
+   /* .list {
+        margin: 0 auto;
+        padding-top: 5px;
+    }*/
+   
+
+    .newspaper ul{float: right; width: 100%;}
+    .newspaper ul li {
+        list-style: none;
+        float: right;
+        display: block;
+        width: 100%;
+    }
+
+    .newspaper ul li ol {
+        counter-reset: item+1;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        /*margin-left: -16px;*/
+    }
+
+    .newspaper ul li ol li {
+        display: block;
+        float: right;
+        width: 100%;
+    }
+
+    .newspaper ul li ol li:before {
+    	width: 3%;
+    	float: right;
+        font-weight: bold;
+        font-size: 12px;
+        content: counter(item) "  ";
+        counter-increment: item;
+        margin-top: 5px;
+    }
+    .newspaper ul li ol li p {
+    width: 97%;
+    margin: 0 0 10px 0;
+    padding: 0 10px 0px 0px;
+    float: right;
+    line-height: 20px;
+    box-sizing: border-box;
+    text-align: right;
+}
+
+ul li span.chapter { float: right; display: inline-block !important; font-size: 40px;}
+.arabic {float: right; margin-right: 3px;}
+    </style>
+</head>
+
+<body class="body">
+    <center><h1>Genesis</h1></center>
+    <div class="newspaper">
+        <ul class="list">
+            <li>
+                
+                <p class="firstLi"><span class="chapter">1</span>
+فِي ٱلْبَدْءِ خَلَقَ ٱللهُ ٱلسَّمَاوَاتِ وَٱلْأَرْضَ.</p>
+            </li>
+            <li>
+                <ol>
+                    <li><p> وَكَانَتِ ٱلْأَرْضُ خَرِبَةً وَخَالِيَةً، وَعَلَى وَجْهِ ٱلْغَمْرِ ظُلْمَةٌ، وَرُوحُ ٱللهِ يَرِفُّ عَلَى وَجْهِ
+</p></li>
+                    <li><p>وَقَالَ ٱللهُ: «لِيَكُنْ نُورٌ»، فَكَانَ نُورٌ.</p></li>
+                    <li><p> وَرَأَى ٱللهُ ٱلنُّورَ أَنَّهُ حَسَنٌ. وَفَصَلَ ٱللهُ بَيْنَ ٱلنُّورِ وَٱلظُّلْمَةِ.</p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلنُّورَ نَهَارًا، وَٱلظُّلْمَةُ دَعَاهَا لَيْلًا. وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا وَاحِدًا.</p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِيَكُنْ جَلَدٌ فِي وَسَطِ ٱلْمِيَاهِ. وَلْيَكُنْ فَاصِلًا بَيْنَ مِيَاهٍ وَمِيَاهٍ». </p></li>
+                    <li><p> فَعَمِلَ ٱللهُ ٱلْجَلَدَ، وَفَصَلَ بَيْنَ ٱلْمِيَاهِ ٱلَّتِي تَحْتَ ٱلْجَلَدِ وَٱلْمِيَاهِ ٱلَّتِي فَوْقَ ٱلْجَلَدِ. وَكَانَ كَذَلِكَ.</p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلْجَلَدَ سَمَاءً. وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا ثَانِيًا. </p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِتَجْتَمِعِ ٱلْمِيَاهُ تَحْتَ ٱلسَّمَاءِ إِلَى مَكَانٍ وَاحِدٍ، وَلْتَظْهَرِ ٱلْيَابِسَةُ». وَكَانَ </p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلْيَابِسَةَ أَرْضًا، وَمُجْتَمَعَ ٱلْمِيَاهِ دَعَاهُ بِحَارًا. وَرَأَى ٱللهُ ذَلِكَ أَنَّهُ حَسَنٌ.</p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِتُنْبِتِ ٱلْأَرْضُ عُشْبًا وَبَقْلًا يُبْزِرُ بِزْرًا، وَشَجَرًا ذَا ثَمَرٍ يَعْمَلُ ثَمَرًا كَجِنْسِهِ، بِزْرُهُ فِيهِ عَلَى ٱلْأَرْضِ». وَكَانَ كَذَلِكَ.</p></li>
+                    <li><p>فَأَخْرَجَتِ ٱلْأَرْضُ عُشْبًا وَبَقْلًا يُبْزِرُ بِزْرًا كَجِنْسِهِ، وَشَجَرًا يَعْمَلُ ثَمَرًا بِزْرُهُ فِيهِ كَجِنْسِهِ. وَرَأَى ٱللهُ ذَلِكَ أَنَّهُ حَسَنٌ.
+</p></li>
+                    <li><p> وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا ثَالِثًا.</p></li>
+                   <!--  <li><p> God said, "Let there be lights in the sky to divide the day from the night. And let them be as signs, for seasons, for days and years. </p></li>
+                    <li><p> Let them be lights in the sky to give light upon the earth." It was so. </p></li>
+                    <li><p> God made the two great lights, the greater light to rule the day, and the lesser light to rule the night. He made the stars also. </p></li>
+                    <li><p> God set them in the sky to give light upon the earth, </p></li>
+                    <li><p> to rule over the day and over the night, and to divide the light from the darkness. God saw that it was good. </p></li>
+                    <li><p> This was evening and morning, the fourth day. </p></li>
+                    <li><p> God said, "Let the waters swarm with swarms of living creatures, and let birds fly above the earth in the expanse of the sky." </p></li>
+                    <li><p> God created the great sea creatures, as well as every living creature after its kind, creatures that move and with which the waters swarm, and every winged bird after its kind. God saw that it was good. </p></li>
+                    <li><p> God blessed them, saying, "Be fruitful and multiply, and fill the waters in the seas. Let birds multiply on the earth." </p></li>
+                    <li><p> This was evening and morning, the fifth day. </p></li>
+                    <li><p> God said, "Let the earth produce living creatures, each according to its own kind, livestock, creeping things, and beasts of the earth, each according to its own kind." It was so. </p></li>
+                    <li><p> God made the beasts of the earth after their kind, the livestock after their kinds, and everything that creeps upon the ground after its kind. He saw that it was good. </p></li>
+                    <li><p> God said, "Let us make man in our image, after our likeness. Let them have dominion over the fish of the sea, over the birds of the sky, over the livestock, over all the earth, and over every creeping thing that creeps on the earth." </p></li>
+                    <li><p> God created man in his own image. In his own image he created him. Male and female he created them. </p></li>
+                    <li><p> God blessed them and said to them, "Be fruitful, and multiply. Fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves upon the earth." </p></li>
+                    <li><p> God said, "See, I have given you every plant yielding seed which is upon the surface of all the earth, and every tree with fruit which has seed in it. They will be food to you. </p></li>
+                    <li><p> To every beast of the earth, to every bird of the heavens, and to everything that creeps upon the earth, and to every creature that has the breath of life I have given every green plant for food." It was so. </p></li>
+                    <li><p> God saw everything that he had made. Behold, it was very good. This was evening and morning, the sixth day.</p></li> -->
+                </ol>
+            </li>
+        </ul>
+        <ul class="list">
+            <li>
+                <p class="firstLi"><span class="chapter">2</span>فِي ٱلْبَدْءِ خَلَقَ ٱللهُ ٱلسَّمَاوَاتِ وَٱلْأَرْضَ.</p>
+            </li>
+            <li>
+                <ol>
+                    <li><p> وَكَانَتِ ٱلْأَرْضُ خَرِبَةً وَخَالِيَةً، وَعَلَى وَجْهِ ٱلْغَمْرِ ظُلْمَةٌ، وَرُوحُ ٱللهِ يَرِفُّ عَلَى وَجْهِ
+</p></li>
+                    <li><p>وَقَالَ ٱللهُ: «لِيَكُنْ نُورٌ»، فَكَانَ نُورٌ.</p></li>
+                    <li><p> وَرَأَى ٱللهُ ٱلنُّورَ أَنَّهُ حَسَنٌ. وَفَصَلَ ٱللهُ بَيْنَ ٱلنُّورِ وَٱلظُّلْمَةِ.</p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلنُّورَ نَهَارًا، وَٱلظُّلْمَةُ دَعَاهَا لَيْلًا. وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا وَاحِدًا.</p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِيَكُنْ جَلَدٌ فِي وَسَطِ ٱلْمِيَاهِ. وَلْيَكُنْ فَاصِلًا بَيْنَ مِيَاهٍ وَمِيَاهٍ». </p></li>
+                    <li><p> فَعَمِلَ ٱللهُ ٱلْجَلَدَ، وَفَصَلَ بَيْنَ ٱلْمِيَاهِ ٱلَّتِي تَحْتَ ٱلْجَلَدِ وَٱلْمِيَاهِ ٱلَّتِي فَوْقَ ٱلْجَلَدِ. وَكَانَ كَذَلِكَ.</p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلْجَلَدَ سَمَاءً. وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا ثَانِيًا. </p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِتَجْتَمِعِ ٱلْمِيَاهُ تَحْتَ ٱلسَّمَاءِ إِلَى مَكَانٍ وَاحِدٍ، وَلْتَظْهَرِ ٱلْيَابِسَةُ». وَكَانَ </p></li>
+                    <li><p> وَدَعَا ٱللهُ ٱلْيَابِسَةَ أَرْضًا، وَمُجْتَمَعَ ٱلْمِيَاهِ دَعَاهُ بِحَارًا. وَرَأَى ٱللهُ ذَلِكَ أَنَّهُ حَسَنٌ.</p></li>
+                    <li><p> وَقَالَ ٱللهُ: «لِتُنْبِتِ ٱلْأَرْضُ عُشْبًا وَبَقْلًا يُبْزِرُ بِزْرًا، وَشَجَرًا ذَا ثَمَرٍ يَعْمَلُ ثَمَرًا كَجِنْسِهِ، بِزْرُهُ فِيهِ عَلَى ٱلْأَرْضِ». وَكَانَ كَذَلِكَ.</p></li>
+                    <li><p>فَأَخْرَجَتِ ٱلْأَرْضُ عُشْبًا وَبَقْلًا يُبْزِرُ بِزْرًا كَجِنْسِهِ، وَشَجَرًا يَعْمَلُ ثَمَرًا بِزْرُهُ فِيهِ كَجِنْسِهِ. وَرَأَى ٱللهُ ذَلِكَ أَنَّهُ حَسَنٌ.
+</p></li>
+                    <li><p> وَكَانَ مَسَاءٌ وَكَانَ صَبَاحٌ يَوْمًا ثَالِثًا.</p></li>
+                   <!--  <li><p> God said, "Let there be lights in the sky to divide the day from the night. And let them be as signs, for seasons, for days and years. </p></li>
+                    <li><p> Let them be lights in the sky to give light upon the earth." It was so. </p></li>
+                    <li><p> God made the two great lights, the greater light to rule the day, and the lesser light to rule the night. He made the stars also. </p></li>
+                    <li><p> God set them in the sky to give light upon the earth, </p></li>
+                    <li><p> to rule over the day and over the night, and to divide the light from the darkness. God saw that it was good. </p></li>
+                    <li><p> This was evening and morning, the fourth day. </p></li>
+                    <li><p> God said, "Let the waters swarm with swarms of living creatures, and let birds fly above the earth in the expanse of the sky." </p></li>
+                    <li><p> God created the great sea creatures, as well as every living creature after its kind, creatures that move and with which the waters swarm, and every winged bird after its kind. God saw that it was good. </p></li>
+                    <li><p> God blessed them, saying, "Be fruitful and multiply, and fill the waters in the seas. Let birds multiply on the earth." </p></li>
+                    <li><p> This was evening and morning, the fifth day. </p></li>
+                    <li><p> God said, "Let the earth produce living creatures, each according to its own kind, livestock, creeping things, and beasts of the earth, each according to its own kind." It was so. </p></li>
+                    <li><p> God made the beasts of the earth after their kind, the livestock after their kinds, and everything that creeps upon the ground after its kind. He saw that it was good. </p></li>
+                    <li><p> God said, "Let us make man in our image, after our likeness. Let them have dominion over the fish of the sea, over the birds of the sky, over the livestock, over all the earth, and over every creeping thing that creeps on the earth." </p></li>
+                    <li><p> God created man in his own image. In his own image he created him. Male and female he created them. </p></li>
+                    <li><p> God blessed them and said to them, "Be fruitful, and multiply. Fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves upon the earth." </p></li>
+                    <li><p> God said, "See, I have given you every plant yielding seed which is upon the surface of all the earth, and every tree with fruit which has seed in it. They will be food to you. </p></li>
+                    <li><p> To every beast of the earth, to every bird of the heavens, and to everything that creeps upon the earth, and to every creature that has the breath of life I have given every green plant for food." It was so. </p></li>
+                    <li><p> God saw everything that he had made. Behold, it was very good. This was evening and morning, the sixth day.</p></li> -->
+                </ol>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
