@@ -29,7 +29,8 @@
     .chapter {
         display: inline;
         font-size: 40px;
-        margin-left: -4%
+        margin-left: -24px;
+        padding-right: 5px;
     }
 
     .list {
@@ -64,9 +65,20 @@
         font-weight: bold;
         font-size: 10px;
         content: counter(item) "  ";
-        counter-increment: item
+        counter-increment: item;
     }
     .newspaper ul li ol li p {width: 97%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
+    .firstLi {margin-bottom: 8px; line-height: 20px;}
+
+    @media only screen and (max-width: 720px) {
+    .chapter {
+        display: inline;
+        font-size: 40px;
+        margin-left: -24px;
+        padding-right: 0px;
+    }
+    .newspaper{margin-right: 2px}
+}
     </style>
 </head>
 
