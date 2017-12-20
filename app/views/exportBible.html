@@ -27,10 +27,12 @@
     }
 */
     .chapter {
-        display: inline-block;
-        font-size: 40px;
-        margin-left: -25px;
-        width: 13%;
+       display: inline-block;
+    font-size: 40px;
+    margin-left: -25px;
+    width: 13%;
+    float: left;
+    text-align: center;
     }
 
     ./*list {
@@ -66,7 +68,8 @@
         content: counter(item) " ";
         counter-increment: item;
         margin-top: -3px;
-        margin-right: 33px;
+        margin-right: 15px;
+        padding-left: 18px;
     }
     .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
     .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
@@ -88,8 +91,8 @@
 }
 @media print {
 
-    li {width: 110% !important;}
-     .newspaper ul li ol li p {box-sizing: border-box !important;}
+  /*  li {width: 100% !important;}
+     .newspaper ul li ol li p {box-sizing: border-box !important;}*/
    /* .newspaper ul li ol li {
         display: block;
         float: left;*/
@@ -108,8 +111,9 @@
         content: counter(item) "  ";
         counter-increment: item;
         margin-top: -4px;
-        padding-right: 4%
+        padding-right: 1%
     }
+    .newspaper ul li ol li p {width: 85%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
 /*.newspaper ul li ol li {
         display: block;
         float: left;
@@ -118,7 +122,7 @@
     body {margin-top: 25px; line-height: 20px}
 
 .list {width: 112%; margin-left: -20px;}*/
-}
+/*}*/
     </style>
 </head>
 
