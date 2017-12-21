@@ -27,13 +27,13 @@
     }
 */
     .chapter {
-         display: inline-block;
+          display: inline-block;
     font-size: 40px;
     margin-left: -45px;
-    width: 13%;
     float: left;
     text-align: right;
     margin-right: 8px;
+    width: 12%;
     }
 
     .list {
@@ -75,20 +75,25 @@
     .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
     .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 750px) {
     .newspaper ul li ol li p {
-    width: 92%;
+    width: 80%;
 }
     .newspaper ul li ol li:before {
     width: 7%;
     }
     .chapter {
-       display: inline;
+         display: inline-block;
     font-size: 35px;
-    margin-left: -41px;
-    padding-right: 8px; 
+    margin-left: -44px;
+    float: right;
+    text-align: right;
+    margin-right: 12px;
+    width: 100%;
+}
     }
     .newspaper{margin-right: 2px}
+    .firstLi {display: inline-flex;}
 }
 @media print {
 
