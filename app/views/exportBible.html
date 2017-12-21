@@ -32,7 +32,7 @@
     margin-left: -45px;
     float: left;
     text-align: right;
-    margin-right: 8px;
+    margin-right: 5px;
     width: 12%;
     }
 
@@ -62,15 +62,16 @@
         width: 100%;
     }
     .newspaper ul li ol li:before {
-        width: 3%;
-        float: left;
-        font-weight: bold;
-        font-size: 10px;
-        content: counter(item) " ";
-        counter-increment: item;
-        margin-top: -3px;
-        margin-right: 4px;
-        padding-left: 18px;
+       width: 3%;
+    float: left;
+    font-weight: bold;
+    font-size: 10px;
+    content: counter(item) " ";
+    counter-increment: item;
+    margin-top: -3px;
+    margin-right: 8px;
+    padding-left: 10px;
+    text-align: right;
     }
     .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
     .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
@@ -93,13 +94,13 @@
 }
 .chapter {
         margin-right: 6px;
-    width: 18%;
+    width: 50%;
 }
       }
 @media only screen and (max-width: 768px) {
 .chapter {
     margin-right: 4px;
-    width: 32%;
+    width: 31%;
 }
 }
 
@@ -122,9 +123,13 @@
     }
     .newspaper{margin-right: 2px}
     .firstLi {display: inline-flex;}
-}
-@media print {
 
+@media only print {
+
+.chapter {
+    margin-right: 4px;
+    width: 30%;
+}
   /*  li {width: 100% !important;}
      .newspaper ul li ol li p {box-sizing: border-box !important;}*/
    /* .newspaper ul li ol li {
@@ -136,8 +141,8 @@
     /*.newspaper ul li ol li p {
         box-sizing: border-box !important;
 }*/
-
-    .newspaper ul li ol li:before {
+   
+    /*.newspaper ul li ol li:before {
         width: 1% !important;
         float: left;
         font-weight: bold;
@@ -147,7 +152,7 @@
         margin-top: -4px;
         padding-right: 1%
     }
-    .newspaper ul li ol li p {width: 85%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}
+    .newspaper ul li ol li p {width: 85%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; line-height: 20px; box-sizing: border-box;}*/
 /*.newspaper ul li ol li {
         display: block;
         float: left;
@@ -156,7 +161,7 @@
     body {margin-top: 25px; line-height: 20px}
 
 .list {width: 112%; margin-left: -20px;}*/
-/*}*/
+}
     </style>
 </head>
 
