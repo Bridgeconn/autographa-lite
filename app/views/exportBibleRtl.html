@@ -11,9 +11,25 @@
         font-family: Arial, Helvetica, sans-serif;
     }*/
 
+/**********************to control font and font-size***********************/ 
+    p {
+        font-size: 100%;
+    }
+    .newspaper ul li ol li:before {
+        font-size: 62%
+    }
+     .chapter {
+        font-size: 35px;
+        }
+
+    p {
+    font-family: Awami Nastaliq;
+    }
+/**********************to control font and font-size***********************/ 
+
     .body {
         background-color: #f5f8fa;
-        line-height: 25px;
+        line-height: 120%;
     }
 
     .newspaper {
@@ -65,7 +81,7 @@
     	width: 3%;
     	float: right;
         font-weight: bold;
-        font-size: 10px;
+        /*font-size: 10px;*/
         content: counter(item, arabic-indic) "  ";
         counter-increment: item;
         margin-top: 3px;
@@ -80,7 +96,7 @@
     text-align: right;
 }
 
-ul li span.chapter { float: right; display: inline-block !important; font-size: 40px; min-height: 11px; width: 6%;}
+ul li span.chapter { float: right; display: inline-block !important; min-height: 11px; width: 6%;}
 .firstLi {float: right;  text-align: right; margin-right: 23px;}
     </style>
 </head>
