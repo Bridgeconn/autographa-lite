@@ -97,7 +97,19 @@
 }
 
 ul li span.chapter { float: right; display: inline-block !important; min-height: 11px; width: 6%;}
-.firstLi {float: right;  text-align: right; margin-right: 23px;}
+.firstLi {float: right;  text-align: right; margin-right: 23px; width: 60%}
+
+@media only print {
+     .body {
+        /*background-color: #f5f8fa;*/
+      /*  margin:0;
+        padding: 0;
+        line-height: 100%;*/
+    }
+   /* p {line-height: 100%};*/
+    .firstLi {width: 80%; margin-bottom: 0px;}
+    ul li span.chapter {margin-left: 5px}
+    }
     </style>
 </head>
 
