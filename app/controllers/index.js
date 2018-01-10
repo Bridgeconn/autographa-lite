@@ -18,7 +18,8 @@ var db = electron.getCurrentWindow().targetDb,
     verseLength = 0;
     versesLength = 0,
     chunkGroup = [],
-    activeRefs = {};
+    activeRefs = {},
+    currentWin = electron.getCurrentWindow();
 
 
 var constants = require('../util/constants.js'),
@@ -51,7 +52,197 @@ var stringReplace = require('../util/string_replace.js'),
     ref_select = '';
     langcodeLimit = 100;
 
+document.getElementById("print-pdf").addEventListener("click", function(e){
 
+        let id = $('.ref-drop-down').val() + '_' + bookCodeList[parseInt(book, 10) - 1];
+
+        let htmlContent = ''
+    let inlineData = `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <style >
+    p {
+        font-size: 100%;
+    }
+    .newspaper ul li ol li:before {
+        font-size: 62%
+    }
+     .chapter {
+        font-size: 180%;
+        }
+
+    p {
+        font-family: Helvetica;
+    }
+
+    .body {
+        background-color: #f5f8fa;
+        line-height: 100%;
+    }
+
+    .newspaper {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+
+    .chapter {
+        display: inline-block;
+        margin-left: 4px;
+        float: left;
+        text-align: right;
+        margin-right: 5px;
+    }
+
+    .list {
+        margin: 0 auto;
+        padding-top: 0px;
+    }
+    .newspaper ul{float: left; width: 100%;}
+    .newspaper ul li {
+        list-style: none;
+        float: left;
+        display: block;
+        width: 100%;
+    }
+
+    .newspaper ul li ol {
+        counter-reset: item+1;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        margin-left: -16px;
+    }
+
+    .newspaper ul li ol li {
+        display: block;
+        float: left;
+        width: 100%;
+    }
+    .newspaper ul li ol li:before {
+       width: 3%;
+    float: left;
+    font-weight: bold;
+    content: counter(item) " ";
+    counter-increment: item;
+    margin-right: 8px;
+    padding-left: 10px;
+    text-align: right;
+    }
+    .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; box-sizing: border-box;}
+    .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
+
+    @media only screen and (max-width: 1024px) {
+        .newspaper ul li ol li p {
+    width: 80%;
+    margin: 0 0 10px 0;
+    padding: 0 8px 0px 0px;
+    float: left;
+    line-height: 20px;
+    box-sizing: border-box;
+}
+.newspaper ul li {
+    list-style: none;
+    float: left;
+    display: block;
+    width: 90%;
+    padding-right: 21px;
+}
+.chapter {
+        margin-right: 6px;
+    width: 18%;
+}
+      }
+@media only screen and (max-width: 768px) {
+.chapter {
+    margin-right: 4px;
+    width: 31%;
+}
+}
+
+    @media only screen and (max-width: 700px) {
+    .newspaper ul li ol li p {
+    width: 80%;
+}
+    .newspaper ul li ol li:before {
+    width: 7%;
+    }
+    .chapter {
+         display: inline-block;
+    margin-left: -44px;
+    float: right;
+    text-align: right;
+    margin-right: 12px;
+    width: 100%;
+}
+    }
+    .newspaper{margin-right: 2px}
+    .firstLi {display: inline-flex;}
+
+@media only print {
+     .body {
+        line-height: 120%;
+       margin-top: 2px;
+    }
+
+}
+    </style>
+</head><body class="body">
+    <center><h1>${currentBook.book_name}</h1></center>
+    <div class="newspaper">`
+            refDb.get(id).then(function(doc) {
+                doc.chapters.map((obj, i) => {
+                    
+                    for( let i=0; i<obj.verses.length; i++){
+                        if(i==0){
+                            htmlContent += 
+                            `<ul class="list">
+                                <li>
+                                    <p class="firstLi"><span class="chapter">${obj.chapter}</span>${obj.verses[i].verse}</p>
+                                </li><li><ol>`
+                        }else{
+                            htmlContent += `
+                            <div><li><p>${obj.verses[i].verse}</p></li></div>`
+                        }
+                    }
+                    // obj.verses.map((objV, i) => {
+                    //     htmlContent += `
+                    //         <div><li><p>${objV.verse}</p></li></div>`
+                    // })
+                    htmlContent+= `</ol></li></ul>`
+
+                    inlineData += htmlContent
+                    htmlContent = ''
+                    
+                 })
+                inlineData+= '</div></body></html>'
+
+                // console.log(inlineData)
+
+                // doc.chapters[i].verses.map(function(verse, verseNum) {
+                //     console.log(verse)    
+                // })
+                fs.writeFile('test.html', inlineData , function (err) {
+                if (err) 
+                    return console.log(err);
+                    console.log('Wrote Hello World in file helloworld.txt, just check it');
+                });
+
+            })     
+    // currentWin.webContents.printToPDF({}, (error, data) => {
+    //     if (error) throw error
+    //     fs.writeFile('print.pdf', data, (error) => {
+    //       if (error) throw error
+    //       console.log('Write PDF successfully.')
+    //     })
+    // })
+    
+})
 
 
 document.getElementById("save-btn").addEventListener("click", function(e) {
