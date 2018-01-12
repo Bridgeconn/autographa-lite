@@ -1,6 +1,7 @@
 const session = require('electron').remote.session;
 const { dialog} = require('electron').remote;
-const electron = require('electron').remote
+const electron = require('electron').remote;
+var Promise = require('bluebird');
 var bibUtil = require("../util/json_to_usfm.js"),
     DiffMatchPatch = require('diff-match-patch'),
     dmp_diff = new DiffMatchPatch();
@@ -52,153 +53,162 @@ var stringReplace = require('../util/string_replace.js'),
     ref_select = '';
     langcodeLimit = 100;
 
+// var fs = Promise.promisifyAll(require("fs"));
+
+    // require(`./${__dirname}/../controllers/exportBook`)
+
 document.getElementById("print-pdf").addEventListener("click", function(e){
+    
+    i18n.isRtl().then((res)=>{
+        if(!res){
+               let id = $('.ref-drop-down').val() + '_' + bookCodeList[parseInt(book, 10) - 1];
 
-        let id = $('.ref-drop-down').val() + '_' + bookCodeList[parseInt(book, 10) - 1];
+        let htmlContent = '';
+        let inlineData = `<!DOCTYPE html>
+                <html lang="en">
 
-        let htmlContent = ''
-    let inlineData = `<!DOCTYPE html>
-<html lang="en">
+                <head>
+                    <meta charset="utf-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <meta name="description" content="">
+                    <style >
+                    p {
+                        font-size: 100%;
+                    }
+                    .newspaper ul li ol li:before {
+                        font-size: 62%
+                    }
+                     .chapter {
+                        font-size: 180%;
+                        }
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <style >
-    p {
-        font-size: 100%;
-    }
-    .newspaper ul li ol li:before {
-        font-size: 62%
-    }
-     .chapter {
-        font-size: 180%;
-        }
+                    p {
+                        font-family: Helvetica;
+                    }
 
-    p {
-        font-family: Helvetica;
-    }
+                    .body {
+                        background-color: #f5f8fa;
+                        line-height: 100%;
+                    }
 
-    .body {
-        background-color: #f5f8fa;
-        line-height: 100%;
-    }
+                    .newspaper {
+                        -webkit-column-count: 2;
+                        -moz-column-count: 2;
+                        column-count: 2;
+                    }
 
-    .newspaper {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-    }
+                    .chapter {
+                        display: inline-block;
+                        margin-left: 4px;
+                        float: left;
+                        text-align: right;
+                        margin-right: 5px;
+                    }
 
-    .chapter {
-        display: inline-block;
-        margin-left: 4px;
-        float: left;
-        text-align: right;
-        margin-right: 5px;
-    }
+                    .list {
+                        margin: 0 auto;
+                        padding-top: 0px;
+                    }
+                    .newspaper ul{float: left; width: 100%;}
+                    .newspaper ul li {
+                        list-style: none;
+                        float: left;
+                        display: block;
+                        width: 100%;
+                    }
 
-    .list {
-        margin: 0 auto;
-        padding-top: 0px;
-    }
-    .newspaper ul{float: left; width: 100%;}
-    .newspaper ul li {
-        list-style: none;
-        float: left;
-        display: block;
-        width: 100%;
-    }
+                    .newspaper ul li ol {
+                        counter-reset: item+1;
+                        list-style-type: none;
+                        margin: 0;
+                        padding: 0;
+                        margin-left: -16px;
+                    }
 
-    .newspaper ul li ol {
-        counter-reset: item+1;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        margin-left: -16px;
-    }
+                    .newspaper ul li ol li {
+                        display: block;
+                        float: left;
+                        width: 100%;
+                    }
+                    .newspaper ul li ol li:before {
+                       width: 3%;
+                    float: left;
+                    font-weight: bold;
+                    content: counter(item) " ";
+                    counter-increment: item;
+                    margin-right: 8px;
+                    padding-left: 10px;
+                    text-align: right;
+                    }
+                    .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; box-sizing: border-box;}
+                    .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
 
-    .newspaper ul li ol li {
-        display: block;
-        float: left;
-        width: 100%;
-    }
-    .newspaper ul li ol li:before {
-       width: 3%;
-    float: left;
-    font-weight: bold;
-    content: counter(item) " ";
-    counter-increment: item;
-    margin-right: 8px;
-    padding-left: 10px;
-    text-align: right;
-    }
-    .newspaper ul li ol li p {width: 90%; margin:0 0 10px 0; padding: 0 29px 0px 0px; float: left; box-sizing: border-box;}
-    .firstLi {margin-bottom: 8px; line-height: 20px; width: 80%}
+                    @media only screen and (max-width: 1024px) {
+                        .newspaper ul li ol li p {
+                    width: 80%;
+                    margin: 0 0 10px 0;
+                    padding: 0 8px 0px 0px;
+                    float: left;
+                    line-height: 20px;
+                    box-sizing: border-box;
+                }
+                .newspaper ul li {
+                    list-style: none;
+                    float: left;
+                    display: block;
+                    width: 90%;
+                    padding-right: 21px;
+                }
+                .chapter {
+                        margin-right: 6px;
+                    width: 18%;
+                }
+                      }
+                @media only screen and (max-width: 768px) {
+                .chapter {
+                    margin-right: 4px;
+                    width: 31%;
+                }
+                }
 
-    @media only screen and (max-width: 1024px) {
-        .newspaper ul li ol li p {
-    width: 80%;
-    margin: 0 0 10px 0;
-    padding: 0 8px 0px 0px;
-    float: left;
-    line-height: 20px;
-    box-sizing: border-box;
-}
-.newspaper ul li {
-    list-style: none;
-    float: left;
-    display: block;
-    width: 90%;
-    padding-right: 21px;
-}
-.chapter {
-        margin-right: 6px;
-    width: 18%;
-}
-      }
-@media only screen and (max-width: 768px) {
-.chapter {
-    margin-right: 4px;
-    width: 31%;
-}
-}
+                    @media only screen and (max-width: 700px) {
+                    .newspaper ul li ol li p {
+                    width: 80%;
+                }
+                    .newspaper ul li ol li:before {
+                    width: 7%;
+                    }
+                    .chapter {
+                         display: inline-block;
+                    margin-left: -44px;
+                    float: right;
+                    text-align: right;
+                    margin-right: 12px;
+                    width: 100%;
+                }
+                    }
+                    .newspaper{margin-right: 2px}
+                    .firstLi {display: inline-flex;}
 
-    @media only screen and (max-width: 700px) {
-    .newspaper ul li ol li p {
-    width: 80%;
-}
-    .newspaper ul li ol li:before {
-    width: 7%;
-    }
-    .chapter {
-         display: inline-block;
-    margin-left: -44px;
-    float: right;
-    text-align: right;
-    margin-right: 12px;
-    width: 100%;
-}
-    }
-    .newspaper{margin-right: 2px}
-    .firstLi {display: inline-flex;}
+                @media only print {
+                     .body {
+                        line-height: 120%;
+                       margin-top: 2px;
+                    }
 
-@media only print {
-     .body {
-        line-height: 120%;
-       margin-top: 2px;
-    }
-
-}
-    </style>
+                }
+                    </style>
 </head><body class="body">
     <center><h1>${currentBook.book_name}</h1></center>
     <div class="newspaper">`
-            refDb.get(id).then(function(doc) {
+            var contentFlag = false;
+            db.get(currentBook._id).then(function(doc) {
                 doc.chapters.map((obj, i) => {
-                    
                     for( let i=0; i<obj.verses.length; i++){
+                        if (obj.verses[i].verse !== "" && obj.verses[i].verse !== null){
+                            contentFlag = true;
+                        }
                         if(i==0){
                             htmlContent += 
                             `<ul class="list">
@@ -210,39 +220,168 @@ document.getElementById("print-pdf").addEventListener("click", function(e){
                             <div><li><p>${obj.verses[i].verse}</p></li></div>`
                         }
                     }
-                    // obj.verses.map((objV, i) => {
-                    //     htmlContent += `
-                    //         <div><li><p>${objV.verse}</p></li></div>`
-                    // })
                     htmlContent+= `</ol></li></ul>`
-
-                    inlineData += htmlContent
-                    htmlContent = ''
-                    
+                    if(contentFlag)
+                        inlineData += htmlContent;
+                    htmlContent = '';
+                    contentFlag = false;
                  })
                 inlineData+= '</div></body></html>'
+                db.get('targetBible').then((doc) => {
+                    let filepath = path.join(doc.targetPath, `${currentBook.book_name}.html`);
+                    fs.writeFile(filepath, inlineData , function (err) {
+                    if (err) {
+                        alertModal("export", "Oops! error occured. Please try later");
+                        return;
+                    }else{
+                        alertModal("export", `File exported at location: ${filepath}`);
+                    }
+                    });    
+                }); 
+            });     
+        } else {
+                i18n.getLocale().then((locale) => {
 
-                // console.log(inlineData)
+                     let id = $('.ref-drop-down').val() + '_' + bookCodeList[parseInt(book, 10) - 1];
+            let htmlContent = '';
+            let inlineData = `<!DOCTYPE html>
+                <html lang="en" dir="rtl">
 
-                // doc.chapters[i].verses.map(function(verse, verseNum) {
-                //     console.log(verse)    
-                // })
-                fs.writeFile('test.html', inlineData , function (err) {
-                if (err) 
-                    return console.log(err);
-                    console.log('Wrote Hello World in file helloworld.txt, just check it');
+                <head>
+                    <meta charset="utf-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <meta name="description" content="">
+                    <style>
+
+                        p {
+                        font-size: 100%;
+                    }
+                    .newspaper ul li ol li:before {
+                        font-size: 62%
+                    }
+                     .chapter {
+                        font-size: 35px;
+                        }
+
+                    p {
+                    font-family: Awami Nastaliq;
+                    }
+
+                    .body {
+                        background-color: #f5f8fa;
+                        line-height: 120%;
+                    }
+
+                    .newspaper {
+                        -webkit-column-count: 2;
+                        -moz-column-count: 2;
+                        column-count: 2;
+                    }
+                    .list {
+                        margin: 0 auto;
+                        padding-top: 5px;
+                    }
+                   
+
+                    .newspaper ul{float: right; width: 100%;}
+                    .newspaper ul li {
+                        list-style: none;
+                        float: right;
+                        display: block;
+                        width: 100%;
+                            margin-right: 16px;
+                    }
+
+                    .newspaper ul li ol {
+                        counter-reset: item+1;
+                        list-style-type: none;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .newspaper ul li ol li {
+                        display: block;
+                        float: right;
+                        width: 100%;
+                    }
+
+                    .newspaper ul li ol li:before {
+                        width: 3%;
+                        float: right;
+                        font-weight: bold;
+                        content: counter(item, arabic-indic) "  ";
+                        counter-increment: item;
+                        margin-top: 3px;
+                    }
+                    .newspaper ul li ol li p {
+                    width: 90%;
+                    margin: 0 0 10px 0;
+                    padding: 0 10px 0px 0px;
+                    float: right;
+                    box-sizing: border-box;
+                    text-align: right;
+                }
+
+                ul li span.chapter { float: right; display: inline-block !important; min-height: 11px; width: 6%;}
+                .firstLi {float: right;  text-align: right; margin-right: 23px; width: 60%}
+
+                    @media only print {
+                        .firstLi {width: 80%; margin-bottom: 0px;}
+                        ul li span.chapter {margin-left: 5px}
+                    }
+        
+                    </style>
+                    </head>
+                <body class="body">
+                <center><h1>${currentBook.book_name}</h1></center>
+                <div class="newspaper">`
+                var contentFlag = false;
+                db.get(currentBook._id).then(function(doc) {
+                    doc.chapters.map((obj, i) => {
+                        for( let i=0; i<obj.verses.length; i++){
+                            if (obj.verses[i].verse !== "" && obj.verses[i].verse !== null){
+                                contentFlag = true;
+                            }
+                            if(i==0){
+                                htmlContent += 
+                                `<ul class="list">
+                                    <li>
+                                        <p class="firstLi"><span class="chapter">${obj.chapter.toLocaleString(locale)}</span>${obj.verses[i].verse}</p>
+                                    </li><li><ol>`
+                            }else{
+                                htmlContent += `
+                                <li><p>${obj.verses[i].verse}</p></li>`
+                            }
+                        }
+                        htmlContent+= `</ol></li></ul>`
+                        if(contentFlag)
+                            inlineData += htmlContent;
+                        htmlContent = '';
+                        contentFlag = false;
+                     })
+                    inlineData+= '</div></body></html>'
+                    db.get('targetBible').then((doc) => {
+                        let filepath = path.join(doc.targetPath, `${currentBook.book_name}.html`);
+                        fs.writeFile(filepath, inlineData , function (err) {
+                        if (err) {
+                            alertModal("export", "Oops! error occured. Please try later");
+                            return;
+                        }else{
+                            alertModal("export", `File exported at location: ${filepath}`);
+                        }
+                        });    
+                    }); 
+                });     
+                
                 });
+            }
+            
+        },(err)=> {
+            console.log(err)
+        });
 
-            })     
-    // currentWin.webContents.printToPDF({}, (error, data) => {
-    //     if (error) throw error
-    //     fs.writeFile('print.pdf', data, (error) => {
-    //       if (error) throw error
-    //       console.log('Write PDF successfully.')
-    //     })
-    // })
-    
-})
+});
 
 
 document.getElementById("save-btn").addEventListener("click", function(e) {
@@ -1218,7 +1357,7 @@ $(function() {
             });
         }
     });
-    $(".dropdown-menu").on('click', 'li a', function() {
+    $("#trans-stage").on('click', 'li a', function() {
         $(this).parent().parent().siblings(".btn:first-child").html($(this).text() + ' <span class="caret"></span>');
         $(this).parent().parent().siblings(".btn:first-child").val($(this).text());
         $("#stageText").val($(this).text());
@@ -1786,10 +1925,9 @@ document.getElementById('target-import-btn').addEventListener('click', function(
     $("#loading-img").show();
     var inputPath = document.getElementById('target-import-path').value;
     var files = fs.readdirSync(inputPath);
-    files.forEach(function(file) {
+    Promise.map(files, function(file){
         var filePath = path.join(inputPath, file);
         if (fs.statSync(filePath).isFile() && !file.startsWith('.')) {
-            //console.log(filePath);
             var options = {
                 lang: 'hi',
                 version: 'ulb',
@@ -1798,7 +1936,24 @@ document.getElementById('target-import-btn').addEventListener('click', function(
             }
             bibUtil_to_json.toJson(options);
         }
-    });
+    }).then(function(res){
+        $("#loading-img").hide();
+    }).catch(function(err){
+        $("#loading-img").hide();
+    })
+    // files.forEach(function(file) {
+    //     var filePath = path.join(inputPath, file);
+    //     if (fs.statSync(filePath).isFile() && !file.startsWith('.')) {
+    //         //console.log(filePath);
+    //         var options = {
+    //             lang: 'hi',
+    //             version: 'ulb',
+    //             usfmFile: filePath,
+    //             targetDb: 'target'
+    //         }
+    //         bibUtil_to_json.toJson(options);
+    //     }
+    // });
     
 });
 
@@ -1809,21 +1964,43 @@ $('#importModal').on('hidden.bs.modal', function () {
 
 
 function saveJsonToDB(files) {
-    files.forEach(function(file) {
+    const location = document.getElementById('ref-path').value
+    const langCode = document.getElementById('langCode').value.toLowerCase();
+    const version = document.getElementById('ref-version').value.toLowerCase();
+    Promise.map(files, function(file){
+        console.log(file)
         if (!file.startsWith('.')) {
-            var filePath = path.join(document.getElementById('ref-path').value, file);
-            //console.log(filePath + ' ' + fs.statSync(filePath).isFile());
+            var filePath = path.join(location, file);
             if (fs.statSync(filePath).isFile()) {
                 var options = {
-                    lang: document.getElementById('langCode').value.toLowerCase(),
-                    version: document.getElementById('ref-version').value.toLowerCase(),
+                    lang: langCode,
+                    version: version,
                     usfmFile: filePath,
                     targetDb: 'refs'
                 }
                 bibUtil_to_json.toJson(options);
             }
         }
-    });
+    }).then(function() {
+        $("#loading-img").hide();
+    }).catch(function(err){
+        $("#loading-img").hide();
+    })
+    // files.forEach(function(file) {
+        // if (!file.startsWith('.')) {
+        //     var filePath = path.join(document.getElementById('ref-path').value, file);
+        //     //console.log(filePath + ' ' + fs.statSync(filePath).isFile());
+        //     if (fs.statSync(filePath).isFile()) {
+        //         var options = {
+        //             lang: document.getElementById('langCode').value.toLowerCase(),
+        //             version: document.getElementById('ref-version').value.toLowerCase(),
+        //             usfmFile: filePath,
+        //             targetDb: 'refs'
+        //         }
+        //         bibUtil_to_json.toJson(options);
+        //     }
+        // }
+    // });
 }
 
 document.getElementById('ref-path').addEventListener('click', function(e) {

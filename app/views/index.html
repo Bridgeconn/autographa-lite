@@ -377,7 +377,7 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right nav-pills verse-diff-on">
-                         <li><span><button id="print-pdf">PDF</button></span></li>
+
                         <li id = "label-off" style="padding:17px 5px 0 0; color: #fff; font-weight: bold"><span>OFF</span></li>
                         <li>
                             <label style="margin-top:17px;" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2" id="switchLable" data-toggle='tooltip' data-placement='bottom' title="Compare mode">
@@ -392,8 +392,14 @@
                             <a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="Find and replace" id="searchText"><i class="fa fa-search fa-2x"></i></a>
                         </li>
                         <li>
-                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Export as USFM" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i>
+                            <!-- <a href="#" data-toggle="tooltip" data-placement="bottom" title="Export as USFM" id="export-usfm"><i class="fa fa-cloud-download fa-2x"></i>
+                            </a> -->
+                            <a href="#" class="btn  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cloud-download fa-2x"></i>
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <li><a href="#" id="export-usfm">Export as USFM</a></li>
+                              <li><a href="#" id="print-pdf">Export as HTML</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a href="#" data-target="#aboutmodal" data-toggle="tooltip" data-placement="bottom" title="About" id="btnAbout"><i class="fa fa-info fa-2x"></i></a>
@@ -442,16 +448,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!-- <div id="input-verse" class="col-12 col-ref">
-                            <div>
-                            <span class="verse-num">1</span><span chunk-group="1-2" contenteditable="true" id="v1"></span>
-                            </div>
-                            <div><span class="verse-num">2</span><span chunk-group="1-2" contenteditable="true" id="v2"></span>
-                            </div><div><span class="verse-num">3</span><span chunk-group="3-5" contenteditable="true" id="v3"></span>
-                        </div><div><span class="verse-num">4</span><span chunk-group="3-5" contenteditable="true" id="v4"></span></div><div><span class="verse-num">5</span><span chunk-group="3-5" contenteditable="true" id="v5"></span></div><div><span class="verse-num">6</span><span chunk-group="6-8" contenteditable="true" id="v6"></span></div><div><span class="verse-num">7</span><span chunk-group="6-8" contenteditable="true" id="v7"></span></div><div><span class="verse-num">8</span><span chunk-group="6-8" contenteditable="true" id="v8"></span></div><div><span class="verse-num">9</span><span chunk-group="9-10" contenteditable="true" id="v9"></span></div><div><span class="verse-num">10</span><span chunk-group="9-10" contenteditable="true" id="v10"></span></div><div><span class="verse-num">11</span><span chunk-group="11-13" contenteditable="true" id="v11"></span></div><div><span class="verse-num">12</span><span chunk-group="11-13" contenteditable="true" id="v12"></span></div><div><span class="verse-num">13</span><span chunk-group="11-13" contenteditable="true" id="v13"></span></div><div><span class="verse-num">14</span><span chunk-group="14-15" contenteditable="true" id="v14"></span></div><div><span class="verse-num">15</span><span chunk-group="14-15" contenteditable="true" id="v15"></span></div><div><span class="verse-num">16</span><span chunk-group="16-19" contenteditable="true" id="v16"></span></div><div><span class="verse-num">17</span><span chunk-group="16-19" contenteditable="true" id="v17"></span></div><div><span class="verse-num">18</span><span chunk-group="16-19" contenteditable="true" id="v18"></span></div><div><span class="verse-num">19</span><span chunk-group="16-19" contenteditable="true" id="v19"></span></div><div><span class="verse-num">20</span><span chunk-group="20-21" contenteditable="true" id="v20"></span></div><div><span class="verse-num">21</span><span chunk-group="20-21" contenteditable="true" id="v21"></span></div><div><span class="verse-num">22</span><span chunk-group="22-23" contenteditable="true" id="v22"></span></div><div><span class="verse-num">23</span><span chunk-group="22-23" contenteditable="true" id="v23"></span></div><div><span class="verse-num">24</span><span chunk-group="24-25" contenteditable="true" id="v24"></span></div><div><span class="verse-num">25</span><span chunk-group="24-25" contenteditable="true" id="v25"></span></div><div><span class="verse-num">26</span><span chunk-group="26-27" contenteditable="true" id="v26"></span></div><div><span class="verse-num">27</span><span chunk-group="26-27" contenteditable="true" id="v27"></span></div><div><span class="verse-num">28</span><span chunk-group="28-29" contenteditable="true" id="v28"></span></div><div><span class="verse-num">29</span><span chunk-group="28-29" contenteditable="true" id="v29"></span></div><div><span class="verse-num">30</span><span chunk-group="30-31" contenteditable="true" id="v30"></span></div><div><span class="verse-num">31</span><span chunk-group="30-31" contenteditable="true" id="v31"></span></div></div> -->
                         <div id="input-verses" class="col-12 col-ref english">
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -567,7 +565,7 @@
                                     <input type="text" class="form-control" aria-label="..." id="stageText" placeholder="Stage name of translation">
                                     <div class="input-group-btn">
                                         <button id="dropdownBtn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Stage <span class="caret"></span></button>
-                                        <ul class="dropdown-menu dropdown-menu-right">
+                                        <ul class="dropdown-menu dropdown-menu-right" id="trans-stage">
                                             <li><a href="#" data-value="stage1"><span class="stage">Stage </span> 1 </a></li>
                                             <li><a href="#" data-value="stage2"><span class="stage">Stage </span> 2 </a></li>
                                             <li><a href="#" data-value="stage3"><span class="stage">Stage </span> 3 </a></li>
