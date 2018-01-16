@@ -997,6 +997,8 @@ $(function() {
             $('head').append('<link rel="stylesheet" href="../assets/stylesheets/material.rtl.min.css">');
             $("#input-verses").attr("dir", "rtl");
             $("#input-verses").addClass('rtl');
+            $(".lang-code-selection").removeAttr('data-tip');
+            $(".lang-code-selection").attr("data-tip-rtl", "Length should be between 3 and 8 characters and can’t start with a number.")
         }
     });
     db.get('targetBible').then((doc) => {
