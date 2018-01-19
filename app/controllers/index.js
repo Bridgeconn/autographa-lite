@@ -52,13 +52,56 @@ var stringReplace = require('../util/string_replace.js'),
     removeReferenceLink = '',
     ref_select = '';
     langcodeLimit = 100,
-    exportHtml = require(`${__dirname}/../util/export_html.js`);
+    exportHtml = require(`${__dirname}/../util/export_html.js`),
+    currentRefVerseLength = 0;
 
 document.getElementById("print-pdf").addEventListener("click", function(e){
     let id = $('.ref-drop-down').val() + '_' + bookCodeList[parseInt(book, 10) - 1];
     db.get('targetBible').then((doc) => {
         exportHtml.exportHtml(id, currentBook, db, doc.langScript);
     });  
+});
+
+
+//keeping last verse id by concate "verseCon" + lastVerse-1;
+$("#rmVerse").click(function(){
+    if( lastVerse -1 > currentRefVerseLength - 4 ){
+        let verseContainer = $("#verseCon"+(lastVerse -1).toString());
+        let verseData = $(`#v${lastVerse-1}`).text();
+        if(verseData){
+            let cnfm = confirm(`Are you sure to delete verse ${lastVerse-1}`);
+            if (!cnfm)
+                return
+        }
+        chunkGroup.push((verseContainer.children().last().attr('chunk-group')).toString());
+        verseContainer.remove();
+        lastVerse--;
+        saveTarget("verseRemove");
+    }
+    dynChunkIndex = 0;
+});
+
+$("#addVerse").click(function(){
+    if(lastVerse <= currentRefVerseLength+4){    
+        var divContainer = document.createElement('div'),
+            spanVerseNum = document.createElement('span'),
+            spanVerse = document.createElement('span');
+        spanVerse.setAttribute("chunk-group", chunkGroup.pop());
+        spanVerse.contentEditable = true;
+        spanVerse.id = "v" + lastVerse;
+        spanVerse.appendChild(document.createTextNode(""));
+        spanVerseNum.setAttribute("class", "verse-num");
+        spanVerseNum.appendChild(document.createTextNode(lastVerse.toLocaleString()));
+        divContainer.id = "verseCon" + lastVerse;
+        divContainer.appendChild(spanVerseNum);
+        divContainer.appendChild(spanVerse);
+        document.getElementById('input-verses').appendChild(divContainer);
+        lastVerse ++;
+        saveTarget("verseAdd");
+        highlightRef();                
+    }
+
+
 });
 
 document.getElementById("save-btn").addEventListener("click", function(e) {
@@ -434,6 +477,7 @@ function getReferenceText(refId, callback) {
                         break;
                     }
                 }
+                currentRefVerseLength = doc.chapters[i].verses.length;
                 ref_string = doc.chapters[i].verses.map(function(verse, verseNum) {
                     let transLatedVerse = refId === "arb_vdt" ? (verseNum+1).toLocaleString('ar') : (verseNum+1);
                     return '<div data-verse="r' + (verseNum + 1) + '"><span class="verse-num">' + transLatedVerse + '</span><span>' + verse.verse + '</span></div>';
@@ -1394,13 +1438,22 @@ $(".navigation-btn").click(function() {
     }
 });
 
-
-function saveTarget() {
+function saveTarget(option) {
     var verses = currentBook.chapters[parseInt(chapter, 10) - 1].verses;
-    verses.forEach(function(verse, index) {
-        var vId = 'v' + (index + 1);
-        verse.verse = document.getElementById(vId).textContent;
-    });
+    let verseObj = {}
+    if(option === "verseAdd") {
+        verseObj[lastVerse-2] = {verse:"", verse_num: lastVerse-1}
+        Object.assign(verses, verseObj)
+    }
+    if(option === "verseRemove") {
+        delete verses[lastVerse-1]
+    }
+    if(option === undefined){
+        verses.forEach(function(verse, index) {
+            var vId = 'v' + (index + 1);
+            verse.verse = document.getElementById(vId).textContent;
+        });
+    }
     currentBook.chapters[parseInt(chapter, 10) - 1].verses = verses;
     db.get(currentBook._id).then(function(book) {
         currentBook._rev = book._rev;
