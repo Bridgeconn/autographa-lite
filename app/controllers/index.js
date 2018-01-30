@@ -104,11 +104,34 @@ $("#addVerse").click(function(){
 
 });
 
+$(document).on("click", ".btn-header", function(){
+    $("#textBoxModal").toggle().modal();
+    $("#verse-index").val($(this).data('verse'));
+    
+});
+
+$("#save-header").click(function(){
+    let sectionHeader = $("#section-header-text").text();
+    let verses = currentBook.chapters[parseInt(chapter, 10) - 1].verses
+    verses[parseInt($("#verse-index").val(), 10) -1 ].sectionHeader = sectionHeader;  
+    db.get(currentBook._id).then(function(doc) {
+        doc.chapters[parseInt(chapter, 10) - 1].verses = verses;
+        db.put(doc).then(function(response) {
+            // $("#textBoxModal").toggle().modal();
+        }).catch(function(err) {
+            console.log(err);
+        });
+    }).catch(function(err) {
+        console.log('Error: While retrieving document. ' + err);
+    });
+});
+
 document.getElementById("save-btn").addEventListener("click", function(e) {
     var verses = currentBook.chapters[parseInt(chapter, 10) - 1].verses;
     verses.forEach(function(verse, index) {
         var vId = 'v' + (index + 1);
         verse.verse = document.getElementById(vId).textContent;
+        verse.sectionHeader = (verse.sectionHeader == undefined) ? "" : verse.sectionHeader;
     });
     currentBook.chapters[parseInt(chapter, 10) - 1].verses = verses;
     db.get(currentBook._id).then(function(doc) {
@@ -139,8 +162,13 @@ function createVerseInputs(verses, chunks, chapter) {
 
         for (i = 1; i <= verses.length; i++) {
             var divContainer = document.createElement('div'),
+                sectionHeaderDiv = document.createElement('div'),
                 spanVerseNum = document.createElement('span'),
-                spanVerse = document.createElement('span');
+                spanVerse = document.createElement('span'),
+                hoverButton = document.createElement('a'),
+                spanSectionHeader = document.createElement('span');
+                hoverButton.setAttribute('data-verse',  i);
+                hoverButton.setAttribute('class', "add-comment glyphicon glyphicon-plus btn-header");
             if (i > chunkVerseEnd) {
                 chunkVerseStart = parseInt(chunks[chunkIndex].firstvs, 10);
                 if (chunkIndex === chunks.length - 1 || parseInt((chunks[chunkIndex + 1].chp), 10) != chapter) {
@@ -158,9 +186,13 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerseNum.setAttribute("class", "verse-num");
             spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
             divContainer.id = "verseCon" + i;
+            spanVerseNum.appendChild(hoverButton);
             divContainer.appendChild(spanVerseNum);
             divContainer.appendChild(spanVerse);
+            spanSectionHeader.appendChild(document.createTextNode(`s: ${verses[i - 1].sectionHeader}`));
+            sectionHeaderDiv.appendChild(spanSectionHeader);
             document.getElementById('input-verses').appendChild(divContainer);
+            document.getElementById('input-verses').appendChild(sectionHeaderDiv);
             $(".diff-count-target").html("");
         }
         lastVerse = i;
@@ -981,8 +1013,7 @@ function exportUsfm() {
 function alertModal(heading, formContent) {
     setLocaleText("#heading", heading, 'text');
     setLocaleText("#content", formContent, 'text');
-    $("#dynamicModal").modal();
-    $("#dynamicModal").toggle();
+    $("#dynamicModal").modal().toggle();
 }
 
 $("#otBooksBtn").on("click", function() {
@@ -1367,6 +1398,7 @@ function saveReplacedText() {
                 var verses = currentBook.chapters[parseInt(c, 10)].verses;
                 verses.forEach(function(verse, index) {
                     verse.verse = replacedChapter[c][index + 1];
+                    verse.sectionHeader = (verse.sectionHeader == undefined) ? "" : verse.sectionHeader;
                 });
                 doc.chapters[parseInt(c, 10)].verses = verses;
                 db.put(doc, function(err, response) {
@@ -1452,6 +1484,7 @@ function saveTarget(option) {
         verses.forEach(function(verse, index) {
             var vId = 'v' + (index + 1);
             verse.verse = document.getElementById(vId).textContent;
+            verse.sectionHeader = (verse.sectionHeader == undefined) ? "" : verse.sectionHeader;
         });
     }
     currentBook.chapters[parseInt(chapter, 10) - 1].verses = verses;
@@ -2259,3 +2292,29 @@ $("#label-language").click(function(){
 $("#source-code-url").click(function(){
     electron.shell.openExternal('https://github.com/Bridgeconn/autographa-lite');
 });
+
+$( ".divbutton" )
+ .on("mouseenter", function() {
+  $("button").show();
+})
+.on("mouseleave", function() {
+  $("button").hide();
+});
+
+$('.add-comment').click(function(){
+     console.log("hi")
+  $('#txtBox').show();
+ });
+ $("#txtBox").focusout(function(){
+     $('#output').html($("#txtBox").val());
+ });
+
+ 
+//dynamic-header-modal
+$('#openBtn').click(function(){
+    $('#textBoxModal').modal({show:true})
+});
+
+$('#textBoxModal').on('show.bs.modal', function (e) {
+    $("#section-header-text").html("");
+}); 
