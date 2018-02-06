@@ -83,6 +83,7 @@
 	"dynamic-compare-mode" :  "Compare mode is not meaningful across different languages. Please select the same language across all panes to continue",
 	"dynamic-msg-bib-name-validation" : "The Bible name is required.",
 	"dynamic-msg-bib-code-validation" : "The Bible language code is required.",
+	"dynamic-msg-bib-code-start-with-number": "The Bible language code length should be between 3 and 8 characters and can’t start with a number.",
 	"dynamic-msg-bib-version-validation" : "The Bible version is required.",
 	"dynamic-msg-bib-path-validation" : "The Bible path is required.",
 	"dynamic-msg-saved-trans" : "Saved translation details successfully.",

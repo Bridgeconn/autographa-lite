@@ -65,6 +65,7 @@ module.exports = {
 			    return refDb.bulkDocs(refEnUlbJson);
 			})
 			.then(function (response) {
+				console.log(response)
 			    return refDb.bulkDocs(refEnUdbJson);
 			})
 			.then(function (response) {

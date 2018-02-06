@@ -113,8 +113,9 @@ $(document).on("click", ".btn-header", function(){
 $("#save-header").click(function(){
     let sectionHeader = $("#section-header-text").text();
     let verses = currentBook.chapters[parseInt(chapter, 10) - 1].verses
-    verses[parseInt($("#verse-index").val(), 10) -1 ].sectionHeader = sectionHeader;  
+    // verses[parseInt($("#verse-index").val(), 10) -1 ].sectionHeader = sectionHeader;  
     db.get(currentBook._id).then(function(doc) {
+        verses[parseInt($("#verse-index").val(), 10) -1 ]["sectionHeader"] = sectionHeader;  
         doc.chapters[parseInt(chapter, 10) - 1].verses = verses;
         db.put(doc).then(function(response) {
             // $("#textBoxModal").toggle().modal();
@@ -184,7 +185,7 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerse.id = "v" + i;
             spanVerse.appendChild(document.createTextNode(verses[i - 1].verse));
             spanVerseNum.setAttribute("class", "verse-num");
-            spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
+            spanVerseNum.appendChild(document.createTextNode(verses[i - 1].verse_number.toLocaleString(res)));
             divContainer.id = "verseCon" + i;
             spanVerseNum.appendChild(hoverButton);
             divContainer.appendChild(spanVerseNum);
@@ -511,7 +512,7 @@ function getReferenceText(refId, callback) {
                 }
                 currentRefVerseLength = doc.chapters[i].verses.length;
                 ref_string = doc.chapters[i].verses.map(function(verse, verseNum) {
-                    let transLatedVerse = refId === "arb_vdt" ? (verseNum+1).toLocaleString('ar') : (verseNum+1);
+                    let transLatedVerse = refId === "arb_vdt" ? (verse.verse_number).toLocaleString('ar') : (verse.verse_number);
                     return '<div data-verse="r' + (verseNum + 1) + '"><span class="verse-num">' + transLatedVerse + '</span><span>' + verse.verse + '</span></div>';
                 }).join('');
                 callback(null, ref_string);
@@ -572,7 +573,7 @@ function createRefSelections() {
                     }
                     getReferenceText(val, function(err, refContent) {
                         if (err) {
-                            $(".ref-drop-down")[i].value = val;
+                            $(".ref-drop-down")[0][i].value = (val)
                             getReferenceText(val, function(err, refContent) {
                                 if (err) {
                                     console.log("This chapter is not available in the selected reference version.");
@@ -1694,7 +1695,7 @@ document.getElementById('target-import-btn').addEventListener('click', function(
         var filePath = path.join(inputPath, file);
         if (fs.statSync(filePath).isFile() && !file.startsWith('.')) {
             var options = {
-                lang: 'hi',
+                lang: 'eng',
                 version: 'ulb',
                 usfmFile: filePath,
                 targetDb: 'target'
