@@ -25,7 +25,7 @@ Please read the [CONTRIBUTE](https://github.com/Bridgeconn/autographa-lite/blob/
 This project is licensed under the liberal MIT License. See [LICENSE](https://github.com/Bridgeconn/autographa-lite/blob/master/LICENSE) for more details.
 
 ## Contact
-Let us know if face any bugs/problems by opening an issue in GitHub. We'll do our best to respond promptly.
+Let us know if face any bugs/problems by opening an issue in GitHub. We'll do our best to be prompt in our response.
 
 ## Acknowledgments
 * Friends of Agape, for their support and contributions.
