@@ -430,7 +430,7 @@ function getReferenceText(refId, callback) {
                     }
                 }
                 ref_string = doc.chapters[i].verses.map(function(verse, verseNum) {
-                    let transLatedVerse = doc.scriptDirection === "RTL" ? (verseNum+1).toLocaleString('ar') : (verseNum+1);
+                    let transLatedVerse = doc.scriptDirection === "RTL" ? (verseNum+1) : (verseNum+1);
                     return '<div data-verse="r' + (verseNum + 1) + '"><span class="verse-num">' + transLatedVerse + '</span><span>' + verse.verse + '</span></div>';
                 }).join('');
                 callback(null, ref_string);
@@ -495,7 +495,9 @@ function createRefSelections() {
                             $(".ref-drop-down")[i].value = val;
                             getReferenceText(val, function(err, refContent) {
                                 if (err) {
-                                    console.log("This chapter is not available in the selected reference version.");
+                                    // console.log("This chapter is not available in the selected reference version.");
+                                    alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+                                    return
                                 }
                                 
                                 refDb.get(id).then((doc)=>{
@@ -529,7 +531,8 @@ function createRefSelections() {
                             $(".ref-drop-down").val($(".ref-drop-down option:first").val());
                             getReferenceText($(".ref-drop-down option:first").val(), function(err, refContent) {
                                 if (err) {
-                                    console.log("This chapter is not available in the selected reference version.");
+                                    alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+                                    return
                                 }
                                 $('div[type="ref"]').html(refContent);
                             })
@@ -2004,7 +2007,7 @@ function buildReferenceList() {
             }
             tr += "</tr>";
             var ref_name = ref_first.toUpperCase()+"-"+ref_except_first;
-            $('<option></option>').val(ref_doc.ref_id).text(ref_name).appendTo(".ref-drop-down");
+            $('<option></option>').val(ref_doc.ref_id).text(ref_doc.ref_name).appendTo(".ref-drop-down");
         });
         $("#reference-list").html(tr);
     })

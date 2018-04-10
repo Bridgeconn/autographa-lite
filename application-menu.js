@@ -64,15 +64,6 @@ let template = [{
   },  {
     type: 'separator'
   }]
-}, {
-  label: 'Help',
-  role: 'help',
-  submenu: [{
-    label: 'Learn More',
-    click: function () {
-      electron.shell.openExternal('http://www.autographa.com')
-    }
-  }]
 }]
 
 function addUpdateMenuItems (items, position) {
