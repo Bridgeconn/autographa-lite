@@ -35,7 +35,7 @@
   "homepage": "http://www.autographa.com",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "bower": "^1.8.2",
+    "bower": "^1.8.4",
     "diff-match-patch": "^1.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "pouchdb-adapter-leveldb": "^6.1.0",
