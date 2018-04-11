@@ -393,6 +393,9 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses) {
         var chunk = chunkVerseStart + '-' + chunkVerseEnd;
         spanVerse = "<span chunk-group=" + chunk + " id=v" + i + ">";
         var d = dmp_diff.diff_main(book_original_verses[i - 1].verse, verses[i - 1].verse);
+        var patch_list = dmp_diff.patch_make(book_original_verses[i - 1].verse, verses[i - 1].verse, d);
+        patch_text = dmp_diff.patch_toText(patch_list);
+        console.log(patch_text)
         var ds = dmp_diff.diff_prettyHtml(d);
         var diff_count = getDifferenceCount(d);
         t_ins += diff_count["ins"];
@@ -496,6 +499,8 @@ function createRefSelections() {
                             getReferenceText(val, function(err, refContent) {
                                 if (err) {
                                     // console.log("This chapter is not available in the selected reference version.");
+                                     // $('div[type="ref"]').html("");
+                                     $("#section-" + i).find('div[type="ref"]').html(refContent);
                                     alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
                                     return
                                 }
@@ -505,7 +510,6 @@ function createRefSelections() {
                                         $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
                                     }else{
                                         $('div[type="ref"]').html(refContent);
-
                                     }
                                 })
                                 
@@ -531,6 +535,8 @@ function createRefSelections() {
                             $(".ref-drop-down").val($(".ref-drop-down option:first").val());
                             getReferenceText($(".ref-drop-down option:first").val(), function(err, refContent) {
                                 if (err) {
+                                    // $('div[type="ref"]').html("");
+                                    $("#section-" + i).find('div[type="ref"]').html("");
                                     alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
                                     return
                                 }
@@ -544,7 +550,6 @@ function createRefSelections() {
                                 $('div[type="ref"]').addClass('rtl');
                             }else{
                                 $('div[type="ref"]').removeAttr("dir", "rtl");
-
                             }
                         })
                         if ($("#section-" + i).length > 0) {
@@ -583,6 +588,9 @@ $('.ref-drop-down').change(function(event) {
     getReferenceText($(this).val(), function(err, refContent) {
         if (err) {
             selectedRefElement.val(selectedRefElement.next().val());
+            // $('div[type="ref"]').html("");
+            $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
+
             alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
             return;
         } else {
@@ -2113,7 +2121,7 @@ $("#btnAbout").click(function() {
 })
 $(document).on('show.bs.modal', '#bannerformmodal', function() {
     setReferenceSetting();
-    buildReferenceList();
+    // buildReferenceList();
 });
 
 $("#chapterTab").click(function() {
