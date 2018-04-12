@@ -230,6 +230,7 @@ function getDiffText(refId1, refId2, position, callback) {
             var refString = "";
             for (var i = 1; i <= ref1.length; i++) {
                 var d = dmp_diff.diff_main(ref1[i - 1].verse, ref2[i - 1].verse);
+                dmp_diff.diff_cleanupSemantic(d);
                 var diff_count = getDifferenceCount(d);
                 t_ins += diff_count["ins"]
                 t_del += diff_count["del"]
@@ -258,8 +259,6 @@ function getDifferenceCount(verse_diff) {
                 deletions += data.length;
                 break;
             case DiffMatchPatch.DIFF_EQUAL:
-                insertions = 0;
-                deletions = 0;
                 break;
         }
     }
@@ -282,7 +281,7 @@ function setDiffReferenceText() {
                     console.log(err);
                 } else {
                     $("#section-" + pos).find('div[type="ref"]').html(refContent);
-                    $("#section-" + pos).find('.diff-count').html("<span>(+): " + t_ins + "</span><span> (-): " + t_del + "</span></span>");
+                    $("#section-" + pos).find('.diff-count').html("<span style='color:#27b97e;font-weight:bold;'>(+) " + t_ins+ "</span> | <span style='color:#f50808;;font-weight:bold;'> (-) " + t_del + "</span></span>");
                     t_ins = 0;
                     t_del = 0;
                 }
@@ -393,9 +392,7 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses) {
         var chunk = chunkVerseStart + '-' + chunkVerseEnd;
         spanVerse = "<span chunk-group=" + chunk + " id=v" + i + ">";
         var d = dmp_diff.diff_main(book_original_verses[i - 1].verse, verses[i - 1].verse);
-        var patch_list = dmp_diff.patch_make(book_original_verses[i - 1].verse, verses[i - 1].verse, d);
-        patch_text = dmp_diff.patch_toText(patch_list);
-        console.log(patch_text)
+        dmp_diff.diff_cleanupSemantic(d);
         var ds = dmp_diff.diff_prettyHtml(d);
         var diff_count = getDifferenceCount(d);
         t_ins += diff_count["ins"];
@@ -409,7 +406,7 @@ function createVerseDiffInputs(verses, chunks, chapter, book_original_verses) {
         $("#input-verses").append(divContainer);
 
     }
-    $(".diff-count-target").html("<span>(+): " + t_ins + "</span><span> (-): " + t_del + "</span></span>");
+    $(".diff-count-target").html("<span style='color:#27b97e;font-weight:bold;'>(+) " + t_ins +"</span> | <span style='color:#f50808;font-weight:bold;'> (-) " + t_del + "</span></span>");
     highlightRef();
 }
 
