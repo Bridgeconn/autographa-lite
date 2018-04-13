@@ -1,21 +1,19 @@
 {
   "name": "Autographa",
-  "version": "0.1.2",
+  "version": "0.1.2-Beta.2",
   "ProductName": "Autographa Lite",
   "description": "A Bible translation editor for everyone.",
-  "main": "app.js",
+  "main": "src/app.js",
   "hostname": "autographaus.bridgeconn.com",
   "autoupdate-endpoint": "http://autographaus.bridgeconn.com/releases/win32",
   "scripts": {
-    "start": "electron .",
+    "start": "node build/start.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm install bower && bower install bootstrap-sass-official && npm install gulp && ./node_modules/.bin/gulp",
     "pack-win": "electron-packager . Autographa  --overwrite --platform=win32 --arch=x64 --icon=app/assets/images/autographa.ico --out=dist  --win32metadata.CompanyName='OA' --win32metadata.ProductName='Autographa Lite' --prune=true",
-    "pack-mac": "electron-packager . \"Autographa Lite\"  --overwrite --platform=darwin --arch=x64 --icon=app/assets/images/autographa.icns --out=dist --electronVersion=1.8.2 --osx-sign.identity='Autographa Lite' --prune=true",
-    "pack-linux": " electron-packager . Autographa  --overwrite --platform=linux --arch=x64 --icon=app/assets/images/autographa-linux.png --out=dist --electron-version=1.8.2 --prune=true",
-    "postinstall": "cd node_modules/leveldown && HOME=~/.electron-gyp node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
-    "postinstall_windows": "cd node_modules/pouchdb/node_modules/leveldown; node-gyp rebuild --target=1.8.2 --dist-url=https://atom.io/download/atom-shell",
-    "installer": "node ./script/installer.js"
+    "pack-mac": "electron-packager . \"Autographa Lite\"  --overwrite --platform=darwin --arch=x64 --icon=app/assets/images/autographa.icns --out=dist --electronVersion=1.8.4 --osx-sign.identity='Autographa Lite' --prune=true",
+    "pack-linux": " electron-packager . Autographa  --overwrite --platform=linux --arch=x64 --icon=app/assets/images/autographa-linux.png --out=dist --electron-version=1.8.4 --prune=true",
+    "postinstall": "electron-builder install-app-deps",
+    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "repository": {
     "type": "git",
@@ -35,34 +33,35 @@
   "homepage": "http://www.autographa.com",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "bower": "^1.8.2",
     "diff-match-patch": "^1.0.0",
-    "electron-squirrel-startup": "^1.0.0",
     "pouchdb-adapter-leveldb": "^6.1.0",
     "pouchdb-core": "^6.1.0",
     "pouchdb-quick-search": "^1.2.0",
     "rtl-detect": "^1.0.0"
   },
   "devDependencies": {
-    "electron": "1.8.2",
-    "electron-winstaller": "^2.5.1",
-    "gulp": "^3.9.1",
-    "gulp-bower": "0.0.13",
-    "gulp-cached": "^1.1.0",
-    "gulp-changed": "^1.2.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-if": "^2.0.1",
-    "gulp-notify": "^2.2.0",
-    "gulp-pug": "^3.0.3",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.0.0",
-    "gulp-util": "^3.0.6",
-    "main-bower-files": "^2.9.0",
-    "rimraf": "^2.5.4"
+    "electron": "1.8.4",
+    "electron-builder": "^20.8.1",
+    "electron-rebuild": "^1.7.3",
+    "rimraf": "^2.5.4",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.6.0",
+    "friendly-errors-webpack-plugin": "^1.6.1"
   },
   "build": {
+    "extends": null,
     "appId": "oa.autographa.lite",
-    "ProductName": "Autographa Lite"
+    "files": [
+      "app/**/*",
+      "src/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
   }
 }

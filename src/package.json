@@ -1,0 +1,40 @@
+{
+  "name": "Autographa",
+  "version": "0.1.2-Beta.2",
+  "ProductName": "Autographa Lite",
+  "description": "A Bible translation editor for everyone.",
+  "main": "app.js",
+  "hostname": "autographaus.bridgeconn.com",
+  "autoupdate-endpoint": "http://autographaus.bridgeconn.com/releases/win32",
+  "scripts": {
+    "start": "node build/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack-win": "electron-packager . Autographa  --overwrite --platform=win32 --arch=x64 --icon=app/assets/images/autographa.ico --out=dist  --win32metadata.CompanyName='OA' --win32metadata.ProductName='Autographa Lite' --prune=true",
+    "pack-mac": "electron-packager . \"Autographa Lite\"  --overwrite --platform=darwin --arch=x64 --icon=app/assets/images/autographa.icns --out=dist --electronVersion=1.8.4 --osx-sign.identity='Autographa Lite' --prune=true",
+    "pack-linux": " electron-packager . Autographa  --overwrite --platform=linux --arch=x64 --icon=app/assets/images/autographa-linux.png --out=dist --electron-version=1.8.4 --prune=true",
+    "postinstall": "electron-builder install-app-deps",
+    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bridgeconn/autographa-lite.git"
+  },
+  "keywords": [
+    "Desktop",
+    "Bible Editor",
+    "USFM",
+    "USFM Editor"
+  ],
+  "author": "Bridgeconn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bridgeconn/autographa-lite/issues"
+  },
+  "homepage": "http://www.autographa.com",
+  "dependencies": {
+   
+  },
+  "devDependencies": {
+    
+  }  
+}

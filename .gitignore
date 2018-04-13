@@ -41,3 +41,8 @@ app/assets/
 .DS_Store
 *~
 \#*
+
+/src/app.js
+/src/app.js.map
+/dist
+/temp
