@@ -1,5 +1,7 @@
 const i18n = new(require('../../translations/i18n'));
 var fs = Promise.promisifyAll(require("fs"));
+const timeStamp = require('./timestamp');
+
 module.exports = {
 	exportHtml: function(id, currentBook, db, direction, column){
 		i18n.isRtl().then((res)=>{
@@ -159,7 +161,7 @@ module.exports = {
 	                inlineData+= '</div></body></html>'
 	                
 	                db.get('targetBible').then((doc) => {
-	                    let filepath = path.join(doc.targetPath, `${currentBook.book_name}.html`);
+	                    let filepath = path.join(doc.targetPath, `${currentBook.book_name}${timeStamp.getTimeStamp(new Date())}.html`);
 	                    fs.writeFile(filepath, inlineData , function (err) {
 		                    if (err) {
 		                        alertModal("export", "Oops! error occured. Please try later");
@@ -268,7 +270,7 @@ module.exports = {
                     	htmlContent += 
                                 `<ul class="list">
                                     <li>
-                                        <p class="firstLi"><span class="chapter">${obj.chapter.toLocaleString( column == 2 ? 'ar' : 'en')}</span></p>
+                                        <p class="firstLi"><span class="chapter">${obj.chapter.toLocaleString( column == 2 ? 'en' : 'en')}</span></p>
                                     </li><li><ol>`
                         for( let i=0; i<obj.verses.length; i++){
                             if (obj.verses[i].verse !== "" && obj.verses[i].verse !== null){
@@ -284,7 +286,7 @@ module.exports = {
                      })
                     inlineData+= '</div></body></html>'
                     db.get('targetBible').then((doc) => {
-                        let filepath = path.join(doc.targetPath, `${currentBook.book_name}.html`);
+                        let filepath = path.join(doc.targetPath, `${currentBook.book_name}${timeStamp.getTimeStamp(new Date())}.html`);
                         fs.writeFile(filepath, inlineData , function (err) {
                         if (err) {
                             alertModal("export", "Oops! error occured. Please try later");
