@@ -161,7 +161,7 @@ module.exports = {
 	                inlineData+= '</div></body></html>'
 	                
 	                db.get('targetBible').then((doc) => {
-	                    let filepath = path.join(doc.targetPath, `${currentBook.book_name}${timeStamp.getTimeStamp(new Date())}.html`);
+	                    let filepath = path.join(doc.targetPath, `${currentBook.book_name.toLowerCase()}_${column}col_${timeStamp.getTimeStamp(new Date())}.html`);
 	                    fs.writeFile(filepath, inlineData , function (err) {
 		                    if (err) {
 		                        alertModal("export", "Oops! error occured. Please try later");
@@ -286,7 +286,7 @@ module.exports = {
                      })
                     inlineData+= '</div></body></html>'
                     db.get('targetBible').then((doc) => {
-                        let filepath = path.join(doc.targetPath, `${currentBook.book_name}${timeStamp.getTimeStamp(new Date())}.html`);
+                        let filepath = path.join(doc.targetPath, `${currentBook.book_name.toLowerCase()}_${column}col_${timeStamp.getTimeStamp(new Date())}.html`);
                         fs.writeFile(filepath, inlineData , function (err) {
                         if (err) {
                             alertModal("export", "Oops! error occured. Please try later");
