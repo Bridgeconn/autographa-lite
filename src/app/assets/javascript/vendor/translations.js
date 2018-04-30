@@ -26,7 +26,7 @@ window.localization = window.localization || {},
                 $.each(elementsList, function(index, object){
                      for (var o in object) {
                         if (object.hasOwnProperty(o)) {
-                            i18n.__(object[o]).then((trans) => $(o).text(trans))
+                            i18n.__(object[o]).then((trans) => $(o).html(trans))
                             
                         }
                     }
