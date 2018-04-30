@@ -108,7 +108,7 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerse.id = "v" + i;
             spanVerse.appendChild(document.createTextNode(verses[i - 1].verse));
             spanVerseNum.setAttribute("class", "verse-num");
-            spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
+            spanVerseNum.appendChild(document.createTextNode(i.toLocaleString('en')));
             divContainer.id = "verseCon" + i;
             divContainer.appendChild(spanVerseNum);
             divContainer.appendChild(spanVerse);
