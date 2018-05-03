@@ -142,6 +142,21 @@ function lastVisitFromSession(success, failure) {
 }
 
 function lastVisitFromDB(success) {
+    refDb.get('deletedRefs').then((doc) =>{
+        doc.deletedRefsList.forEach((list) => {
+            removeRef(list);
+            refDb.get('activeRefs').then((doc) => {
+                for (let key in doc.activeRefs) {
+                    if (doc.activeRefs[key] == list) doc.activeRefs[key] = "eng_ulb"
+                }
+                refDb.put(doc);
+            })
+        })
+        doc.deletedRefsList = []
+        doc._id = doc._id;
+        doc._rev = doc._rev;
+        refDb.put(doc);
+    })
     refDb.get("ref_history")
         .then(function(doc) {
             book = doc.visit_history[0].bookId;
@@ -584,7 +599,7 @@ $('.ref-drop-down').change(function(event) {
     let id = refId + '_' + bookCodeList[parseInt(book, 10) - 1]
     getReferenceText($(this).val(), function(err, refContent) {
         if (err) {
-            selectedRefElement.val(selectedRefElement.next().val());
+            // selectedRefElement.val(selectedRefElement.next().val());
             // $('div[type="ref"]').html("");
             $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
 
@@ -2039,23 +2054,39 @@ $(document).on('click', '.remove-ref', function() {
     });
 });
 $("#confirmOk").click(function() {
-    removeRef(removeReferenceLink);
+    // removeRef(removeReferenceLink);
+    var refList = [];
+    refList.push(removeReferenceLink.data('id'))
+    refDb.get('deletedRefs').then((doc) =>{
+        // doc.deletedRefsList.push(removeReferenceLink.data('id'));
+        doc.deletedRefsList.forEach((list) => {
+            if ($.inArray(list, refList) === -1)
+                refList.push(list)
+        })
+        doc.deletedRefsList = refList;
+        doc._id = doc._id;
+        doc._rev = doc._rev;
+        refDb.put(doc).then((res) => {
+            $("#confirmModal").modal("hide");
+            alert_message(".alert-success", "dynamic-msg-ref-deleted");
+        });
+    })
 });
 
-function removeRef(element) {
+function removeRef(refId) {
     var ref_ids = [];
     refDb.get('refs').then(function(doc) {
         doc.ref_ids.forEach(function(ref_doc) {
-            if (ref_doc.ref_id != element.data('id')) {
+            if (ref_doc.ref_id != refId) {
                 ref_ids.push({ ref_id: ref_doc.ref_id, ref_name: ref_doc.ref_name, isDefault: ref_doc.isDefault });
             }
         })
         doc.ref_ids = ref_ids;
         return refDb.put(doc);
     }).then(function(res) {
-        element.closest('tr').remove();
+        // element.closest('tr').remove();
         buildReferenceList();
-        $("#confirmModal").modal("hide");
+        // $("#confirmModal").modal("hide");
     }).catch(function(err) {
         $("#confirmModal").modal("hide");
         alertModal("dynamic-msg-error", "dynamic-msg-del-unable");

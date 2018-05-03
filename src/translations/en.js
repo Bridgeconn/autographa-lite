@@ -108,6 +108,7 @@
 	"dynamic-msg-ref-name-validation" : "Reference name is required.",
 	"dynamic-msg-book" : "Book", 
 	"dynamic-msg-save-language": "Successfully saved changes. Restart the application for the changes to take effect.",
+	"dynamic-msg-ref-deleted": "Reference Successfully deleted. Restart the application for the changes to take effect.",
 	"label-auto-update-info" : "If enabled this would allow the application to automatically connect to the internet (when available), download and thereafter install updates that are released by the Autographa team.",
 	"label-auto-update" : "Auto-update",
 	"label-radio-enable": "Enabled",
