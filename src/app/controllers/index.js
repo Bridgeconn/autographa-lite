@@ -52,7 +52,8 @@ var stringReplace = require('../util/string_replace.js'),
     removeReferenceLink = '',
     ref_select = '';
     langcodeLimit = 100,
-    exportHtml = require(`${__dirname}/../util/export_html.js`);
+    exportHtml = require(`${__dirname}/../util/export_html.js`),
+    currentChangeRef = "";
 
 
 
@@ -512,11 +513,10 @@ function createRefSelections() {
                                 if (err) {
                                     // console.log("This chapter is not available in the selected reference version.");
                                      // $('div[type="ref"]').html("");
-                                     $("#section-" + i).find('div[type="ref"]').html(refContent);
-                                    alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+                                    // $("#section-" + i).find('div[type="ref"]').html(refContent);
+                                    alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
                                     return
                                 }
-                                
                                 refDb.get(id).then((doc)=>{
                                     if(doc.scriptDirection === "RTL"){
                                         $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
@@ -584,17 +584,6 @@ $('.ref-drop-down').change(function(event) {
         if (error)
             console.log(error);
     });
-    activeRefs[refDropDownPos] = selectedRefElement.val();
-    refDb.get('activeRefs').then((doc) => {
-        doc._rev = doc._rev;
-        doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
-        refDb.put(doc);
-    }, (err) => {
-        refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
-        }, (err) => {
-            console.log(err);
-        });
-    });
     let refId = ($(this).val() === 0 ? document.getElementById('refs-select').value : $(this).val());
     let id = refId + '_' + bookCodeList[parseInt(book, 10) - 1]
     getReferenceText($(this).val(), function(err, refContent) {
@@ -602,11 +591,33 @@ $('.ref-drop-down').change(function(event) {
             // selectedRefElement.val(selectedRefElement.next().val());
             // $('div[type="ref"]').html("");
             $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
-
-            alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
-            return;
+            activeRefs[refDropDownPos] = "eng_ulb"
+            refDb.get('activeRefs').then((doc) => {
+            doc._rev = doc._rev;
+            doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+            refDb.put(doc);
+        }, (err) => {
+            refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+            }, (err) => {
+                console.log(err);
+            });
+        });  
+            // alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+        alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+        return;
         } else {
+            activeRefs[refDropDownPos] = selectedRefElement.val();
             selectedRefElement.next().val(selectedRefElement.val());
+            refDb.get('activeRefs').then((doc) => {
+                doc._rev = doc._rev;
+                doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                refDb.put(doc);
+            }, (err) => {
+                refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                }, (err) => {
+                    console.log(err);
+                });
+            });  
         }
         refDb.get(id).then((doc)=>{
            if(doc.scriptDirection == "RTL"){
@@ -614,7 +625,7 @@ $('.ref-drop-down').change(function(event) {
            }else{
                 selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent).removeAttr("dir")
            }
-        })      
+        });
     });
 });
 
@@ -633,7 +644,6 @@ function highlightRef() {
             }
             $('div[data-verse="r' + (limits[0] + 1) + '"]').css({ "border-radius": "10px 10px 0px 0px" });
             $('div[data-verse="r' + (limits[1] + 1) + '"]').css({ "border-radius": "0px 0px 10px 10px" });
-
         });
     }
 }
@@ -973,6 +983,52 @@ function alertModal(heading, formContent) {
     setLocaleText("#content", formContent, 'text');
     $("#dynamicModal").modal();
     $("#dynamicModal").toggle();
+}
+
+function alertRefModal(heading, formContent) {
+    setLocaleText("#headingRef", heading, 'text');
+    setLocaleText("#contentRef", formContent, 'text');
+    $("#refreshModal").modal();
+    $("#refreshModal").toggle();
+}
+
+$("#ref-btn-ok").click(function(){
+    getDefaultContent();    
+})
+
+function getDefaultContent(){
+    let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
+    getReferenceText("eng_ulb", function(err, refContent) {
+        if (err) {
+            // console.log("This chapter is not available in the selected reference version.");
+             // $('div[type="ref"]').html("");
+             // $("#section-" + i).find('div[type="ref"]').html(refContent);
+            console.log("check")
+            return
+        }
+        $(".ref-drop-down").val('eng_ulb');
+
+        refDb.get(id).then((doc)=>{
+            if(doc.scriptDirection === "RTL"){
+                $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
+            }else{
+                $('div[type="ref"]').html(refContent);
+            }
+        })
+        activeRefs[refDropDownPos] = selectedRefElement.val();
+        refDb.get('activeRefs').then((doc) => {
+            doc._rev = doc._rev;
+            doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+            refDb.put(doc);
+        }, (err) => {
+            refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+            }, (err) => {
+                console.log(err);
+            });
+        });
+        
+    })
+    return;
 }
 
 $("#otBooksBtn").on("click", function() {
