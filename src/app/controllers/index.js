@@ -511,9 +511,6 @@ function createRefSelections() {
                             $(".ref-drop-down")[i].value = val;
                             getReferenceText(val, function(err, refContent) {
                                 if (err) {
-                                    // console.log("This chapter is not available in the selected reference version.");
-                                     // $('div[type="ref"]').html("");
-                                    // $("#section-" + i).find('div[type="ref"]').html(refContent);
                                     alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
                                     return
                                 }
@@ -579,6 +576,7 @@ function createRefSelections() {
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
     let refDropDownPos = $(this).siblings('.current-pos').val().toString();
+    currentChangeRef = refDropDownPos;
     var cookieRef = { url: 'http://refs.autographa.com', name: refDropDownPos , value: selectedRefElement.val() };
     session.defaultSession.cookies.set(cookieRef, (error) => {
         if (error)
@@ -590,21 +588,20 @@ $('.ref-drop-down').change(function(event) {
         if (err) {
             // selectedRefElement.val(selectedRefElement.next().val());
             // $('div[type="ref"]').html("");
-            $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
+            // $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
             activeRefs[refDropDownPos] = "eng_ulb"
-            refDb.get('activeRefs').then((doc) => {
-            doc._rev = doc._rev;
-            doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
-            refDb.put(doc);
-        }, (err) => {
-            refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                refDb.get('activeRefs').then((doc) => {
+                doc._rev = doc._rev;
+                doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                refDb.put(doc);
             }, (err) => {
-                console.log(err);
-            });
-        });  
-            // alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
-        alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
-        return;
+                refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                },  (err) => {
+                    console.log(err);
+                });
+            });  
+            alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+            return;
         } else {
             activeRefs[refDropDownPos] = selectedRefElement.val();
             selectedRefElement.next().val(selectedRefElement.val());
@@ -692,7 +689,6 @@ function setMultiwindowReference(layout) {
             clone_ele.find(".current-pos").val('1');
             var refVal = clone_ele.find(".current-val").val()
             if(refVal != ""){
-                console.log(refVal)
                 var cookieRef = { url: 'http://refs.autographa.com', name: "1" , value: refVal };
                 session.defaultSession.cookies.set(cookieRef, (error) => {
                     if (error)
@@ -992,30 +988,26 @@ function alertRefModal(heading, formContent) {
     $("#refreshModal").toggle();
 }
 
-$("#ref-btn-ok").click(function(){
-    getDefaultContent();    
+$(".close-ref").click(function(){
+    getDefaultContent();
 })
 
 function getDefaultContent(){
     let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
     getReferenceText("eng_ulb", function(err, refContent) {
         if (err) {
-            // console.log("This chapter is not available in the selected reference version.");
-             // $('div[type="ref"]').html("");
-             // $("#section-" + i).find('div[type="ref"]').html(refContent);
-            console.log("check")
+            console.log(err);
             return
         }
-        $(".ref-drop-down").val('eng_ulb');
-
+        $("#section-" + currentChangeRef).find(".ref-drop-down").val('eng_ulb');
         refDb.get(id).then((doc)=>{
             if(doc.scriptDirection === "RTL"){
-                $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
+                $("#section-" + currentChangeRef).find('div[type="ref"]').html(refContent).attr('dir', 'rtl');
             }else{
-                $('div[type="ref"]').html(refContent);
+                $("#section-" + currentChangeRef).find('div[type="ref"]').html(refContent);
             }
         })
-        activeRefs[refDropDownPos] = selectedRefElement.val();
+        activeRefs[currentChangeRef] = $("#section-" + currentChangeRef).find(".ref-drop-down").val();
         refDb.get('activeRefs').then((doc) => {
             doc._rev = doc._rev;
             doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
@@ -1026,7 +1018,6 @@ function getDefaultContent(){
                 console.log(err);
             });
         });
-        
     })
     return;
 }
@@ -2124,7 +2115,7 @@ $("#confirmOk").click(function() {
         doc._rev = doc._rev;
         refDb.put(doc).then((res) => {
             $("#confirmModal").modal("hide");
-            alert_message(".alert-success", "dynamic-msg-ref-deleted");
+            alert_message(".alert-success", "dynamic-msg-save-language");
         });
     })
 });
@@ -2181,7 +2172,8 @@ $(document).on('click', '.save-ref-text', function() {
             alertModal("dynamic-msg-error", "dynamic-msg-name-taken");
         } else {
             tdElement.html(textElement.val());
-            tdElement.next().find('.edit-ref').css('pointer-events', '');
+            $('.edit-ref').css('pointer-events', '');
+            alert_message(".alert-success", "dynamic-msg-save-language");
         }
     }).catch(function(err) {
         alertModal("dynamic-msg-error", "dynamic-msg-ren-unable");
