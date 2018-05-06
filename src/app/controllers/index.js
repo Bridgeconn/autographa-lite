@@ -989,35 +989,48 @@ function alertRefModal(heading, formContent) {
 }
 
 $(".close-ref").click(function(){
-    getDefaultContent();
+    // getDefaultContent();
+    $.each($(".ref-drop-down"), function(i, obj){
+        getDefaultContent($(obj).val(), i)
+    })
 })
 
-function getDefaultContent(){
-    let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
-    getReferenceText("eng_ulb", function(err, refContent) {
+function getDefaultContent(val, pos){
+    getReferenceText(val, function(err, refContent) {
         if (err) {
-            console.log(err);
-            return
+            getReferenceText("eng_ulb", function(err, refContent) {
+                let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
+                $("#section-" + pos).find(".ref-drop-down").val('eng_ulb');
+                refDb.get(id).then((doc)=>{
+                    if(doc.scriptDirection === "RTL"){
+                        $("#section-" + pos).find('div[type="ref"]').html(refContent).attr('dir', 'rtl');
+                    }else{
+                        $("#section-" + pos).find('div[type="ref"]').html(refContent);
+                    }
+                })
+                activeRefs[pos] = "eng_ulb"
+                refDb.get('activeRefs').then((doc) => {
+                    doc._rev = doc._rev;
+                    doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                    refDb.put(doc).then(()=>{
+                    },(err) => {
+                        if (err.name === 'conflict') {
+                            // conflict!
+                        } else {
+                            // some other error
+                        }
+                    });
+                }, (err) => {
+                    // console.log(err)
+                    refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                    }, (err) => {
+                        // console.log(err);
+                    });
+                });
+            })
+           
         }
-        $("#section-" + currentChangeRef).find(".ref-drop-down").val('eng_ulb');
-        refDb.get(id).then((doc)=>{
-            if(doc.scriptDirection === "RTL"){
-                $("#section-" + currentChangeRef).find('div[type="ref"]').html(refContent).attr('dir', 'rtl');
-            }else{
-                $("#section-" + currentChangeRef).find('div[type="ref"]').html(refContent);
-            }
-        })
-        activeRefs[currentChangeRef] = $("#section-" + currentChangeRef).find(".ref-drop-down").val();
-        refDb.get('activeRefs').then((doc) => {
-            doc._rev = doc._rev;
-            doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
-            refDb.put(doc);
-        }, (err) => {
-            refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
-            }, (err) => {
-                console.log(err);
-            });
-        });
+        
     })
     return;
 }
