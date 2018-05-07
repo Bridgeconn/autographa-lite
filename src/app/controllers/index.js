@@ -2304,6 +2304,6 @@ $("#label-language").click(function(){
         });
 });
 
-$("#source-code-url").click(function(){
-    electron.shell.openExternal('https://github.com/Bridgeconn/autographa-lite');
+$(".external-url").click(function(link){
+  electron.shell.openExternal(link.target.textContent);
 });
