@@ -147,7 +147,7 @@ function lastVisitFromDB(success) {
             removeRef(list);
             refDb.get('activeRefs').then((doc) => {
                 for (let key in doc.activeRefs) {
-                    if (doc.activeRefs[key] == list) doc.activeRefs[key] = "eng_ulb"
+                    if (doc.activeRefs[key] == list) doc.activeRefs[key] = "eng_irv"
                 }
                 refDb.put(doc);
             })
@@ -587,7 +587,7 @@ $('.ref-drop-down').change(function(event) {
             // selectedRefElement.val(selectedRefElement.next().val());
             // $('div[type="ref"]').html("");
             // $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
-            activeRefs[refDropDownPos] = "eng_ulb"
+            activeRefs[refDropDownPos] = "eng_irv"
                 refDb.get('activeRefs').then((doc) => {
                 doc._rev = doc._rev;
                 doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
@@ -996,9 +996,9 @@ $(".close-ref").click(function(){
 function getDefaultContent(val, pos){
     getReferenceText(val, function(err, refContent) {
         if (err) {
-            getReferenceText("eng_ulb", function(err, refContent) {
-                let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
-                $("#section-" + pos).find(".ref-drop-down").val('eng_ulb');
+            getReferenceText("eng_irv", function(err, refContent) {
+                let id = "eng_irv" + '_' + bookCodeList[parseInt(book, 10) - 1]
+                $("#section-" + pos).find(".ref-drop-down").val('eng_irv');
                 refDb.get(id).then((doc)=>{
                     if(doc.scriptDirection === "RTL"){
                         $("#section-" + pos).find('div[type="ref"]').html(refContent).attr('dir', 'rtl');
@@ -1006,7 +1006,7 @@ function getDefaultContent(val, pos){
                         $("#section-" + pos).find('div[type="ref"]').html(refContent);
                     }
                 })
-                activeRefs[pos] = "eng_ulb"
+                activeRefs[pos] = "eng_irv"
                 refDb.get('activeRefs').then((doc) => {
                     doc._rev = doc._rev;
                     doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
