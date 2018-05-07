@@ -52,8 +52,7 @@ var stringReplace = require('../util/string_replace.js'),
     removeReferenceLink = '',
     ref_select = '';
     langcodeLimit = 100,
-    exportHtml = require(`${__dirname}/../util/export_html.js`),
-    currentChangeRef = "";
+    exportHtml = require(`${__dirname}/../util/export_html.js`)
 
 
 
@@ -576,7 +575,6 @@ function createRefSelections() {
 $('.ref-drop-down').change(function(event) {
     var selectedRefElement = $(this);
     let refDropDownPos = $(this).siblings('.current-pos').val().toString();
-    currentChangeRef = refDropDownPos;
     var cookieRef = { url: 'http://refs.autographa.com', name: refDropDownPos , value: selectedRefElement.val() };
     session.defaultSession.cookies.set(cookieRef, (error) => {
         if (error)
@@ -1015,9 +1013,9 @@ function getDefaultContent(val, pos){
                     refDb.put(doc).then(()=>{
                     },(err) => {
                         if (err.name === 'conflict') {
-                            // conflict!
+                            // ignore error!
                         } else {
-                            // some other error
+                            // ignore error
                         }
                     });
                 }, (err) => {
