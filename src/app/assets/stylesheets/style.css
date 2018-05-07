@@ -8744,12 +8744,15 @@ body {
   60% {
     text-shadow: 0.25em 0 0 white, 0.5em 0 0 transparent; }
   80%, 100% {
-    text-shadow: .25em 0 0 white, .5em 0 0 white; } }
+    text-shadow: .25em 0 0 white,
+ .5em 0 0 white; } }
 
 .loading {
   font-size: 16px;
   font-weight: 600;
-  margin-top: 1%; }
+  margin-top: 1%;
+  position: absolute;top: 50%;left: 50%;transform: translateX(-50%) translateY(-50%);
+}
 
 #loading-img {
   background: url(../assets/images/loader.gif) center center no-repeat;

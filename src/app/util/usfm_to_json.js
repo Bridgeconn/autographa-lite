@@ -93,6 +93,7 @@ module.exports = {
                     book._rev = doc._rev;
                     book.scriptDirection = options.scriptDirection;
                     refDb.put(book);
+                    return callback(null, "success");
                 }).catch(function(err) {
                     refDb.put(book).then(function(doc) {
                         return callback(null, "Successfully loaded new refs");

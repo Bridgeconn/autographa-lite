@@ -52,7 +52,7 @@ var stringReplace = require('../util/string_replace.js'),
     removeReferenceLink = '',
     ref_select = '';
     langcodeLimit = 100,
-    exportHtml = require(`${__dirname}/../util/export_html.js`);
+    exportHtml = require(`${__dirname}/../util/export_html.js`)
 
 
 
@@ -108,7 +108,7 @@ function createVerseInputs(verses, chunks, chapter) {
             spanVerse.id = "v" + i;
             spanVerse.appendChild(document.createTextNode(verses[i - 1].verse));
             spanVerseNum.setAttribute("class", "verse-num");
-            spanVerseNum.appendChild(document.createTextNode(i.toLocaleString(res)));
+            spanVerseNum.appendChild(document.createTextNode(i.toLocaleString('en')));
             divContainer.id = "verseCon" + i;
             divContainer.appendChild(spanVerseNum);
             divContainer.appendChild(spanVerse);
@@ -142,6 +142,21 @@ function lastVisitFromSession(success, failure) {
 }
 
 function lastVisitFromDB(success) {
+    refDb.get('deletedRefs').then((doc) =>{
+        doc.deletedRefsList.forEach((list) => {
+            removeRef(list);
+            refDb.get('activeRefs').then((doc) => {
+                for (let key in doc.activeRefs) {
+                    if (doc.activeRefs[key] == list) doc.activeRefs[key] = "eng_ulb"
+                }
+                refDb.put(doc);
+            })
+        })
+        doc.deletedRefsList = []
+        doc._id = doc._id;
+        doc._rev = doc._rev;
+        refDb.put(doc);
+    })
     refDb.get("ref_history")
         .then(function(doc) {
             book = doc.visit_history[0].bookId;
@@ -495,13 +510,9 @@ function createRefSelections() {
                             $(".ref-drop-down")[i].value = val;
                             getReferenceText(val, function(err, refContent) {
                                 if (err) {
-                                    // console.log("This chapter is not available in the selected reference version.");
-                                     // $('div[type="ref"]').html("");
-                                     $("#section-" + i).find('div[type="ref"]').html(refContent);
-                                    alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+                                    alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
                                     return
                                 }
-                                
                                 refDb.get(id).then((doc)=>{
                                     if(doc.scriptDirection === "RTL"){
                                         $('div[type="ref"]').html(refContent).attr('dir', 'rtl');
@@ -569,29 +580,39 @@ $('.ref-drop-down').change(function(event) {
         if (error)
             console.log(error);
     });
-    activeRefs[refDropDownPos] = selectedRefElement.val();
-    refDb.get('activeRefs').then((doc) => {
-        doc._rev = doc._rev;
-        doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
-        refDb.put(doc);
-    }, (err) => {
-        refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
-        }, (err) => {
-            console.log(err);
-        });
-    });
     let refId = ($(this).val() === 0 ? document.getElementById('refs-select').value : $(this).val());
     let id = refId + '_' + bookCodeList[parseInt(book, 10) - 1]
     getReferenceText($(this).val(), function(err, refContent) {
         if (err) {
-            selectedRefElement.val(selectedRefElement.next().val());
+            // selectedRefElement.val(selectedRefElement.next().val());
             // $('div[type="ref"]').html("");
-            $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
-
-            alertModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
+            // $("#section-" + refDropDownPos).find('div[type="ref"]').html(refContent);
+            activeRefs[refDropDownPos] = "eng_ulb"
+                refDb.get('activeRefs').then((doc) => {
+                doc._rev = doc._rev;
+                doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                refDb.put(doc);
+            }, (err) => {
+                refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                },  (err) => {
+                    console.log(err);
+                });
+            });  
+            alertRefModal("dynamic-msg-error", "dynamic-msg-selected-ref-ver");
             return;
         } else {
+            activeRefs[refDropDownPos] = selectedRefElement.val();
             selectedRefElement.next().val(selectedRefElement.val());
+            refDb.get('activeRefs').then((doc) => {
+                doc._rev = doc._rev;
+                doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                refDb.put(doc);
+            }, (err) => {
+                refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                }, (err) => {
+                    console.log(err);
+                });
+            });  
         }
         refDb.get(id).then((doc)=>{
            if(doc.scriptDirection == "RTL"){
@@ -599,7 +620,7 @@ $('.ref-drop-down').change(function(event) {
            }else{
                 selectedRefElement.closest('div.row').next('div.row').children('div[type="ref"]').html(refContent).removeAttr("dir")
            }
-        })      
+        });
     });
 });
 
@@ -618,7 +639,6 @@ function highlightRef() {
             }
             $('div[data-verse="r' + (limits[0] + 1) + '"]').css({ "border-radius": "10px 10px 0px 0px" });
             $('div[data-verse="r' + (limits[1] + 1) + '"]').css({ "border-radius": "0px 0px 10px 10px" });
-
         });
     }
 }
@@ -667,7 +687,6 @@ function setMultiwindowReference(layout) {
             clone_ele.find(".current-pos").val('1');
             var refVal = clone_ele.find(".current-val").val()
             if(refVal != ""){
-                console.log(refVal)
                 var cookieRef = { url: 'http://refs.autographa.com', name: "1" , value: refVal };
                 session.defaultSession.cookies.set(cookieRef, (error) => {
                     if (error)
@@ -958,6 +977,60 @@ function alertModal(heading, formContent) {
     setLocaleText("#content", formContent, 'text');
     $("#dynamicModal").modal();
     $("#dynamicModal").toggle();
+}
+
+function alertRefModal(heading, formContent) {
+    setLocaleText("#headingRef", heading, 'text');
+    setLocaleText("#contentRef", formContent, 'text');
+    $("#refreshModal").modal();
+    $("#refreshModal").toggle();
+}
+
+$(".close-ref").click(function(){
+    // getDefaultContent();
+    $.each($(".ref-drop-down"), function(i, obj){
+        getDefaultContent($(obj).val(), i)
+    })
+})
+
+function getDefaultContent(val, pos){
+    getReferenceText(val, function(err, refContent) {
+        if (err) {
+            getReferenceText("eng_ulb", function(err, refContent) {
+                let id = "eng_ulb" + '_' + bookCodeList[parseInt(book, 10) - 1]
+                $("#section-" + pos).find(".ref-drop-down").val('eng_ulb');
+                refDb.get(id).then((doc)=>{
+                    if(doc.scriptDirection === "RTL"){
+                        $("#section-" + pos).find('div[type="ref"]').html(refContent).attr('dir', 'rtl');
+                    }else{
+                        $("#section-" + pos).find('div[type="ref"]').html(refContent);
+                    }
+                })
+                activeRefs[pos] = "eng_ulb"
+                refDb.get('activeRefs').then((doc) => {
+                    doc._rev = doc._rev;
+                    doc.activeRefs = Object.assign(doc.activeRefs, activeRefs);
+                    refDb.put(doc).then(()=>{
+                    },(err) => {
+                        if (err.name === 'conflict') {
+                            // ignore error!
+                        } else {
+                            // ignore error
+                        }
+                    });
+                }, (err) => {
+                    // console.log(err)
+                    refDb.put({_id: "activeRefs" , activeRefs: activeRefs}).then((res) => {
+                    }, (err) => {
+                        // console.log(err);
+                    });
+                });
+            })
+           
+        }
+        
+    })
+    return;
 }
 
 $("#otBooksBtn").on("click", function() {
@@ -2039,23 +2112,39 @@ $(document).on('click', '.remove-ref', function() {
     });
 });
 $("#confirmOk").click(function() {
-    removeRef(removeReferenceLink);
+    // removeRef(removeReferenceLink);
+    var refList = [];
+    refList.push(removeReferenceLink.data('id'))
+    refDb.get('deletedRefs').then((doc) =>{
+        // doc.deletedRefsList.push(removeReferenceLink.data('id'));
+        doc.deletedRefsList.forEach((list) => {
+            if ($.inArray(list, refList) === -1)
+                refList.push(list)
+        })
+        doc.deletedRefsList = refList;
+        doc._id = doc._id;
+        doc._rev = doc._rev;
+        refDb.put(doc).then((res) => {
+            $("#confirmModal").modal("hide");
+            alert_message(".alert-success", "dynamic-msg-save-language");
+        });
+    })
 });
 
-function removeRef(element) {
+function removeRef(refId) {
     var ref_ids = [];
     refDb.get('refs').then(function(doc) {
         doc.ref_ids.forEach(function(ref_doc) {
-            if (ref_doc.ref_id != element.data('id')) {
+            if (ref_doc.ref_id != refId) {
                 ref_ids.push({ ref_id: ref_doc.ref_id, ref_name: ref_doc.ref_name, isDefault: ref_doc.isDefault });
             }
         })
         doc.ref_ids = ref_ids;
         return refDb.put(doc);
     }).then(function(res) {
-        element.closest('tr').remove();
+        // element.closest('tr').remove();
         buildReferenceList();
-        $("#confirmModal").modal("hide");
+        // $("#confirmModal").modal("hide");
     }).catch(function(err) {
         $("#confirmModal").modal("hide");
         alertModal("dynamic-msg-error", "dynamic-msg-del-unable");
@@ -2094,7 +2183,8 @@ $(document).on('click', '.save-ref-text', function() {
             alertModal("dynamic-msg-error", "dynamic-msg-name-taken");
         } else {
             tdElement.html(textElement.val());
-            tdElement.next().find('.edit-ref').css('pointer-events', '');
+            $('.edit-ref').css('pointer-events', '');
+            alert_message(".alert-success", "dynamic-msg-save-language");
         }
     }).catch(function(err) {
         alertModal("dynamic-msg-error", "dynamic-msg-ren-unable");
@@ -2214,6 +2304,6 @@ $("#label-language").click(function(){
         });
 });
 
-$("#source-code-url").click(function(){
-    electron.shell.openExternal('https://github.com/Bridgeconn/autographa-lite');
+$(".external-url").click(function(link){
+  electron.shell.openExternal(link.target.textContent);
 });
